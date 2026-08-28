@@ -1,0 +1,152 @@
+<!-- sections/custom-text-section.liquid -->
+<section class="custom-text-section" style="background-color: {{ section.settings.background_color }};">
+  <div class="container">
+    <div class="text-content">
+      {% if section.settings.text_content != blank %}
+        <p class="main-text" 
+           style="color: {{ section.settings.text_color }}; 
+                  font-size: {{ section.settings.text_size }}px; 
+                  font-weight: {{ section.settings.text_weight }};">
+          {{ section.settings.text_content }}
+        </p>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<style>
+  .custom-text-section {
+    padding: 60px 0;
+    width: 100%;
+  }
+  
+  .custom-text-section .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 10px;
+  }
+  
+  .custom-text-section .text-content {
+    text-align: center;
+  }
+  
+  .custom-text-section .main-text {
+    line-height: 1.6;
+    margin: 0;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .custom-text-section {
+      padding: 40px 0;
+    }
+    
+    .custom-text-section .main-text {
+      font-size: {{ section.settings.text_size | minus: 2 }}px !important;
+      line-height: 1.5;
+    }
+    
+    .custom-text-section .container {
+      padding: 0 15px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .custom-text-section {
+      padding: 30px 0;
+    }
+    
+    .custom-text-section .main-text {
+      font-size: {{ section.settings.text_size | minus: 3 }}px !important;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Custom Text Section",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "textarea",
+      "id": "text_content",
+      "label": "Text Content",
+      "default": "Discover modern, elegant fashion designed for the confident woman. Explore our curated collections of stylish ready-to-wear, from sophisticated dresses to unique head pieces and exquisite jewelry. Shop the latest arrivals and timeless designs that empower your individual style."
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#666666"
+    },
+    {
+      "type": "range",
+      "id": "text_size",
+      "min": 12,
+      "max": 36,
+      "step": 1,
+      "unit": "px",
+      "label": "Text Size",
+      "default": 18
+    },
+    {
+      "type": "select",
+      "id": "text_weight",
+      "label": "Text Weight",
+      "options": [
+        {
+          "value": "100",
+          "label": "Thin (100)"
+        },
+        {
+          "value": "200",
+          "label": "Extra Light (200)"
+        },
+        {
+          "value": "300",
+          "label": "Light (300)"
+        },
+        {
+          "value": "400",
+          "label": "Normal (400)"
+        },
+        {
+          "value": "500",
+          "label": "Medium (500)"
+        },
+        {
+          "value": "600",
+          "label": "Semi Bold (600)"
+        },
+        {
+          "value": "700",
+          "label": "Bold (700)"
+        },
+        {
+          "value": "800",
+          "label": "Extra Bold (800)"
+        },
+        {
+          "value": "900",
+          "label": "Black (900)"
+        }
+      ],
+      "default": "300"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Text Section"
+    }
+  ]
+}
+{% endschema %}

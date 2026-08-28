@@ -1,0 +1,1727 @@
+{% comment %}
+  ============================================================
+  Section: press-media-showcase.liquid
+  Brand:   GetGlow Fashion
+  Purpose: Showcase celebrity features, press, movies & media
+  Theme:   Shopify Dawn compatible
+  Author:  GetGlow Dev
+  ============================================================
+{% endcomment %}
+
+<style>
+  /* ============================================================
+     GLOBAL STYLES & TYPOGRAPHY
+  ============================================================ */
+  :root {
+    --gg-black:       #0a0a0a;
+    --gg-white:       #faf9f7;
+    --gg-cream:       #f5f0ea;
+    --gg-gold:        #c9a96e;
+    --gg-gold-light:  #e8d5b0;
+    --gg-gray:        #8a8a8a;
+    --gg-gray-light:  #e8e4df;
+    --gg-serif:       'Playfair Display', 'Georgia', serif;
+    --gg-sans:        'Cormorant Garamond', 'Garamond', serif;
+    --gg-body:        'Jost', 'Helvetica Neue', sans-serif;
+    --transition:     0.38s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,600&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap');
+
+  .press-showcase {
+    font-family: var(--gg-body);
+    color: var(--gg-black);
+    background: var(--gg-white);
+  }
+
+  .press-showcase *,
+  .press-showcase *::before,
+  .press-showcase *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  .press-showcase img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+
+  .press-showcase a {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  /* ============================================================
+     SHARED UTILITY CLASSES
+  ============================================================ */
+  .ps-section {
+    padding: 100px 0;
+  }
+
+  .ps-container {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 48px;
+  }
+
+  .ps-eyebrow {
+    font-family: var(--gg-body);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--gg-gold);
+    display: block;
+    margin-bottom: 18px;
+  }
+
+  .ps-heading {
+    font-family: var(--gg-serif);
+    font-size: clamp(2.4rem, 5vw, 4.5rem);
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    color: var(--gg-black);
+  }
+
+  .ps-heading em {
+    font-style: italic;
+    color: var(--gg-gold);
+  }
+
+  .ps-subheading {
+    font-family: var(--gg-sans);
+    font-size: clamp(1.3rem, 2vw, 1.6rem);
+    font-weight: 300;
+    line-height: 1.7;
+    color: var(--gg-gray);
+    margin-top: 20px;
+    max-width: 560px;
+  }
+
+  .ps-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--gg-body);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    padding: 16px 36px;
+    border: 1px solid currentColor;
+    transition: var(--transition);
+    cursor: pointer;
+    background: transparent;
+    color: #ffffff;
+  }
+
+  .ps-btn::after {
+    content: '→';
+    transition: transform var(--transition);
+  }
+
+  .ps-btn:hover::after {
+    transform: translateX(5px);
+  }
+
+  .ps-btn--dark {
+    color: var(--gg-black);
+    border-color: var(--gg-black);
+  }
+  
+
+  .ps-btn--dark:hover {
+    background: var(--gg-black);
+    color: var(--gg-white);
+  }
+
+  .ps-btn--light {
+    color: var(--gg-white);
+    border-color: var(--gg-white);
+  }
+
+  .ps-btn--light:hover {
+    background: var(--gg-white);
+    color: var(--gg-black);
+  }
+
+  .ps-btn--gold {
+    color: var(--gg-gold);
+    border-color: var(--gg-gold);
+  }
+
+  .ps-btn--gold:hover {
+    background: var(--gg-gold);
+    color: var(--gg-white);
+  }
+
+  .ps-divider {
+    width: 60px;
+    height: 1px;
+    background: var(--gg-gold);
+    margin: 28px 0;
+  }
+
+  /* ============================================================
+     SECTION 1 — HERO BANNER
+  ============================================================ */
+  .ps-hero {
+    position: relative;
+    min-height: 90vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background-color: var(--gg-black);
+  }
+
+  .ps-hero__bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    opacity: 0.55;
+    transition: transform 8s ease;
+  }
+
+  .ps-hero:hover .ps-hero__bg {
+    transform: scale(1.03);
+  }
+
+  .ps-hero__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(10,10,10,0.25) 0%,
+      rgba(10,10,10,0.55) 50%,
+      rgba(10,10,10,0.85) 100%
+    );
+  }
+
+  .ps-hero__content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 60px 24px;
+    max-width: 900px;
+  }
+
+  .ps-hero__eyebrow {
+    font-family: var(--gg-body);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    color: var(--gg-gold);
+    display: block;
+    margin-bottom: 24px;
+    animation: fadeUp 1s ease both;
+    animation-delay: 0.2s;
+  }
+
+  .ps-hero__title {
+    font-family: var(--gg-serif);
+    font-size: clamp(3.5rem, 9vw, 8rem);
+    font-weight: 400;
+    line-height: 1;
+    color: var(--gg-white);
+    letter-spacing: -0.02em;
+    animation: fadeUp 1s ease both;
+    animation-delay: 0.35s;
+  }
+
+  .ps-hero__title em {
+    font-style: italic;
+    color: var(--gg-gold-light);
+  }
+
+  .ps-hero__subtitle {
+    font-family: var(--gg-sans);
+    font-size: clamp(1.3rem, 2vw, 1.6rem);
+    font-weight: 300;
+    line-height: 1.75;
+    color: rgba(250,249,247,0.8);
+    margin: 28px auto 0;
+    max-width: 600px;
+    animation: fadeUp 1s ease both;
+    animation-delay: 0.5s;
+  }
+
+  .ps-hero__actions {
+    margin-top: 48px;
+    animation: fadeUp 1s ease both;
+    animation-delay: 0.65s;
+  }
+
+  .ps-hero__scroll {
+    position: absolute;
+    bottom: 36px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: rgba(255,255,255,0.5);
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    animation: fadeUp 1s ease both;
+    animation-delay: 1s;
+  }
+
+  .ps-hero__scroll-line {
+    width: 1px;
+    height: 48px;
+    background: linear-gradient(to bottom, rgba(201,169,110,0.8), transparent);
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 0.4; transform: scaleY(1); }
+    50%       { opacity: 1;   transform: scaleY(1.2); }
+  }
+
+  /* ============================================================
+     SECTION 2 — CELEBRITY SHOWCASE
+  ============================================================ */
+  .ps-celebrity {
+    background: var(--gg-cream);
+  }
+
+  .ps-celebrity__header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 40px;
+    margin-bottom: 64px;
+    flex-wrap: wrap;
+  }
+
+  .ps-celebrity__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+  }
+
+  .ps-celeb-card {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 3 / 4;
+    cursor: pointer;
+    background: var(--gg-black);
+  }
+
+  .ps-celeb-card__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition), opacity var(--transition);
+    transform-origin: center;
+    opacity: 1;
+  }
+
+  .ps-celeb-card:hover .ps-celeb-card__img {
+    transform: scale(1.08);
+    opacity: 0.5;
+  }
+
+  .ps-celeb-card__overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 36px 28px;
+    background: linear-gradient(to top, rgba(10,10,10,0.9) 0%, transparent 60%);
+    opacity: 1;
+    transition: var(--transition);
+  }
+
+  .ps-celeb-card__name {
+    font-family: var(--gg-serif);
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: var(--gg-white);
+    line-height: 1.2;
+    transform: translateY(0);
+    transition: transform var(--transition);
+  }
+
+  .ps-celeb-card__dress {
+    font-family: var(--gg-body);
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gg-gold-light);
+    margin-top: 6px;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity var(--transition), transform var(--transition);
+    transition-delay: 0.05s;
+  }
+
+  .ps-celeb-card__shop {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--gg-body);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gg-gold);
+    margin-top: 16px;
+    padding-bottom: 2px;
+    border-bottom: 1px solid var(--gg-gold);
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity var(--transition), transform var(--transition);
+    transition-delay: 0.1s;
+  }
+
+  .ps-celeb-card:hover .ps-celeb-card__dress,
+  .ps-celeb-card:hover .ps-celeb-card__shop {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .ps-celeb-card:hover .ps-celeb-card__name {
+    transform: translateY(-4px);
+  }
+
+  /* Placeholder when no image */
+  .ps-celeb-card--placeholder {
+    background: var(--gg-gray-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ps-placeholder-icon {
+    font-size: 3rem;
+    opacity: 0.15;
+  }
+
+  /* ============================================================
+     SECTION 3 — MAGAZINE / PRESS GRID
+  ============================================================ */
+  .ps-press {
+    background: var(--gg-white);
+  }
+
+  .ps-press__header {
+    text-align: center;
+    margin-bottom: 64px;
+  }
+
+  .ps-press__header .ps-subheading {
+    margin: 20px auto 0;
+  }
+
+  .ps-press__header .ps-divider {
+    margin: 28px auto;
+  }
+
+  .ps-press__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+  }
+
+  .ps-press-card {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    background: var(--gg-black);
+  }
+
+  .ps-press-card__img-wrap {
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .ps-press-card__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition), opacity var(--transition);
+  }
+
+  .ps-press-card:hover .ps-press-card__img {
+    transform: scale(1.06);
+    opacity: 0.45;
+  }
+
+  .ps-press-card__hover {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    opacity: 0;
+    transition: opacity var(--transition);
+    padding: 20px;
+    text-align: center;
+  }
+
+  .ps-press-card:hover .ps-press-card__hover {
+    opacity: 1;
+  }
+
+  .ps-press-card__hover-mag {
+    font-family: var(--gg-serif);
+    font-size: 1.4rem;
+    font-weight: 400;
+    color: var(--gg-white);
+    font-style: italic;
+  }
+
+  .ps-press-card__hover-link {
+    font-family: var(--gg-body);
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gg-gold);
+    border-bottom: 1px solid var(--gg-gold);
+    padding-bottom: 2px;
+  }
+
+  .ps-press-card__body {
+    padding: 20px 0 0;
+  }
+
+  .ps-press-card__mag {
+    font-family: var(--gg-serif);
+    font-size: 1.05rem;
+    font-weight: 400;
+    color: var(--gg-black);
+    font-style: italic;
+  }
+
+  .ps-press-card__caption {
+    font-family: var(--gg-body);
+    font-size: 12px;
+    font-weight: 300;
+    color: var(--gg-gray);
+    margin-top: 6px;
+    line-height: 1.5;
+  }
+
+  /* ============================================================
+     SECTION 4 — MOVIES & TV APPEARANCES
+  ============================================================ */
+  .ps-movies {
+    background: var(--gg-black);
+    padding: 120px 0;
+  }
+
+  .ps-movies .ps-heading,
+  .ps-movies .ps-eyebrow {
+    color: var(--gg-white);
+  }
+
+  .ps-movies .ps-subheading {
+    color: rgba(250,249,247,0.55);
+  }
+
+  .ps-movies .ps-divider {
+    background: var(--gg-gold);
+  }
+
+  .ps-movies__header {
+    margin-bottom: 72px;
+  }
+
+  .ps-movies__list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .ps-movie-card {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 480px;
+    overflow: hidden;
+    position: relative;
+    transition: var(--transition);
+  }
+
+  .ps-movie-card:nth-child(even) {
+    direction: rtl;
+  }
+
+  .ps-movie-card:nth-child(even) > * {
+    direction: ltr;
+  }
+
+  .ps-movie-card__img-wrap {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .ps-movie-card__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .ps-movie-card:hover .ps-movie-card__img {
+    transform: scale(1.05);
+  }
+
+  .ps-movie-card__img-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, transparent 60%, rgba(10,10,10,0.8));
+  }
+
+  .ps-movie-card:nth-child(even) .ps-movie-card__img-overlay {
+    background: linear-gradient(to left, transparent 60%, rgba(10,10,10,0.8));
+  }
+
+  .ps-movie-card__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 60px 72px;
+    background: #111111;
+    position: relative;
+  }
+
+  .ps-movie-card__content::before {
+    content: '';
+    position: absolute;
+    top: 60px;
+    left: 72px;
+    width: 36px;
+    height: 1px;
+    background: var(--gg-gold);
+  }
+
+  .ps-movie-card:nth-child(even) .ps-movie-card__content::before {
+    left: auto;
+    right: 72px;
+  }
+
+  .ps-movie-card__tag {
+    font-family: var(--gg-body);
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gg-gold);
+    margin-bottom: 20px;
+    padding-top: 28px;
+  }
+
+  .ps-movie-card__title {
+    font-family: var(--gg-serif);
+    font-size: clamp(1.8rem, 2.5vw, 2.8rem);
+    font-weight: 400;
+    color: var(--gg-white);
+    line-height: 1.1;
+    font-style: italic;
+  }
+
+  .ps-movie-card__actress {
+    font-family: var(--gg-body);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+    margin-top: 14px;
+  }
+
+  .ps-movie-card__dress {
+    font-family: var(--gg-sans);
+    font-size: 1rem;
+    font-weight: 300;
+    color: var(--gg-gold-light);
+    margin-top: 10px;
+    font-style: italic;
+  }
+
+  .ps-movie-card__desc {
+    font-family: var(--gg-body);
+    font-size: 13px;
+    font-weight: 300;
+    line-height: 1.75;
+    color: rgba(250,249,247,0.5);
+    margin-top: 20px;
+    max-width: 360px;
+  }
+
+  .ps-movie-card__btn {
+    margin-top: 36px;
+    width: fit-content;
+  }
+
+  /* ============================================================
+     SECTION 5 — PRESS LOGO WALL
+  ============================================================ */
+  .ps-logos {
+    background: var(--gg-cream);
+    padding: 80px 0;
+  }
+
+  .ps-logos__header {
+    text-align: center;
+    margin-bottom: 56px;
+  }
+
+  .ps-logos__label {
+    font-family: var(--gg-body);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.45em;
+    text-transform: uppercase;
+    color: var(--gg-gray);
+  }
+
+  .ps-logos__grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .ps-logo-item {
+    flex: 0 0 calc(20% - 4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 24px;
+    transition: background var(--transition);
+    position: relative;
+    background: transparent;
+  }
+
+  .ps-logo-item::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 1px solid transparent;
+    transition: border-color var(--transition);
+  }
+
+  .ps-logo-item:hover::after {
+    border-color: var(--gg-gold-light);
+  }
+
+  .ps-logo-item img {
+    max-height: 36px;
+    max-width: 120px;
+    width: auto;
+    object-fit: contain;
+    filter: grayscale(100%) opacity(0.4);
+    transition: filter var(--transition), transform var(--transition);
+  }
+
+  .ps-logo-item:hover img {
+    filter: grayscale(0%) opacity(1);
+    transform: scale(1.05);
+  }
+
+  /* Text-based logo fallback */
+  .ps-logo-text {
+    font-family: var(--gg-serif);
+    font-size: 1.2rem;
+    font-weight: 400;
+    font-style: italic;
+    color: rgba(10,10,10,0.3);
+    transition: color var(--transition);
+    text-align: center;
+    user-select: none;
+    letter-spacing: 0.05em;
+  }
+
+  .ps-logo-item:hover .ps-logo-text {
+    color: var(--gg-black);
+  }
+
+  /* ============================================================
+     SECTION 6 — CALL TO ACTION
+  ============================================================ */
+  .ps-cta {
+    background: var(--gg-black);
+    padding: 160px 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .ps-cta::before {
+    content: '';
+    position: absolute;
+    top: -200px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(201,169,110,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .ps-cta__eyebrow {
+    font-family: var(--gg-body);
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    color: var(--gg-gold);
+    display: block;
+    margin-bottom: 24px;
+  }
+
+  .ps-cta__title {
+    font-family: var(--gg-serif);
+    font-size: clamp(2.4rem, 5.5vw, 5rem);
+    font-weight: 400;
+    color: var(--gg-white);
+    line-height: 1.1;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .ps-cta__title em {
+    font-style: italic;
+    color: var(--gg-gold-light);
+  }
+
+  .ps-cta__subtitle {
+    font-family: var(--gg-sans);
+    font-size: 1.15rem;
+    font-weight: 300;
+    color: rgba(250,249,247,0.5);
+    margin: 24px auto 0;
+    max-width: 480px;
+    line-height: 1.7;
+  }
+
+  .ps-cta__actions {
+    margin-top: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .ps-cta__ornament {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 48px;
+  }
+
+  .ps-cta__ornament-line {
+    width: 80px;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--gg-gold));
+  }
+
+  .ps-cta__ornament-line:last-child {
+    background: linear-gradient(to left, transparent, var(--gg-gold));
+  }
+
+  .ps-cta__ornament-diamond {
+    width: 6px;
+    height: 6px;
+    background: var(--gg-gold);
+    transform: rotate(45deg);
+  }
+
+  /* ============================================================
+     RESPONSIVE BREAKPOINTS
+  ============================================================ */
+  @media (max-width: 1100px) {
+    .ps-press__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 900px) {
+    .ps-container {
+      padding: 0 32px;
+    }
+
+    .ps-section {
+      padding: 72px 0;
+    }
+
+    .ps-celebrity__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .ps-movie-card {
+      grid-template-columns: 1fr;
+      min-height: auto;
+      direction: ltr !important;
+    }
+
+    .ps-movie-card:nth-child(even) > * {
+      direction: ltr;
+    }
+
+    .ps-movie-card__img-wrap {
+      aspect-ratio: 16 / 9;
+    }
+
+    .ps-movie-card__img-overlay {
+      background: linear-gradient(to top, rgba(10,10,10,0.8), transparent) !important;
+    }
+
+    .ps-movie-card__content {
+      padding: 40px 36px 48px;
+    }
+
+    .ps-movie-card__content::before {
+      left: 36px !important;
+      right: auto !important;
+    }
+
+    .ps-movie-card__desc {
+      max-width: 100%;
+    }
+
+    .ps-logo-item {
+      flex: 0 0 calc(33.33% - 4px);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .ps-container {
+      padding: 0 20px;
+    }
+
+    .ps-section {
+      padding: 60px 0;
+    }
+
+    .ps-hero {
+      min-height: 100svh;
+    }
+
+    .ps-celebrity__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .ps-celebrity__header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 24px;
+    }
+
+    .ps-press__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .ps-logo-item {
+      flex: 0 0 calc(50% - 4px);
+    }
+
+    .ps-cta {
+      padding: 100px 0;
+    }
+
+    .ps-movies {
+      padding: 72px 0;
+    }
+  }
+
+  /* ============================================================
+     LAZY LOAD FADE-IN
+  ============================================================ */
+  .ps-lazy {
+    opacity: 0;
+    transition: opacity 0.6s ease;
+  }
+
+  .ps-lazy.ps-loaded {
+    opacity: 1;
+  }
+
+  /* ============================================================
+     SCROLL REVEAL
+  ============================================================ */
+  .ps-reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .ps-reveal.ps-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .ps-reveal--delay-1 { transition-delay: 0.1s; }
+  .ps-reveal--delay-2 { transition-delay: 0.2s; }
+  .ps-reveal--delay-3 { transition-delay: 0.3s; }
+  .ps-reveal--delay-4 { transition-delay: 0.4s; }
+</style>
+
+
+{% comment %} ============================================================
+   SECTION 1 — HERO BANNER
+============================================================ {% endcomment %}
+
+{% assign hero_block = section.blocks | where: 'type', 'hero' | first %}
+
+<section class="press-showcase ps-hero" id="ps-hero">
+
+  {% if hero_block.settings.bg_image != blank %}
+    <img
+      class="ps-hero__bg ps-lazy"
+      src="{{ hero_block.settings.bg_image | img_url: '2000x' }}"
+      srcset="
+        {{ hero_block.settings.bg_image | img_url: '800x'  }} 800w,
+        {{ hero_block.settings.bg_image | img_url: '1200x' }} 1200w,
+        {{ hero_block.settings.bg_image | img_url: '2000x' }} 2000w
+      "
+      sizes="100vw"
+      alt="{{ hero_block.settings.title | escape }}"
+      loading="eager"
+      fetchpriority="high"
+      width="2000"
+      height="1333"
+    >
+  {% else %}
+    <div style="position:absolute;inset:0;background:linear-gradient(135deg,#1a1208 0%,#0a0a0a 100%);"></div>
+  {% endif %}
+
+  <div class="ps-hero__overlay"></div>
+
+  <div class="ps-hero__content">
+    <span class="ps-hero__eyebrow">{{ hero_block.settings.eyebrow | default: 'The GetGlow Edit' }}</span>
+
+    <h1 class="ps-hero__title">
+      {{ hero_block.settings.title | default: 'As Seen <em>In</em>' }}
+    </h1>
+
+    {% if hero_block.settings.subtitle != blank %}
+      <p class="ps-hero__subtitle">{{ hero_block.settings.subtitle }}</p>
+    {% else %}
+      <p class="ps-hero__subtitle">GetGlow dresses worn by celebrities, featured in films, and showcased in top fashion publications worldwide.</p>
+    {% endif %}
+
+    {% if hero_block.settings.btn_label != blank %}
+      <div class="ps-hero__actions">
+        <a
+          href="{{ hero_block.settings.btn_link | default: '/collections/all' }}"
+          class="ps-btn ps-btn--light"
+        >{{ hero_block.settings.btn_label }}</a>
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="ps-hero__scroll">
+    <div class="ps-hero__scroll-line"></div>
+    <span>Scroll</span>
+  </div>
+
+</section>
+
+
+{% comment %} ============================================================
+   SECTION 2 — CELEBRITY SHOWCASE
+============================================================ {% endcomment %}
+
+{% assign celeb_blocks = section.blocks | where: 'type', 'celebrity' %}
+
+{% if celeb_blocks.size > 0 %}
+<section class="press-showcase ps-section ps-celebrity" id="ps-celebrity">
+  <div class="ps-container">
+
+    <div class="ps-celebrity__header">
+      <div>
+        <span class="ps-eyebrow">Celebrity Spotlight</span>
+        <h2 class="ps-heading">Dressed by <em>the Stars</em></h2>
+        <div class="ps-divider"></div>
+        <p class="ps-subheading">Our gowns have graced the most celebrated figures in entertainment, royalty, and culture.</p>
+      </div>
+    </div>
+
+    <div class="ps-celebrity__grid">
+      {% for block in celeb_blocks %}
+        <div class="ps-celeb-card ps-reveal ps-reveal--delay-{{ forloop.index | modulo: 4 | plus: 1 }}" {{ block.shopify_attributes }}>
+
+          {% if block.settings.image != blank %}
+            <img
+              class="ps-celeb-card__img ps-lazy"
+              src="{{ block.settings.image | img_url: '800x' }}"
+              srcset="
+                {{ block.settings.image | img_url: '400x'  }} 400w,
+                {{ block.settings.image | img_url: '800x'  }} 800w,
+                {{ block.settings.image | img_url: '1200x' }} 1200w
+              "
+              sizes="(max-width:640px) 100vw,(max-width:900px) 50vw,33vw"
+              alt="{{ block.settings.name | escape }}"
+              loading="lazy"
+              width="800"
+              height="1067"
+            >
+          {% else %}
+            <div style="width:100%;height:100%;background:linear-gradient(135deg,#1c1c1c,#2a2218);display:flex;align-items:center;justify-content:center;">
+              <span style="font-family:Georgia,serif;font-size:4rem;opacity:0.15;color:#c9a96e;">✦</span>
+            </div>
+          {% endif %}
+
+          <div class="ps-celeb-card__overlay">
+            <div class="ps-celeb-card__name">{{ block.settings.name | default: 'Celebrity Name' }}</div>
+            {% if block.settings.dress_name != blank %}
+              <div class="ps-celeb-card__dress">Wearing: {{ block.settings.dress_name }}</div>
+            {% endif %}
+            {% if block.settings.product_link != blank %}
+              <a href="{{ block.settings.product_link }}" class="ps-celeb-card__shop">
+                Shop the Look&nbsp;&nbsp;→
+              </a>
+            {% endif %}
+          </div>
+
+        </div>
+      {% endfor %}
+    </div>
+
+  </div>
+</section>
+{% endif %}
+
+
+{% comment %} ============================================================
+   SECTION 3 — MAGAZINE / PRESS FEATURES GRID
+============================================================ {% endcomment %}
+
+{% assign press_blocks = section.blocks | where: 'type', 'press_feature' %}
+
+{% if press_blocks.size > 0 %}
+<section class="press-showcase ps-section ps-press" id="ps-press">
+  <div class="ps-container">
+
+    <div class="ps-press__header ps-reveal">
+      <span class="ps-eyebrow">Press Features</span>
+      <h2 class="ps-heading">In the <em>Pages</em></h2>
+      <div class="ps-divider"></div>
+      <p class="ps-subheading">From glossy covers to editorial spreads — GetGlow is the name on every fashion editor's lips.</p>
+    </div>
+
+    <div class="ps-press__grid">
+      {% for block in press_blocks %}
+        <div class="ps-press-card ps-reveal ps-reveal--delay-{{ forloop.index | modulo: 4 | plus: 1 }}" {{ block.shopify_attributes }}>
+
+          <div class="ps-press-card__img-wrap">
+            {% if block.settings.image != blank %}
+              <img
+                class="ps-press-card__img ps-lazy"
+                src="{{ block.settings.image | img_url: '600x' }}"
+                srcset="
+                  {{ block.settings.image | img_url: '400x' }} 400w,
+                  {{ block.settings.image | img_url: '600x' }} 600w
+                "
+                sizes="(max-width:640px) 100vw,(max-width:1100px) 50vw,25vw"
+                alt="{{ block.settings.mag_name | escape }}"
+                loading="lazy"
+                width="600"
+                height="800"
+              >
+            {% else %}
+              <div style="width:100%;height:100%;background:linear-gradient(135deg,#e8e4df,#d6cfc6);display:flex;align-items:center;justify-content:center;">
+                <span style="font-family:Georgia,serif;font-size:1.2rem;font-style:italic;color:#8a8a8a;text-align:center;padding:20px;">{{ block.settings.mag_name | default: 'Magazine' }}</span>
+              </div>
+            {% endif %}
+
+            {% if block.settings.article_link != blank %}
+              <div class="ps-press-card__hover">
+                <div class="ps-press-card__hover-mag">{{ block.settings.mag_name | default: 'Publication' }}</div>
+                <a href="{{ block.settings.article_link }}" target="_blank" rel="noopener" class="ps-press-card__hover-link">Read Feature →</a>
+              </div>
+            {% else %}
+              <div class="ps-press-card__hover">
+                <div class="ps-press-card__hover-mag">{{ block.settings.mag_name | default: 'Publication' }}</div>
+              </div>
+            {% endif %}
+          </div>
+
+          <div class="ps-press-card__body">
+            <div class="ps-press-card__mag">{{ block.settings.mag_name | default: 'Publication Name' }}</div>
+            {% if block.settings.caption != blank %}
+              <p class="ps-press-card__caption">{{ block.settings.caption }}</p>
+            {% endif %}
+          </div>
+
+        </div>
+      {% endfor %}
+    </div>
+
+  </div>
+</section>
+{% endif %}
+
+
+{% comment %} ============================================================
+   SECTION 4 — MOVIES & TV APPEARANCES
+============================================================ {% endcomment %}
+
+{% assign movie_blocks = section.blocks | where: 'type', 'movie' %}
+
+{% if movie_blocks.size > 0 %}
+<section class="press-showcase ps-movies" id="ps-movies">
+  <div class="ps-container">
+
+    <div class="ps-movies__header ps-reveal">
+      <span class="ps-eyebrow" style="color:var(--gg-gold);">Screen & Stage</span>
+      <h2 class="ps-heading" style="color:var(--gg-white);">On the <em>Silver Screen</em></h2>
+      <div class="ps-divider"></div>
+      <p class="ps-subheading" style="color:rgba(250,249,247,0.55);">From blockbuster films to acclaimed television — GetGlow dresses have stolen every scene.</p>
+    </div>
+
+    <div class="ps-movies__list">
+      {% for block in movie_blocks %}
+        <div class="ps-movie-card ps-reveal" {{ block.shopify_attributes }}>
+
+          <div class="ps-movie-card__img-wrap">
+            {% if block.settings.image != blank %}
+              <img
+                class="ps-movie-card__img ps-lazy"
+                src="{{ block.settings.image | img_url: '900x' }}"
+                srcset="
+                  {{ block.settings.image | img_url: '600x'  }} 600w,
+                  {{ block.settings.image | img_url: '900x'  }} 900w,
+                  {{ block.settings.image | img_url: '1400x' }} 1400w
+                "
+                sizes="(max-width:900px) 100vw, 50vw"
+                alt="{{ block.settings.movie_title | escape }}"
+                loading="lazy"
+                width="900"
+                height="600"
+              >
+            {% else %}
+              <div style="width:100%;height:100%;min-height:480px;background:linear-gradient(135deg,#111,#1c1c1c);display:flex;align-items:center;justify-content:center;">
+                <span style="font-size:4rem;opacity:0.1;">🎬</span>
+              </div>
+            {% endif %}
+            <div class="ps-movie-card__img-overlay"></div>
+          </div>
+
+          <div class="ps-movie-card__content">
+            <div class="ps-movie-card__tag">
+              {% if block.settings.appearance_type != blank %}
+                {{ block.settings.appearance_type }}
+              {% else %}
+                Film Appearance
+              {% endif %}
+            </div>
+
+            <h3 class="ps-movie-card__title">{{ block.settings.movie_title | default: 'Film Title' }}</h3>
+
+            {% if block.settings.actress_name != blank %}
+              <div class="ps-movie-card__actress">{{ block.settings.actress_name }}</div>
+            {% endif %}
+
+            {% if block.settings.dress_name != blank %}
+              <div class="ps-movie-card__dress">{{ block.settings.dress_name }}</div>
+            {% endif %}
+
+            {% if block.settings.description != blank %}
+              <p class="ps-movie-card__desc">{{ block.settings.description }}</p>
+            {% endif %}
+
+            {% if block.settings.product_link != blank %}
+              <a href="{{ block.settings.product_link }}" class="ps-btn ps-btn--gold ps-movie-card__btn">
+                Shop This Dress
+              </a>
+            {% endif %}
+          </div>
+
+        </div>
+      {% endfor %}
+    </div>
+
+  </div>
+</section>
+{% endif %}
+
+
+{% comment %} ============================================================
+   SECTION 5 — PRESS LOGO WALL
+============================================================ {% endcomment %}
+
+{% assign logo_blocks = section.blocks | where: 'type', 'logo' %}
+
+{% if logo_blocks.size > 0 %}
+<section class="press-showcase ps-logos" id="ps-logos">
+  <div class="ps-container">
+
+    <div class="ps-logos__header ps-reveal">
+      <p class="ps-logos__label">As Featured In</p>
+    </div>
+
+    <div class="ps-logos__grid">
+      {% for block in logo_blocks %}
+        <div class="ps-logo-item ps-reveal ps-reveal--delay-{{ forloop.index | modulo: 5 | plus: 1 }}" {{ block.shopify_attributes }}>
+          {% if block.settings.logo_link != blank %}
+            <a href="{{ block.settings.logo_link }}" target="_blank" rel="noopener" style="display:contents;">
+          {% endif %}
+
+          {% if block.settings.logo_image != blank %}
+            <img
+              class="ps-lazy"
+              src="{{ block.settings.logo_image | img_url: '300x' }}"
+              alt="{{ block.settings.logo_name | default: 'Press Logo' | escape }}"
+              loading="lazy"
+              width="150"
+              height="60"
+            >
+          {% else %}
+            <span class="ps-logo-text">{{ block.settings.logo_name | default: 'Publication' }}</span>
+          {% endif %}
+
+          {% if block.settings.logo_link != blank %}
+            </a>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+
+  </div>
+</section>
+{% endif %}
+
+
+{% comment %} ============================================================
+   SECTION 6 — CALL TO ACTION
+============================================================ {% endcomment %}
+
+{% assign cta_block = section.blocks | where: 'type', 'cta' | first %}
+
+<section class="press-showcase ps-cta" id="ps-cta">
+  <div class="ps-container">
+
+    <div class="ps-cta__ornament">
+      <div class="ps-cta__ornament-line"></div>
+      <div class="ps-cta__ornament-diamond"></div>
+      <div class="ps-cta__ornament-line"></div>
+    </div>
+
+    <span class="ps-cta__eyebrow ps-reveal">{{ cta_block.settings.eyebrow | default: 'The Collection' }}</span>
+
+    <h2 class="ps-cta__title ps-reveal">
+      {{ cta_block.settings.title | default: 'Shop the Dresses <em>Everyone</em> Is Talking About' }}
+    </h2>
+
+    {% assign cta_subtitle = cta_block.settings.subtitle | default: 'Loved by celebrities and featured worldwide.' %}
+    <p class="ps-cta__subtitle ps-reveal">{{ cta_subtitle }}</p>
+
+    <div class="ps-cta__actions ps-reveal">
+      <a
+        href="{{ cta_block.settings.btn_link | default: '/collections/all' }}"
+        class="ps-btn ps-btn--gold"
+      >{{ cta_block.settings.btn_label | default: 'Shop The Collection' }}</a>
+    </div>
+
+  </div>
+</section>
+
+
+{% comment %} ============================================================
+   JAVASCRIPT — Lazy Load + Scroll Reveal
+============================================================ {% endcomment %}
+
+<script>
+(function() {
+  'use strict';
+
+  /* Lazy load images */
+  var lazyImgs = document.querySelectorAll('.press-showcase .ps-lazy');
+  if ('IntersectionObserver' in window) {
+    var imgObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          var el = entry.target;
+          el.classList.add('ps-loaded');
+          imgObserver.unobserve(el);
+        }
+      });
+    }, { rootMargin: '200px 0px' });
+
+    lazyImgs.forEach(function(img) { imgObserver.observe(img); });
+  } else {
+    lazyImgs.forEach(function(img) { img.classList.add('ps-loaded'); });
+  }
+
+  /* Scroll reveal */
+  var revealEls = document.querySelectorAll('.press-showcase .ps-reveal');
+  if ('IntersectionObserver' in window) {
+    var revealObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('ps-visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    revealEls.forEach(function(el) { revealObserver.observe(el); });
+  } else {
+    revealEls.forEach(function(el) { el.classList.add('ps-visible'); });
+  }
+})();
+</script>
+
+
+{% comment %} ============================================================
+   SCHEMA — Theme Editor Settings
+============================================================ {% endcomment %}
+
+{% schema %}
+{
+  "name": "Press & Media Showcase",
+  "tag": "div",
+  "class": "press-media-showcase-section",
+  "max_blocks": 50,
+  "settings": [],
+  "blocks": [
+    {
+      "type": "hero",
+      "name": "Hero Banner",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "eyebrow",
+          "label": "Eyebrow Text",
+          "default": "The GetGlow Edit"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Hero Title (HTML allowed)",
+          "default": "As Seen <em>In</em>",
+          "info": "Use <em>word</em> to italicize and apply gold color."
+        },
+        {
+          "type": "textarea",
+          "id": "subtitle",
+          "label": "Subtitle / Description",
+          "default": "GetGlow dresses worn by celebrities, featured in films, and showcased in top fashion publications worldwide."
+        },
+        {
+          "type": "image_picker",
+          "id": "bg_image",
+          "label": "Background Image"
+        },
+        {
+          "type": "text",
+          "id": "btn_label",
+          "label": "Button Label",
+          "default": "Shop the Collection"
+        },
+        {
+          "type": "url",
+          "id": "btn_link",
+          "label": "Button Link"
+        }
+      ]
+    },
+    {
+      "type": "celebrity",
+      "name": "Celebrity Entry",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Celebrity Photo"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Celebrity Name",
+          "default": "Celebrity Name"
+        },
+        {
+          "type": "text",
+          "id": "dress_name",
+          "label": "Dress Name",
+          "default": "The Glow Gown"
+        },
+        {
+          "type": "url",
+          "id": "product_link",
+          "label": "Product Link (optional)"
+        }
+      ]
+    },
+    {
+      "type": "press_feature",
+      "name": "Press / Magazine Feature",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Magazine Cover / Article Image"
+        },
+        {
+          "type": "text",
+          "id": "mag_name",
+          "label": "Magazine or Publication Name",
+          "default": "Vogue"
+        },
+        {
+          "type": "textarea",
+          "id": "caption",
+          "label": "Short Caption / Feature Description",
+          "default": "Featured in the February issue cover story."
+        },
+        {
+          "type": "url",
+          "id": "article_link",
+          "label": "Article / Feature Link (optional)"
+        }
+      ]
+    },
+    {
+      "type": "movie",
+      "name": "Movie / TV Appearance",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Movie Still / Scene Image"
+        },
+        {
+          "type": "select",
+          "id": "appearance_type",
+          "label": "Appearance Type",
+          "options": [
+            { "value": "Film Appearance",       "label": "Film" },
+            { "value": "TV Series",             "label": "TV Series" },
+            { "value": "Music Video",           "label": "Music Video" },
+            { "value": "Stage Performance",     "label": "Stage Performance" },
+            { "value": "Awards Ceremony",       "label": "Awards Ceremony" }
+          ],
+          "default": "Film Appearance"
+        },
+        {
+          "type": "text",
+          "id": "movie_title",
+          "label": "Movie / Show Title",
+          "default": "The Grand Premiere"
+        },
+        {
+          "type": "text",
+          "id": "actress_name",
+          "label": "Actress / Character Name",
+          "default": "Actress Name"
+        },
+        {
+          "type": "text",
+          "id": "dress_name",
+          "label": "Dress Name",
+          "default": "The Glow Gown"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Short Description",
+          "default": "An unforgettable scene that became a fashion moment heard around the world."
+        },
+        {
+          "type": "url",
+          "id": "product_link",
+          "label": "Shop This Dress Link (optional)"
+        }
+      ]
+    },
+    {
+      "type": "logo",
+      "name": "Press Logo",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "logo_image",
+          "label": "Logo Image (PNG with transparency recommended)"
+        },
+        {
+          "type": "text",
+          "id": "logo_name",
+          "label": "Publication Name (used if no logo image)",
+          "default": "Vogue"
+        },
+        {
+          "type": "url",
+          "id": "logo_link",
+          "label": "Article Link (optional)"
+        }
+      ]
+    },
+    {
+      "type": "cta",
+      "name": "Call to Action",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "eyebrow",
+          "label": "Eyebrow Text",
+          "default": "The Collection"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title (HTML allowed)",
+          "default": "Shop the Dresses <em>Everyone</em> Is Talking About",
+          "info": "Use <em>word</em> to italicize and apply gold color."
+        },
+        {
+          "type": "textarea",
+          "id": "subtitle",
+          "label": "Subtitle",
+          "default": "Loved by celebrities and featured in publications worldwide."
+        },
+        {
+          "type": "text",
+          "id": "btn_label",
+          "label": "Button Label",
+          "default": "Shop The Collection"
+        },
+        {
+          "type": "url",
+          "id": "btn_link",
+          "label": "Button Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Press & Media Showcase",
+      "blocks": [
+        {
+          "type": "hero",
+          "settings": {
+            "eyebrow": "The GetGlow Edit",
+            "title": "As Seen <em>In</em>",
+            "subtitle": "GetGlow dresses worn by celebrities, featured in films, and showcased in top fashion publications worldwide.",
+            "btn_label": "Shop the Collection",
+            "btn_link": "/collections/all"
+          }
+        },
+        {
+          "type": "celebrity",
+          "settings": {
+            "name": "Tiwa Savage",
+            "dress_name": "The Golden Hour Gown"
+          }
+        },
+        {
+          "type": "celebrity",
+          "settings": {
+            "name": "Yvonne Nelson",
+            "dress_name": "The Midnight Silk Dress"
+          }
+        },
+        {
+          "type": "celebrity",
+          "settings": {
+            "name": "Ini Edo",
+            "dress_name": "The Ebony Editorial Gown"
+          }
+        },
+        {
+          "type": "press_feature",
+          "settings": {
+            "mag_name": "Vogue Africa",
+            "caption": "Featured on the February cover — The New Wave of African Luxury."
+          }
+        },
+        {
+          "type": "press_feature",
+          "settings": {
+            "mag_name": "Glam Africa",
+            "caption": "Editorial spread: Dressing the Future."
+          }
+        },
+        {
+          "type": "press_feature",
+          "settings": {
+            "mag_name": "ThisDay Style",
+            "caption": "10 Looks That Defined the Season."
+          }
+        },
+        {
+          "type": "press_feature",
+          "settings": {
+            "mag_name": "BellaNaija",
+            "caption": "Best Dressed at Lagos Fashion Week."
+          }
+        },
+        {
+          "type": "movie",
+          "settings": {
+            "appearance_type": "Film Appearance",
+            "movie_title": "A Lagos Story",
+            "actress_name": "Genevieve Nnaji",
+            "dress_name": "The Crimson Evening Gown",
+            "description": "The iconic finale scene that had audiences talking for weeks — a GetGlow original that stopped the show."
+          }
+        },
+        {
+          "type": "logo",
+          "settings": { "logo_name": "Vogue" }
+        },
+        {
+          "type": "logo",
+          "settings": { "logo_name": "Glam Africa" }
+        },
+        {
+          "type": "logo",
+          "settings": { "logo_name": "Guardian Life" }
+        },
+        {
+          "type": "logo",
+          "settings": { "logo_name": "ThisDay Style" }
+        },
+        {
+          "type": "logo",
+          "settings": { "logo_name": "BellaNaija" }
+        },
+        {
+          "type": "cta",
+          "settings": {
+            "eyebrow": "The Collection",
+            "title": "Shop the Dresses <em>Everyone</em> Is Talking About",
+            "subtitle": "Loved by celebrities and featured in publications worldwide.",
+            "btn_label": "Shop The Collection",
+            "btn_link": "/collections/all"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,325 @@
+{%- style -%}
+.vertical-slideshow {
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+.slide-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  height: 100vh;
+  position: relative;
+}
+.mobile-video {
+  display: none;
+}
+.video-column {
+  position: relative;
+  overflow: hidden;
+}
+
+.video-column video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  /* Optimize video rendering */
+  transform: translateZ(0);
+  pointer-events: none;
+}
+
+.content-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 2;
+  max-width: 800px;
+  width: 90%;
+}
+
+.slide-heading {
+  font-size: 3rem;
+  margin-bottom: 2.2rem;
+  color: {{ section.settings.heading_color }};
+}
+
+.slide-subheading {
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+  color: {{ section.settings.subheading_color }};
+}
+
+.shop-button {
+  padding: 15px 40px;
+  background-color: {{ section.settings.button_bg_color }};
+  color: {{ section.settings.button_text_color }} !important;
+  text-decoration: none;
+  border-radius: 30px;
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
+}
+
+.swiper-pagination {
+  right: 40px !important;
+  left: auto !important;
+  bottom: 50% !important;
+  transform: translateY(50%);
+  width: auto !important;
+}
+
+.swiper-pagination-bullet {
+  background: {{ section.settings.pagination_color }};
+  opacity: 0.5;
+  margin: 10px 0 !important;
+}
+
+.swiper-pagination-bullet-active {
+  opacity: 1;
+}
+
+@media (max-width: 768px) {
+  .video-column {
+    display: none;
+  }
+  
+  .mobile-video {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+  }
+  
+  .mobile-video video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  .slide-heading {
+    font-size: 2.5rem;
+  }
+  
+  .slide-subheading {
+    font-size: 1.2rem;
+  }
+  
+  .shop-button {
+    padding: 12px 30px;
+    font-size: 1rem;
+  }
+}
+{%- endstyle -%}
+
+<div class="horizontal-slideshow swiper">
+  <div class="swiper-wrapper">
+    {% for block in section.blocks %}
+    <div class="swiper-slide">
+      <div class="slide-container">
+        <div class="video-column">
+          <video muted autoplay playsinline loop>
+            <source src="{{ block.settings.video }}" type="video/mp4">
+            <source src="{{ block.settings.webm_video }}" type="video/webm">
+          </video>
+        </div>
+        <div class="video-column">
+          <video muted autoplay playsinline loop>
+            <source src="{{ block.settings.video }}" type="video/mp4">
+            <source src="{{ block.settings.webm_video }}" type="video/webm">
+          </video>
+        </div>
+        <div class="video-column">
+          <video muted autoplay playsinline loop>
+            <source src="{{ block.settings.video }}" type="video/mp4">
+            <source src="{{ block.settings.webm_video }}" type="video/webm">
+          </video>
+        </div>
+
+        <div class="mobile-video">
+          {% if block.settings.mobile_video != blank %}
+            <video muted autoplay playsinline loop>
+              <source src="{{ block.settings.mobile_video }}" type="video/mp4">
+            </video>
+          {% endif %}
+        </div>
+        
+        <div class="content-overlay">
+          <h2 class="slide-subheading">{{ block.settings.heading }}</h2>
+          <p class="slide-heading">{{ block.settings.subheading }}</p>
+          <a href="{{ block.settings.button_link }}" class="shop-button">
+            {{ block.settings.button_text }}
+          </a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  <div class="swiper-pagination"></div>
+</div>
+
+<script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const loadVideo = (videoEl) => {
+    const sources = videoEl.querySelectorAll('source');
+    sources.forEach(source => {
+      if (source.dataset.src && !source.src) {
+        source.src = source.dataset.src;
+      }
+    });
+    videoEl.load();
+  };
+
+  const playVideo = (videoEl) => {
+    videoEl.play().catch(e => console.error('Video play error:', e));
+  };
+
+  const slider = new Swiper('.vertical-slideshow', {
+    direction: 'horizontal',
+    loop: true,
+    speed: 800,
+    autoplay: {
+      delay: {{ section.settings.autoplay_delay }},
+      disableOnInteraction: false,
+    },
+    pagination: {
+      el: '.swiper-pagination',
+      clickable: true,
+    },
+    preloadImages: false,
+    lazy: true,
+    on: {
+      init: function() {
+        const activeSlide = this.slides[this.activeIndex];
+        const activeVideos = activeSlide.querySelectorAll('video');
+        activeVideos.forEach(video => {
+          loadVideo(video);
+          playVideo(video);
+        });
+      },
+      slideChangeTransitionStart: function() {
+        const prevSlide = this.slides[this.previousIndex];
+        const prevVideos = prevSlide.querySelectorAll('video');
+        prevVideos.forEach(video => video.pause());
+
+        const activeSlide = this.slides[this.activeIndex];
+        const activeVideos = activeSlide.querySelectorAll('video');
+        activeVideos.forEach(video => {
+          if (!video.querySelector('source').src) {
+            loadVideo(video);
+          }
+          playVideo(video);
+        });
+      }
+    }
+  });
+});
+</script>
+
+
+{% schema %}
+{
+  "name": "Vertical Video Slideshow",
+  "settings": [
+    {
+      "type": "range",
+      "id": "autoplay_delay",
+      "min": 3000,
+      "max": 9000,
+      "step": 1000,
+      "unit": "ms",
+      "label": "Autoplay Delay",
+      "default": 5000
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "subheading_color",
+      "label": "Subheading Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "button_bg_color",
+      "label": "Button Background",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "pagination_color",
+      "label": "Pagination Color",
+      "default": "#ffffff"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Slide",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Slide Heading"
+        },
+        {
+          "type": "text",
+          "id": "mobile_video",
+          "label": "Mobile Video URL",
+          "info": "Upload MP4 files to Settings -> Files and paste URL here"
+        },
+        {
+          "type": "text",
+          "id": "subheading",
+          "label": "Subheading",
+          "default": "Slide subheading text goes here"
+        },
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button Text",
+          "default": "SHOP NOW"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button Link"
+        },
+        {
+          "type": "text",
+          "id": "video",
+          "label": "Video URL",
+          "info": "Upload MP4 files to Settings -> Files and paste URL here"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Vertical Video Slideshow",
+      "category": "Custom Sections"
+    }
+  ]
+}
+{% endschema %}

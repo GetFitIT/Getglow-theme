@@ -1,0 +1,923 @@
+{% comment %}
+  Collection Slider Section for Shopify - Mobile Responsive with Touch Support
+  Save this as: sections/collection-slider.liquid
+{% endcomment %}
+
+<div class="collection-slider-wrapper" id="collection-slider-{{ section.id }}">
+  <div class="collection-slider" id="slider-{{ section.id }}">
+    {% for block in section.blocks %}
+      <div class="slide" data-slide="{{ forloop.index }}">
+        <div class="slide-content">
+          <!-- Image 1 -->
+          <div class="image-container image-left">
+            {% if block.settings.image_1 %}
+              <img src="{{ block.settings.image_1 | img_url: '600x800' }}" 
+                   alt="{{ block.settings.image_1.alt | default: 'Collection image' }}"
+                   loading="lazy">
+            {% else %}
+              <div class="placeholder-image">Image 1</div>
+            {% endif %}
+          </div>
+
+          <!-- Center content with image 2 -->
+          <div class="image-container image-center">
+            {% if block.settings.image_2 %}
+              <img src="{{ block.settings.image_2 | img_url: '600x800' }}" 
+                   alt="{{ block.settings.image_2.alt | default: 'Collection image' }}"
+                   loading="lazy">
+            {% else %}
+              <div class="placeholder-image">Image 2</div>
+            {% endif %}
+          </div>
+
+          <!-- Image 3 -->
+          <div class="image-container image-right">
+            {% if block.settings.image_3 %}
+              <img src="{{ block.settings.image_3 | img_url: '600x800' }}" 
+                   alt="{{ block.settings.image_3.alt | default: 'Collection image' }}"
+                   loading="lazy">
+            {% else %}
+              <div class="placeholder-image">Image 3</div>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- Overlay content - moved outside slide-content for proper positioning -->
+        <div class="slide-overlay position-{{ block.settings.button_position }}">
+          {% if block.settings.heading %}
+            <h2 class="slide-heading">{{ block.settings.heading }}</h2>
+          {% endif %}
+          
+          {% if block.settings.subheading %}
+            <p class="slide-subheading">{{ block.settings.subheading }}</p>
+          {% endif %}
+
+          {% if block.settings.button_text %}
+            {% if block.settings.link_type == 'collection' and block.settings.collection %}
+              <a href="{{ collections[block.settings.collection].url }}" 
+                 class="slide-button">
+                {{ block.settings.button_text }}
+              </a>
+            {% elsif block.settings.link_type == 'product' and block.settings.product %}
+              <a href="{{ all_products[block.settings.product].url }}" 
+                 class="slide-button">
+                {{ block.settings.button_text }}
+              </a>
+            {% elsif block.settings.link_type == 'url' and block.settings.custom_url %}
+              <a href="{{ block.settings.custom_url }}" 
+                 class="slide-button">
+                {{ block.settings.button_text }}
+              </a>
+            {% endif %}
+          {% endif %}
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+  <!-- Navigation -->
+  {% if section.blocks.size > 1 %}
+    <div class="slider-navigation">
+      <button class="nav-btn prev-btn" onclick="changeSlide(-1)">‹</button>
+      <div class="slide-dots">
+        {% for block in section.blocks %}
+          <button class="dot {% if forloop.first %}active{% endif %}" 
+                  onclick="currentSlide({{ forloop.index }})"></button>
+        {% endfor %}
+      </div>
+      <button class="nav-btn next-btn" onclick="changeSlide(1)">›</button>
+    </div>
+  {% endif %}
+</div>
+
+<style>
+  .collection-slider-wrapper {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    background: {{ section.settings.background_color | default: '#f5f5f5' }};
+    touch-action: pan-y; /* Allow vertical scrolling but handle horizontal ourselves */
+  }
+
+  .collection-slider {
+    display: flex;
+    transition: transform 0.3s ease-out;
+    width: {{ section.blocks.size | times: 100 }}%;
+    cursor: grab;
+  }
+
+  .collection-slider:active {
+    cursor: grabbing;
+  }
+
+  .slide {
+    width: {{ 100.0 | divided_by: section.blocks.size }}%;
+    min-height: 500px;
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .slide-content {
+    display: flex;
+    height: 100%;
+    align-items: stretch;
+    gap: 12px;
+    padding: 0 10px;
+  }
+
+  .image-container {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .placeholder-image {
+    width: 100%;
+    height: 100%;
+    background: #e0e0e0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+    font-size: 18px;
+  }
+
+  .slide-overlay {
+    position: absolute;
+    z-index: 10;
+    padding: 20px;
+    max-width: 400px;
+    word-wrap: break-word;
+  }
+
+  /* Fixed positioning classes */
+  .slide-overlay.position-center {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+
+  .slide-overlay.position-left {
+    top: 50%;
+    left: 5%;
+    transform: translateY(-50%);
+    text-align: left;
+  }
+
+  .slide-overlay.position-right {
+    top: 50%;
+    right: 5%;
+    transform: translateY(-50%);
+    text-align: right;
+  }
+
+  .slide-overlay.position-top-left {
+    top: 30px;
+    left: 5%;
+    text-align: left;
+  }
+
+  .slide-overlay.position-top-center {
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+  }
+
+  .slide-overlay.position-top-right {
+    top: 30px;
+    right: 5%;
+    text-align: right;
+  }
+
+  .slide-overlay.position-bottom-left {
+    bottom: 80px;
+    left: 5%;
+    text-align: left;
+  }
+
+  .slide-overlay.position-bottom-center {
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+  }
+
+  .slide-overlay.position-bottom-right {
+    bottom: 80px;
+    right: 5%;
+    text-align: right;
+  }
+
+  .slide-heading {
+    font-size: {{ section.settings.heading_size | default: '32px' }};
+    font-weight: 700;
+    margin: 0 0 10px 0;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+    color: {{ section.settings.text_color | default: '#ffffff' }};
+    line-height: 1.1;
+    word-wrap: break-word;
+    hyphens: auto;
+  }
+
+  .slide-subheading {
+    font-size: {{ section.settings.subheading_size | default: '14px' }};
+    margin: 0 0 20px 0;
+    opacity: 0.95;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
+    color: {{ section.settings.text_color | default: '#ffffff' }};
+    line-height: 1.2;
+    word-wrap: break-word;
+  }
+
+  .slide-button {
+    display: inline-block;
+    padding: 16px 32px;
+    background: {{ section.settings.button_bg | default: '#ffffff' }};
+    color: {{ section.settings.button_text_color | default: '#000000' }};
+    text-decoration: none;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-radius: 25px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 2px solid {{ section.settings.button_bg | default: '#ffffff' }};
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    position: relative;
+    z-index: 20;
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: 14px;
+    min-width: 180px;
+    text-align: center;
+  }
+
+  .slide-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+  }
+
+  .slide-button:hover {
+    background: transparent;
+    color: {{ section.settings.button_bg | default: '#ffffff' }};
+    border-color: {{ section.settings.button_bg | default: '#ffffff' }};
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+  }
+
+  .slide-button:hover::before {
+    left: 100%;
+  }
+
+  .slide-button:active {
+    transform: translateY(-1px) scale(1.02);
+    transition: all 0.1s;
+  }
+
+  .slider-navigation {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    z-index: 30;
+  }
+
+  .nav-btn {
+    background: rgba(255,255,255,0.9);
+    border: 2px solid rgba(255,255,255,0.3);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 24px;
+    color: #333;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  }
+
+  .nav-btn:hover {
+    background: white;
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+  }
+
+  .slide-dots {
+    display: flex;
+    gap: 12px;
+  }
+
+  .dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.7);
+    background: rgba(255,255,255,0.3);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+
+  .dot.active,
+  .dot:hover {
+    background: white;
+    border-color: white;
+    transform: scale(1.2);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  }
+
+  /* Tablet styles */
+  @media (max-width: 1024px) {
+    .slide {
+      min-height: 400px;
+    }
+    
+    .slide-heading {
+      font-size: 28px;
+    }
+    
+    .slide-button {
+      padding: 14px 28px;
+      font-size: 13px;
+      min-width: 160px;
+    }
+  }
+
+  /* Mobile responsiveness - Show only center image */
+  @media (max-width: 768px) {
+    .slide {
+      min-height: 400px;
+    }
+
+    .slide-content {
+      flex-direction: row; /* Keep horizontal layout but hide side images */
+      gap: 0;
+      padding: 0;
+    }
+
+    /* Hide left and right images on mobile */
+    .image-container.image-left,
+    .image-container.image-right {
+      display: none;
+    }
+
+    /* Make center image full width */
+    .image-container.image-center {
+      width: 100%;
+      flex: 1;
+    }
+
+    .image-container.image-center img,
+    .image-container.image-center .placeholder-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .slide-heading {
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+
+    .slide-subheading {
+      font-size: 14px;
+      margin-bottom: 15px;
+    }
+
+    .slide-button {
+      padding: 14px 28px;
+      font-size: 13px;
+      border-radius: 22px;
+      min-width: 160px;
+    }
+
+    .slide-overlay {
+      padding: 20px;
+      max-width: 320px;
+    }
+
+    /* Adjust positioning for mobile */
+    .slide-overlay.position-left,
+    .slide-overlay.position-top-left,
+    .slide-overlay.position-bottom-left {
+      left: 20px;
+    }
+
+    .slide-overlay.position-right,
+    .slide-overlay.position-top-right,
+    .slide-overlay.position-bottom-right {
+      right: 20px;
+    }
+
+    .slider-navigation {
+      bottom: 20px;
+      gap: 15px;
+    }
+
+    .nav-btn {
+      width: 45px;
+      height: 45px;
+      font-size: 22px;
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+    }
+
+    .slide-dots {
+      gap: 10px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .slide {
+      min-height: 350px;
+    }
+
+    .slide-heading {
+      font-size: 20px;
+      margin-bottom: 6px;
+    }
+
+    .slide-subheading {
+      font-size: 12px;
+      margin-bottom: 12px;
+    }
+
+    .slide-overlay {
+      padding: 15px;
+      max-width: 280px;
+    }
+
+    .slide-button {
+      padding: 12px 24px;
+      font-size: 12px;
+      border-radius: 20px;
+      min-width: 140px;
+    }
+
+    .slider-navigation {
+      gap: 12px;
+      bottom: 15px;
+    }
+
+    .nav-btn {
+      width: 40px;
+      height: 40px;
+      font-size: 20px;
+    }
+
+    /* More compact positioning on small screens */
+    .slide-overlay.position-left,
+    .slide-overlay.position-top-left,
+    .slide-overlay.position-bottom-left {
+      left: 15px;
+    }
+
+    .slide-overlay.position-right,
+    .slide-overlay.position-top-right,
+    .slide-overlay.position-bottom-right {
+      right: 15px;
+    }
+  }
+
+  /* Very small screens */
+  @media (max-width: 320px) {
+    .slide {
+      min-height: 300px;
+    }
+    
+    .slide-heading {
+      font-size: 18px;
+    }
+    
+    .slide-subheading {
+      font-size: 11px;
+    }
+    
+    .slide-button {
+      padding: 10px 20px;
+      font-size: 11px;
+      min-width: 120px;
+    }
+    
+    .slide-overlay {
+      max-width: 240px;
+      padding: 12px;
+    }
+  }
+</style>
+
+<script>
+  (function() {
+    const sectionId = 'collection-slider-{{ section.id }}';
+    const wrapper = document.getElementById(sectionId);
+    const slider = document.getElementById('slider-{{ section.id }}');
+    let currentSlideIndex = 0;
+    const totalSlides = {{ section.blocks.size }};
+    
+    // Touch/swipe variables
+    let startX = 0;
+    let startY = 0;
+    let currentX = 0;
+    let currentY = 0;
+    let isDragging = false;
+    let startTime = 0;
+    let autoplayInterval;
+
+    function showSlide(index, animate = true) {
+      if (!animate) {
+        slider.style.transition = 'none';
+      } else {
+        slider.style.transition = 'transform 0.3s ease-out';
+      }
+      
+      const slideWidth = 100 / totalSlides;
+      slider.style.transform = `translateX(-${index * slideWidth}%)`;
+      
+      // Update dots
+      const dots = wrapper.querySelectorAll('.dot');
+      dots.forEach((dot, i) => {
+        dot.classList.toggle('active', i === index);
+      });
+      
+      currentSlideIndex = index;
+      
+      // Restore transition after animation
+      if (!animate) {
+        requestAnimationFrame(() => {
+          slider.style.transition = 'transform 0.3s ease-out';
+        });
+      }
+    }
+
+    function changeSlide(direction) {
+      let newIndex = currentSlideIndex + direction;
+      
+      if (newIndex >= totalSlides) {
+        newIndex = 0;
+      } else if (newIndex < 0) {
+        newIndex = totalSlides - 1;
+      }
+      
+      showSlide(newIndex);
+      restartAutoplay();
+    }
+
+    function currentSlide(index) {
+      showSlide(index - 1);
+      restartAutoplay();
+    }
+
+    // Touch event handlers
+    function handleTouchStart(e) {
+      startTime = Date.now();
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+      currentX = startX;
+      currentY = startY;
+      isDragging = true;
+      slider.style.transition = 'none';
+      stopAutoplay();
+    }
+
+    function handleTouchMove(e) {
+      if (!isDragging) return;
+      
+      currentX = e.touches[0].clientX;
+      currentY = e.touches[0].clientY;
+      
+      const deltaX = currentX - startX;
+      const deltaY = currentY - startY;
+      
+      // Check if this is more of a horizontal swipe
+      if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 10) {
+        e.preventDefault(); // Prevent vertical scrolling when swiping horizontally
+        
+        const slideWidth = slider.offsetWidth / totalSlides;
+        const currentTransform = -currentSlideIndex * slideWidth;
+        const newTransform = currentTransform + deltaX;
+        
+        slider.style.transform = `translateX(${newTransform}px)`;
+      }
+    }
+
+    function handleTouchEnd(e) {
+      if (!isDragging) return;
+      
+      isDragging = false;
+      slider.style.transition = 'transform 0.3s ease-out';
+      
+      const deltaX = currentX - startX;
+      const deltaY = currentY - startY;
+      const deltaTime = Date.now() - startTime;
+      const velocity = Math.abs(deltaX) / deltaTime;
+      
+      // Determine if this was a horizontal swipe
+      if (Math.abs(deltaX) > Math.abs(deltaY)) {
+        const threshold = 50; // Minimum swipe distance
+        const velocityThreshold = 0.3; // Minimum swipe velocity
+        
+        if ((Math.abs(deltaX) > threshold || velocity > velocityThreshold)) {
+          if (deltaX > 0) {
+            // Swipe right - go to previous slide
+            changeSlide(-1);
+          } else {
+            // Swipe left - go to next slide
+            changeSlide(1);
+          }
+        } else {
+          // Snap back to current slide
+          showSlide(currentSlideIndex);
+          restartAutoplay();
+        }
+      } else {
+        // Not a horizontal swipe, snap back
+        showSlide(currentSlideIndex);
+        restartAutoplay();
+      }
+    }
+
+    // Mouse event handlers for desktop drag
+    function handleMouseDown(e) {
+      startTime = Date.now();
+      startX = e.clientX;
+      startY = e.clientY;
+      currentX = startX;
+      currentY = startY;
+      isDragging = true;
+      slider.style.transition = 'none';
+      stopAutoplay();
+      e.preventDefault();
+    }
+
+    function handleMouseMove(e) {
+      if (!isDragging) return;
+      
+      currentX = e.clientX;
+      currentY = e.clientY;
+      
+      const deltaX = currentX - startX;
+      const slideWidth = slider.offsetWidth / totalSlides;
+      const currentTransform = -currentSlideIndex * slideWidth;
+      const newTransform = currentTransform + deltaX;
+      
+      slider.style.transform = `translateX(${newTransform}px)`;
+      e.preventDefault();
+    }
+
+    function handleMouseUp(e) {
+      if (!isDragging) return;
+      
+      isDragging = false;
+      slider.style.transition = 'transform 0.3s ease-out';
+      
+      const deltaX = currentX - startX;
+      const deltaTime = Date.now() - startTime;
+      const velocity = Math.abs(deltaX) / deltaTime;
+      
+      const threshold = 50;
+      const velocityThreshold = 0.3;
+      
+      if (Math.abs(deltaX) > threshold || velocity > velocityThreshold) {
+        if (deltaX > 0) {
+          changeSlide(-1);
+        } else {
+          changeSlide(1);
+        }
+      } else {
+        showSlide(currentSlideIndex);
+        restartAutoplay();
+      }
+    }
+
+    // Autoplay functions
+    function startAutoplay() {
+      {% if section.settings.autoplay %}
+        autoplayInterval = setInterval(() => {
+          changeSlide(1);
+        }, {{ section.settings.autoplay_speed | default: 5000 }});
+      {% endif %}
+    }
+
+    function stopAutoplay() {
+      if (autoplayInterval) {
+        clearInterval(autoplayInterval);
+      }
+    }
+
+    function restartAutoplay() {
+      stopAutoplay();
+      startAutoplay();
+    }
+
+    // Event listeners
+    if (slider) {
+      // Touch events
+      slider.addEventListener('touchstart', handleTouchStart, { passive: false });
+      slider.addEventListener('touchmove', handleTouchMove, { passive: false });
+      slider.addEventListener('touchend', handleTouchEnd, { passive: true });
+      
+      // Mouse events for desktop
+      slider.addEventListener('mousedown', handleMouseDown);
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleMouseUp);
+      
+      // Prevent context menu on long press
+      slider.addEventListener('contextmenu', (e) => {
+        if (isDragging) {
+          e.preventDefault();
+        }
+      });
+    }
+
+    // Global functions for navigation buttons
+    window.changeSlide = changeSlide;
+    window.currentSlide = currentSlide;
+
+    // Initialize
+    showSlide(0, false);
+    startAutoplay();
+
+    // Pause autoplay when page is not visible
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        stopAutoplay();
+      } else {
+        restartAutoplay();
+      }
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Collection Slider",
+  "class": "collection-slider-section",
+  "settings": [
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#f5f5f5"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "button_bg",
+      "label": "Button Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button Text Color",
+      "default": "#000000"
+    },
+    {
+      "type": "text",
+      "id": "heading_size",
+      "label": "Heading Size",
+      "default": "32px"
+    },
+    {
+      "type": "text",
+      "id": "subheading_size",
+      "label": "Subheading Size",
+      "default": "14px"
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Enable Autoplay",
+      "default": false
+    },
+    {
+      "type": "number",
+      "id": "autoplay_speed",
+      "label": "Autoplay Speed (ms)",
+      "default": 5000
+    }
+  ],
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Collection Slide",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image_1",
+          "label": "Left Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_2",
+          "label": "Center Image (Mobile Main)"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_3",
+          "label": "Right Image"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "ARCHIVE SALE DROP II"
+        },
+        {
+          "type": "text",
+          "id": "subheading",
+          "label": "Subheading"
+        },
+        {
+          "type": "select",
+          "id": "link_type",
+          "label": "Link Type",
+          "options": [
+            { "value": "collection", "label": "Collection" },
+            { "value": "product", "label": "Product" },
+            { "value": "url", "label": "Custom URL" }
+          ],
+          "default": "collection"
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        },
+        {
+          "type": "url",
+          "id": "custom_url",
+          "label": "Custom URL"
+        },
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button Text",
+          "default": "SHOP NOW"
+        },
+        {
+          "type": "select",
+          "id": "button_position",
+          "label": "Button Position",
+          "options": [
+            { "value": "center", "label": "Center" },
+            { "value": "left", "label": "Left" },
+            { "value": "right", "label": "Right" },
+            { "value": "top-left", "label": "Top Left" },
+            { "value": "top-center", "label": "Top Center" },
+            { "value": "top-right", "label": "Top Right" },
+            { "value": "bottom-left", "label": "Bottom Left" },
+            { "value": "bottom-center", "label": "Bottom Center" },
+            { "value": "bottom-right", "label": "Bottom Right" }
+          ],
+          "default": "center"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection Slider",
+      "blocks": [
+        {
+          "type": "slide"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

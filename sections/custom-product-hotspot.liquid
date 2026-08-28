@@ -1,0 +1,587 @@
+<!-- Section Settings Schema -->
+{% schema %}
+{
+  "name": "Product Hotspot",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Our highlights"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading"
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Hero Image"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "hotspot",
+      "name": "Product Hotspot",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        },
+        {
+          "type": "range",
+          "id": "hotspot_x",
+          "label": "Hotspot X Position (%)",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "default": 50
+        },
+        {
+          "type": "range",
+          "id": "hotspot_y",
+          "label": "Hotspot Y Position (%)",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "default": 50
+        },
+        {
+          "type": "color",
+          "id": "hotspot_color",
+          "label": "Hotspot Color",
+          "default": "#000000"
+        },
+        {
+          "type": "color",
+          "id": "hotspot_pulse_color",
+          "label": "Hotspot Pulse Color",
+          "default": "#ffffff"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Hotspot",
+      "blocks": [
+        {
+          "type": "hotspot"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+<!-- Section HTML -->
+<div class="hotspot-section" id="hotspot-section-{{ section.id }}">
+  <div class="container">
+    {% if section.settings.heading != blank or section.settings.subheading != blank %}
+      <div class="hotspot-header">
+        {% if section.settings.heading != blank %}
+          <h2 class="hotspot-heading">{{ section.settings.heading }}</h2>
+        {% endif %}
+        {% if section.settings.subheading != blank %}
+          <p class="hotspot-subheading">{{ section.settings.subheading }}</p>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    <div class="hotspot-content">
+      <!-- Hero Image with Hotspots -->
+      <div class="hotspot-image-container">
+        {% if section.settings.hero_image != blank %}
+          <img src="{{ section.settings.hero_image | img_url: '1200x1200' }}" 
+               alt="{{ section.settings.hero_image.alt | default: 'Hero image' }}" 
+               class="hotspot-hero-image">
+        {% else %}
+          <div class="hotspot-placeholder">
+            <p>Add hero image in section settings</p>
+          </div>
+        {% endif %}
+
+        <!-- Hotspot Markers -->
+        {% for block in section.blocks %}
+          {% if block.type == 'hotspot' and block.settings.product != blank %}
+            <div class="hotspot-marker" 
+                 data-product-id="{{ block.settings.product.id }}"
+                 style="left: {{ block.settings.hotspot_x }}%; top: {{ block.settings.hotspot_y }}%; --hotspot-color: {{ block.settings.hotspot_color }}; --pulse-color: {{ block.settings.hotspot_pulse_color }};">
+              <div class="hotspot-dot"></div>
+              <div class="hotspot-pulse"></div>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+
+      <!-- Product Display Panel -->
+      <div class="hotspot-product-panel">
+        {% for block in section.blocks %}
+          {% if block.type == 'hotspot' and block.settings.product != blank %}
+            {% assign product = block.settings.product %}
+            <div class="product-display" 
+                 data-product-id="{{ product.id }}"
+                 {% if forloop.first %}style="display: block;"{% else %}style="display: none;"{% endif %}>
+              
+              <!-- Product Images Slider -->
+              <div class="product-images">
+                <div class="product-slider">
+                  {% for image in product.images limit: 5 %}
+                    <div class="slide {% if forloop.first %}active{% endif %}">
+                      <img src="{{ image | img_url: 'master' }}" alt="{{ image.alt | default: product.title }}">
+                    </div>
+                  {% endfor %}
+                </div>
+                
+                {% if product.images.size > 1 %}
+                  <div class="slider-nav">
+                    <button class="slider-prev">‹</button>
+                    <div class="slider-indicators">
+                      {% for image in product.images limit: 5 %}
+                        <span class="indicator {% if forloop.first %}active{% endif %}" data-slide="{{ forloop.index0 }}"></span>
+                      {% endfor %}
+                    </div>
+                    <button class="slider-next">›</button>
+                  </div>
+                {% endif %}
+              </div>
+
+              <!-- Product Info -->
+              <div class="product-info">
+                <h3 class="product-title">{{ product.title }}</h3>
+                <div class="product-price">
+                  {% if product.compare_at_price > product.price %}
+                    <span class="price-compare">{{ product.compare_at_price | money }}</span>
+                    <span class="price-sale">{{ product.price | money }}</span>
+                  {% else %}
+                    <span class="price">{{ product.price | money }}</span>
+                  {% endif %}
+                </div>
+                
+                <!-- Color Swatches -->
+                {% unless product.has_only_default_variant %}
+                  {% for option in product.options_with_values %}
+                    {% if option.name contains 'Color' or option.name contains 'Colour' %}
+                      <div class="color-swatches">
+                        {% for value in option.values %}
+                          <div class="color-swatch" 
+                               style="background-color: {{ value | handle | replace: '-', '' }};"
+                               title="{{ value }}"></div>
+                        {% endfor %}
+                      </div>
+                      {% break %}
+                    {% endif %}
+                  {% endfor %}
+                {% endunless %}
+
+                <a href="{{ product.url }}" class="product-link">View Product</a>
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.hotspot-section {
+  padding: 60px 0;
+  background: #f8f9fa;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.hotspot-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.hotspot-heading {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.hotspot-subheading {
+  font-size: 1.1rem;
+  color: #666;
+  margin: 0;
+}
+
+.hotspot-content {
+  display: grid;
+  grid-template-columns: 1fr 450px;
+  gap: 60px;
+  align-items: start;
+}
+
+.hotspot-image-container {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.hotspot-hero-image {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.hotspot-placeholder {
+  background: #e0e0e0;
+  height: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+}
+
+.hotspot-marker {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+  z-index: 10;
+}
+
+.hotspot-dot {
+  width: 20px;
+  height: 20px;
+  background: var(--hotspot-color);
+  border: 3px solid white;
+  border-radius: 50%;
+  position: relative;
+  z-index: 2;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+.hotspot-pulse {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 20px;
+  height: 20px;
+  background: var(--pulse-color);
+  border-radius: 50%;
+  opacity: 0.7;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.7;
+  }
+  70% {
+    transform: translate(-50%, -50%) scale(2.5);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0;
+  }
+}
+
+.hotspot-marker:hover .hotspot-dot {
+  transform: scale(1.2);
+}
+
+.hotspot-product-panel {
+  background: white;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  position: sticky;
+  top: 20px;
+}
+
+.product-display {
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.product-images {
+  margin-bottom: 20px;
+}
+
+.product-slider {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  aspect-ratio: 1;
+  height: 350px;
+  margin-bottom: 20px;
+}
+
+.slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.slide.active {
+  opacity: 1;
+}
+
+.slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}
+
+.product-info-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(transparent, rgba(0,0,0,0.8));
+  padding: 40px 20px 20px;
+  color: white;
+  transform: translateY(100%);
+  transition: transform 0.3s ease;
+}
+
+.slide:hover .product-info-overlay {
+  transform: translateY(0);
+}
+
+.product-info-overlay .product-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  line-height: 1.2;
+}
+
+.product-info-overlay .product-price {
+  margin-bottom: 12px;
+}
+
+.product-info-overlay .price {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: white;
+}
+
+.product-info-overlay .price-compare {
+  font-size: 0.95rem;
+  color: #ccc;
+  text-decoration: line-through;
+  margin-right: 8px;
+}
+
+.product-info-overlay .price-sale {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #ff6b6b;
+}
+
+.product-info-overlay .color-swatches {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 15px;
+}
+
+.product-info-overlay .color-swatch {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.6);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.product-info-overlay .color-swatch:hover {
+  transform: scale(1.1);
+  border-color: white;
+}
+
+.product-info-overlay .product-link {
+  display: inline-block;
+  background: white;
+  color: #333;
+  padding: 8px 16px;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.product-info-overlay .product-link:hover {
+  background: #f0f0f0;
+  transform: translateY(-2px);
+}
+
+.slider-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 15px;
+}
+
+.slider-prev,
+.slider-next {
+  background: #f0f0f0;
+  border: none;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease;
+}
+
+.slider-prev:hover,
+.slider-next:hover {
+  background: #e0e0e0;
+}
+
+.slider-indicators {
+  display: flex;
+  gap: 8px;
+}
+
+.indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ddd;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.indicator.active {
+  background: #333;
+}
+
+.product-info {
+  display: none;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .hotspot-content {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+  
+  .hotspot-product-panel {
+    position: static;
+  }
+  
+  .hotspot-heading {
+    font-size: 2rem;
+  }
+  
+  .container {
+    padding: 0 15px;
+  }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const sectionId = 'hotspot-section-{{ section.id }}';
+  const section = document.getElementById(sectionId);
+  
+  if (!section) return;
+  
+  const hotspots = section.querySelectorAll('.hotspot-marker');
+  const productDisplays = section.querySelectorAll('.product-display');
+  
+  // Hotspot click functionality
+  hotspots.forEach(hotspot => {
+    hotspot.addEventListener('click', function() {
+      const productId = this.dataset.productId;
+      
+      // Hide all product displays
+      productDisplays.forEach(display => {
+        display.style.display = 'none';
+      });
+      
+      // Show selected product display
+      const targetDisplay = section.querySelector(`[data-product-id="${productId}"]`);
+      if (targetDisplay) {
+        targetDisplay.style.display = 'block';
+      }
+      
+      // Update active hotspot
+      hotspots.forEach(h => h.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+  
+  // Image slider functionality
+  function initializeSlider(productDisplay) {
+    const slides = productDisplay.querySelectorAll('.slide');
+    const indicators = productDisplay.querySelectorAll('.indicator');
+    const prevBtn = productDisplay.querySelector('.slider-prev');
+    const nextBtn = productDisplay.querySelector('.slider-next');
+    
+    if (slides.length <= 1) return;
+    
+    let currentSlide = 0;
+    
+    function showSlide(index) {
+      slides.forEach((slide, i) => {
+        slide.classList.toggle('active', i === index);
+      });
+      indicators.forEach((indicator, i) => {
+        indicator.classList.toggle('active', i === index);
+      });
+    }
+    
+    function nextSlide() {
+      currentSlide = (currentSlide + 1) % slides.length;
+      showSlide(currentSlide);
+    }
+    
+    function prevSlide() {
+      currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+      showSlide(currentSlide);
+    }
+    
+    if (nextBtn) nextBtn.addEventListener('click', nextSlide);
+    if (prevBtn) prevBtn.addEventListener('click', prevSlide);
+    
+    indicators.forEach((indicator, index) => {
+      indicator.addEventListener('click', () => {
+        currentSlide = index;
+        showSlide(currentSlide);
+      });
+    });
+  }
+  
+  // Initialize sliders for all product displays
+  productDisplays.forEach(display => {
+    initializeSlider(display);
+  });
+  
+  // Set first hotspot as active by default
+  if (hotspots.length > 0) {
+    hotspots[0].classList.add('active');
+  }
+});
+</script>
