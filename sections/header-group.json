@@ -1,1 +1,100 @@
-{"type":"header","name":"Header Group","sections":{"announcement-bar":{"type":"announcement-bar","blocks":{"message-0":{"type":"message","settings":{"message_text":"WORLDWIDE SHIPPING","message_link":""}},"message_VVA9PA":{"type":"message","settings":{"message_text":"MADE-TO-ORDER WITH EXCEPTIONAL CARE, EACH ITEM IS FINAL SALE.","message_link":""}},"message_mCQUxW":{"type":"message","settings":{"message_text":"OUR STANDARD PROCESSING TIME FOR ORDERs, 5-8 WORKING DAYS","message_link":""}}},"block_order":["message-0","message_VVA9PA","message_mCQUxW"],"settings":{"color_scheme":"scheme-2","enable_autoplay":true,"duration":5,"open_external_link":false}},"header":{"type":"header","blocks":{"mega-menu":{"type":"mega_menu","settings":{"menu_item_name":"","primary_heading":"Heading","primary_link":"","image_overlay_opacity_first":30,"secondary_heading":"Heading","secondary_link":"","image_overlay_opacity_second":30}},"collections-menu":{"type":"collections_menu","settings":{"header_collection_title":"Shop","collection_list":["bimbo","dresses","kimono","corset-tops-skirts"],"items_per_row_on_desktop":"6"}}},"block_order":["mega-menu","collections-menu"],"custom_css":[".header {display: flex !important; justify-content: space-between; align-items: center;}"],"settings":{"color_scheme":"scheme-1","enable_drawer":false,"enable_sticky_header":true,"logo_position":"middle-left","logo_width":70,"logo_width_mobile":70,"menu":"main-menu","open_external_link":true,"show_currency_selector":true,"show_language_selector":true,"enable_contact":true,"enable_social":true,"enable_transparent":true,"transparent_text_color":"#ffffff"}}},"order":["announcement-bar","header"]}
+{
+  "type": "header",
+  "name": "Header Group",
+  "sections": {
+    "announcement-bar": {
+      "type": "announcement-bar",
+      "blocks": {
+        "message-0": {
+          "type": "message",
+          "settings": {
+            "message_text": "MADE TO YOUR MEASURE · WORLDWIDE SHIPPING",
+            "message_link": ""
+          }
+        },
+        "message_VVA9PA": {
+          "type": "message",
+          "settings": {
+            "message_text": "HANDMADE TO ORDER · READY TO SHIP IN 5–8 WORKING DAYS",
+            "message_link": ""
+          }
+        },
+        "message_mCQUxW": {
+          "type": "message",
+          "settings": {
+            "message_text": "QUESTIONS? CHAT WITH US ON WHATSAPP",
+            "message_link": "https://wa.me/2347048522079"
+          }
+        }
+      },
+      "block_order": [
+        "message-0",
+        "message_VVA9PA",
+        "message_mCQUxW"
+      ],
+      "settings": {
+        "color_scheme": "scheme-2",
+        "enable_autoplay": true,
+        "duration": 5,
+        "open_external_link": false
+      }
+    },
+    "header": {
+      "type": "header",
+      "blocks": {
+        "mega-menu": {
+          "type": "mega_menu",
+          "settings": {
+            "menu_item_name": "",
+            "primary_heading": "Heading",
+            "primary_link": "",
+            "image_overlay_opacity_first": 30,
+            "secondary_heading": "Heading",
+            "secondary_link": "",
+            "image_overlay_opacity_second": 30
+          }
+        },
+        "collections-menu": {
+          "type": "collections_menu",
+          "settings": {
+            "header_collection_title": "Shop",
+            "collection_list": [
+              "bimbo",
+              "dresses",
+              "kimono",
+              "corset-tops-skirts"
+            ],
+            "items_per_row_on_desktop": "6"
+          }
+        }
+      },
+      "block_order": [
+        "mega-menu",
+        "collections-menu"
+      ],
+      "custom_css": [
+        ".header {display: flex !important; justify-content: space-between; align-items: center;}"
+      ],
+      "settings": {
+        "color_scheme": "scheme-1",
+        "enable_drawer": false,
+        "enable_sticky_header": true,
+        "logo_position": "middle-left",
+        "logo_width": 70,
+        "logo_width_mobile": 70,
+        "menu": "main-menu",
+        "open_external_link": true,
+        "show_currency_selector": true,
+        "show_language_selector": true,
+        "enable_contact": true,
+        "enable_social": true,
+        "enable_transparent": true,
+        "transparent_text_color": "#ffffff"
+      }
+    }
+  },
+  "order": [
+    "announcement-bar",
+    "header"
+  ]
+}

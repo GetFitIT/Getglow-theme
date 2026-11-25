@@ -9,196 +9,65 @@
  */
 {
   "sections": {
-    "video_slides_83c7GJ": {
-      "type": "video-slides",
-      "blocks": {
-        "slide_LHQmdx": {
-          "type": "slide",
-          "settings": {
-            "heading": "Discover Timeless Fashion Pieces Designed to Elevate Your Everyday Looks",
-            "mobile_video": "https://cdn.shopify.com/videos/c/o/v/3a163067727d44608ebca9155c6ed1b2.mov",
-            "subheading": "STYLE THAT SPEAKS FOR YOU",
-            "button_text": "SHOP NOW",
-            "button_link": "shopify://products/the-richest-aunty-bubu",
-            "video": "https://cdn.shopify.com/videos/c/o/v/3a163067727d44608ebca9155c6ed1b2.mov"
-          }
-        }
-      },
-      "block_order": [
-        "slide_LHQmdx"
-      ],
-      "name": "Vertical Video Slideshow",
+    "gg_hero": {
+      "type": "gg-hero",
       "settings": {
-        "autoplay_delay": 5000,
-        "heading_color": "#ffffff",
-        "subheading_color": "#ffffff",
-        "button_bg_color": "#000000",
-        "button_text_color": "#ffffff",
-        "pagination_color": "#ffffff"
+        "video": "shopify://files/videos/getglow-hero-red-gown.mp4",
+        "poster": "shopify://shop_images/getglow-hero-poster.jpg",
+        "eyebrow": "The Angel Dress",
+        "heading": "Luxury occasion wear, made to your measure",
+        "subheading": "Hand-finished pieces for weddings, owambe and every moment you want to own. Made to order and shipped worldwide.",
+        "button_1_label": "Shop the collection",
+        "button_1_link": "shopify://collections/all",
+        "button_2_label": "Shop the Angel Dress",
+        "button_2_link": "shopify://products/angel-dress",
+        "background": "#f6f0e6"
       }
     },
-    "running_text": {
-      "type": "running-text",
-      "settings": {
-        "color_scheme": "scheme-1",
-        "accent_scheme": "color-accent-1",
-        "speed": "30",
-        "enable_play": false,
-        "text": "Effortless Elegance",
-        "font_style": "marquee-font--heading",
-        "text_size": "h3",
-        "link": "",
-        "slope_style": "none",
-        "remove_padding_top": true,
-        "remove_padding_bottom": false
-      }
-    },
-    "content_collage": {
-      "type": "content-collage",
+    "gg_categories": {
+      "type": "gg-collection-tiles",
       "blocks": {
-        "block_image_1": {
-          "type": "image",
+        "t1": {
+          "type": "tile",
           "settings": {
-            "image": "shopify://shop_images/ShouldIdresslikethismoreoftenorsticktomyjeans.OristhisrichauntyvibeworkingOut_3.jpg",
-            "image_overlay_opacity": 0,
-            "image_mask_overlay_color": "#ffffff",
-            "image_content_overlay_color": "#ffffff",
-            "heading": "beaded Corset top",
-            "button_text": "",
-            "button_link": "shopify://products/hand-beaded-corset-top-with-inbuilt-corset-luxury-pleat-skirt"
+            "collection": "dresses",
+            "image": "shopify://shop_images/getglow-tile-bubu-magenta.jpg",
+            "label": "Bubus & Dresses"
           }
         },
-        "image_4eaqgq": {
-          "type": "image",
+        "t2": {
+          "type": "tile",
           "settings": {
-            "image": "shopify://shop_images/Framed_in_gold._Draped_in_power.Outfit_getglowng_Fascinator_yunik.works_Beaded_bag_themaisonm_3.jpg",
-            "image_overlay_opacity": 30,
-            "image_mask_overlay_color": "#000000",
-            "image_content_overlay_color": "#ffffff",
-            "heading": "Feather Me Set",
-            "button_text": "",
-            "button_link": "shopify://products/feather-me-set"
+            "collection": "corset-tops-skirts",
+            "image": "shopify://shop_images/getglow-tile-beaded-corset.jpg",
+            "label": "Corsets & Skirts"
           }
         },
-        "block_image_2": {
-          "type": "image",
+        "t3": {
+          "type": "tile",
           "settings": {
-            "image": "shopify://shop_images/IMG_5654.jpg",
-            "image_overlay_opacity": 0,
-            "image_mask_overlay_color": "#000000",
-            "image_content_overlay_color": "#ffffff",
-            "heading": "The Richest Aunty Bubu",
-            "button_text": "",
-            "button_link": "shopify://products/the-richest-aunty-bubu"
+            "collection": "kimono",
+            "label": "Kimono Sets"
+          }
+        },
+        "t4": {
+          "type": "tile",
+          "settings": {
+            "collection": "bimbo",
+            "label": "The Bimbo Edit"
           }
         }
       },
       "block_order": [
-        "block_image_1",
-        "image_4eaqgq",
-        "block_image_2"
+        "t1",
+        "t2",
+        "t3",
+        "t4"
       ],
       "settings": {
-        "color_scheme": "scheme-1",
+        "heading": "Shop by category",
         "subheading": "",
-        "heading": "Curated Collections",
-        "description": "A refined showcase of this season’s standout styles.",
-        "collage_width_on_desktop": "compacted",
-        "content_alignment": "ta-center",
-        "items_ordering": "equal",
-        "enable_stacked_layout": false,
-        "remove_padding_top": false,
-        "remove_padding_bottom": true,
-        "image_ratio": "4/5",
-        "show_items_button": true,
-        "badge_text": "",
-        "badge_color": "color-accent-1",
-        "badge_position": "p-badge--bottom-left",
-        "badge_shape": "badge--star"
-      }
-    },
-    "featured_collections": {
-      "type": "featured-collections",
-      "blocks": {
-        "block_collection": {
-          "type": "collection",
-          "settings": {
-            "collection": "",
-            "heading": "Collection"
-          }
-        }
-      },
-      "block_order": [
-        "block_collection"
-      ],
-      "disabled": true,
-      "settings": {
-        "color_scheme": "scheme-3",
-        "subheading": "",
-        "heading": "Featured collection",
-        "description": "",
-        "items_per_row_on_desktop": "4",
-        "items_per_row_on_mobile": "1",
-        "content_alignment": "ta-center",
-        "items_to_show": 4,
-        "enable_carousel": false,
-        "show_navigation": false,
-        "remove_padding_top": false,
-        "remove_padding_bottom": false,
-        "show_view_all_button": true,
-        "button_text": "View collection",
-        "badge_text": "",
-        "badge_color": "color-accent-1",
-        "badge_position": "p-badge--top-right",
-        "badge_shape": "badge--star"
-      }
-    },
-    "custom_banner_section_qQzPbW": {
-      "type": "custom-banner-section",
-      "disabled": true,
-      "name": "Banner Section",
-      "settings": {
-        "background_image": "shopify://shop_images/cropped-IMG_5827.jpg",
-        "overlay_opacity": 40,
-        "section_height": 350,
-        "mobile_height": 250,
-        "margin_top": 20,
-        "margin_bottom": 20,
-        "heading": "Getglow",
-        "heading_size": 36,
-        "heading_weight": "700",
-        "subheading": "Discover our latest collection",
-        "subheading_size": 16,
-        "subheading_weight": "400",
-        "button_text": "VIEW ALL",
-        "button_link": "",
-        "button_text_size": 12,
-        "text_color": "#ffffff",
-        "button_text_color": "#ffffff"
-      }
-    },
-    "video_hero_eaJRmR": {
-      "type": "video-hero",
-      "disabled": true,
-      "name": "Video Hero",
-      "settings": {
-        "video": "shopify://files/videos/angel (1).mp4",
-        "video_url": "",
-        "fallback_image": "shopify://shop_images/IMG_0726.jpg",
-        "overlay_color": "#1a0800",
-        "overlay_opacity": 35,
-        "eyebrow": "",
-        "heading": "Holiday '26 Collection",
-        "heading_tag": "h2",
-        "subheading": "Online and Instore",
-        "text_color": "#ffffff",
-        "button_label": "Shop Now",
-        "button_link": "",
-        "button_bg": "#2c0f0f",
-        "button_text_color": "#ffffff",
-        "button_new_tab": false,
-        "section_height": 100,
-        "mobile_height": 75
+        "show_count": true
       }
     },
     "featured_product_carousel_fnkxC9": {
@@ -207,17 +76,21 @@
       "settings": {
         "color_scheme": "scheme-1",
         "subheading": "",
-        "heading": "In High Demand",
-        "description": "Our signature pieces, chosen for their elegance, craftsmanship, and flawless fit.",
+        "heading": "Bestsellers",
+        "description": "Our most-loved pieces, made to order for you.",
         "items_per_row_on_desktop": "4",
         "content_align": "ta-center",
         "show_navigation": true,
         "remove_padding_top": false,
         "remove_padding_bottom": false,
         "product_list": [
-          "richest-aunty-bubu-with-turkey-pleat",
-          "high-waist-corset-damask-jacket-skirt",
-          "urban-chic-set",
+          "angel-dress",
+          "the-richest-aunty-bubu",
+          "aduke-bubu-set",
+          "hand-beaded-corset-top-with-inbuilt-corset-luxury-pleat-skirt",
+          "beaded-bimbo-corset-top",
+          "feather-me-set",
+          "the-beaded-akuete-jacket",
           "daine-corset-dress"
         ],
         "show_ranking": false,
@@ -234,20 +107,89 @@
         "badge_shape": "badge--star"
       }
     },
-    "running_text_2": {
-      "type": "running-text",
+    "gg_reels": {
+      "type": "gg-reels",
+      "blocks": {
+        "r1": {
+          "type": "reel",
+          "settings": {
+            "video": "shopify://files/videos/getglow-reel-angel-red.mp4",
+            "product": "angel-dress",
+            "label": "Angel Dress in Red"
+          }
+        },
+        "r2": {
+          "type": "reel",
+          "settings": {
+            "video": "shopify://files/videos/getglow-reel-angel-yellow.mp4",
+            "product": "angel-dress",
+            "label": "Angel Dress in Butter"
+          }
+        },
+        "r3": {
+          "type": "reel",
+          "settings": {
+            "video": "shopify://files/videos/getglow-reel-beaded-corset.mp4",
+            "product": "hand-beaded-corset-top-with-inbuilt-corset-luxury-pleat-skirt",
+            "label": "Hand-Beaded Corset + Pleat Skirt"
+          }
+        },
+        "r4": {
+          "type": "reel",
+          "settings": {
+            "video": "shopify://files/videos/getglow-reel-magenta-bubu.mp4",
+            "product": "richest-aunty-bubu-with-turkey-pleat",
+            "label": "Richest Aunty Bubu with Turkey Pleat"
+          }
+        }
+      },
+      "block_order": [
+        "r1",
+        "r2",
+        "r3",
+        "r4"
+      ],
       "settings": {
-        "color_scheme": "scheme-1",
-        "accent_scheme": "color-accent-2",
-        "speed": "30",
-        "enable_play": false,
-        "text": "✨Own the Moment",
-        "font_style": "marquee-font--heading",
-        "text_size": "h3",
-        "link": "",
-        "slope_style": "none",
-        "remove_padding_top": true,
-        "remove_padding_bottom": true
+        "heading": "See it move",
+        "subheading": "Real fabric, real movement. Tap a look to shop it."
+      }
+    },
+    "gg_steps": {
+      "type": "gg-steps",
+      "blocks": {
+        "s1": {
+          "type": "step",
+          "settings": {
+            "title": "Choose your look",
+            "text": "Pick your style and colour from the collection."
+          }
+        },
+        "s2": {
+          "type": "step",
+          "settings": {
+            "title": "Add your measurements",
+            "text": "Choose a UK size, or add your bust, waist and hips for a made-to-measure fit."
+          }
+        },
+        "s3": {
+          "type": "step",
+          "settings": {
+            "title": "Made for you, shipped to you",
+            "text": "Our tailors make your piece in 5–8 working days, then we ship it anywhere in the world."
+          }
+        }
+      },
+      "block_order": [
+        "s1",
+        "s2",
+        "s3"
+      ],
+      "settings": {
+        "heading": "How made-to-order works",
+        "subheading": "Every piece is made for you, not pulled from a shelf.",
+        "button_label": "Start shopping",
+        "button_link": "shopify://collections/all",
+        "background": "#f6f0e6"
       }
     },
     "collection_triple_slider_4my8UW": {
@@ -306,400 +248,11 @@
       "type": "custom-text-section",
       "name": "Custom Text Section",
       "settings": {
-        "text_content": "Immerse yourself in a world of modern sophistication, where every piece is crafted for the confident, stylish woman. From statement dresses to distinctive headpieces and exquisite jewelry, our curated collections blend timeless beauty with contemporary flair. Discover fashion that celebrates your individuality, with grace, poise, and power.",
+        "text_content": "Getglow is a modern womenswear label blending African heritage with contemporary silhouettes. From hand-beaded corsets to flowing brocade bubus, every piece is made to order and finished with care, for the woman who wants to look unforgettable and feel completely herself.",
         "background_color": "#ffffff",
         "text_color": "#666666",
         "text_size": 18,
         "text_weight": "300"
-      }
-    },
-    "content_collage_2": {
-      "type": "content-collage",
-      "blocks": {
-        "content_collage_1": {
-          "type": "image",
-          "settings": {
-            "image": "shopify://shop_images/IMG_7625.jpg",
-            "image_overlay_opacity": 28,
-            "image_mask_overlay_color": "#101010",
-            "image_content_overlay_color": "#ffffff",
-            "heading": "Morocco Beauty Brocade",
-            "button_text": "Check now",
-            "button_link": "shopify://products/urban-chic-bubu"
-          }
-        },
-        "content_collage_2": {
-          "type": "image",
-          "settings": {
-            "image": "shopify://shop_images/IMG_0680.jpg",
-            "image_overlay_opacity": 40,
-            "image_mask_overlay_color": "#101010",
-            "image_content_overlay_color": "#ffffff",
-            "heading": "Beaded bimbo Corset",
-            "button_text": "Check now",
-            "button_link": "shopify://products/beaded-bimbo-corset-top"
-          }
-        },
-        "content_collage_3": {
-          "type": "image",
-          "settings": {
-            "image": "shopify://shop_images/IMG_7484.jpg",
-            "image_overlay_opacity": 19,
-            "image_mask_overlay_color": "#101010",
-            "image_content_overlay_color": "#ffffff",
-            "heading": "Sequin dress Kimono Set",
-            "button_text": "Check now",
-            "button_link": "shopify://products/sequin-dress-kimono-set"
-          }
-        }
-      },
-      "block_order": [
-        "content_collage_1",
-        "content_collage_2",
-        "content_collage_3"
-      ],
-      "settings": {
-        "color_scheme": "scheme-1",
-        "subheading": "",
-        "heading": "",
-        "description": "",
-        "collage_width_on_desktop": "wide",
-        "content_alignment": "ta-left",
-        "items_ordering": "equal",
-        "enable_stacked_layout": false,
-        "remove_padding_top": false,
-        "remove_padding_bottom": false,
-        "image_ratio": "1/1",
-        "show_items_button": false,
-        "badge_text": "",
-        "badge_color": "color-accent-1",
-        "badge_position": "p-badge--bottom-left",
-        "badge_shape": "badge--star"
-      }
-    },
-    "image_with_text_daTKkP": {
-      "type": "image-with-text",
-      "name": "t:sections.image_with_text.name",
-      "settings": {
-        "color_scheme": "",
-        "enable_large_heading": false,
-        "content_alignment": "ta-left",
-        "remove_padding_top": false,
-        "remove_padding_bottom": false,
-        "primary_image": "shopify://shop_images/IMG_6041_1.jpg",
-        "primary_image_ratio": "portrait",
-        "secondary_image": "shopify://shop_images/IMG_6038_1.jpg",
-        "secondary_image_ratio": "portrait",
-        "subheading": "",
-        "heading": "High waist corset skirt and Damask jacket",
-        "description": "<p>Elevate your wardrobe with our elegant <strong>High Waist Corset Skirt and Damask Jacket Set. A</strong> chic fusion of structure and sophistication.<br/><br/></p>",
-        "button_main_text": "",
-        "button_main_link": "",
-        "button_sub_text": "",
-        "button_sub_link": "",
-        "badge_text": "",
-        "badge_color": "color-accent-1",
-        "badge_position": "p-badge--bottom-right",
-        "badge_shape": "badge--star"
-      }
-    },
-    "featured_collections_BKrU87": {
-      "type": "featured-collections",
-      "blocks": {
-        "collection_gVmmM7": {
-          "type": "collection",
-          "settings": {
-            "collection": "kimono",
-            "heading": "Collection"
-          }
-        }
-      },
-      "block_order": [
-        "collection_gVmmM7"
-      ],
-      "name": "t:sections.featured_collection.name",
-      "settings": {
-        "color_scheme": "",
-        "subheading": "",
-        "heading": "Kimono collection",
-        "description": "Where Tradition Meets Modern Sophistication",
-        "items_per_row_on_desktop": "4",
-        "items_per_row_on_mobile": "1",
-        "content_alignment": "ta-center",
-        "items_to_show": 4,
-        "enable_carousel": true,
-        "show_navigation": true,
-        "remove_padding_top": false,
-        "remove_padding_bottom": false,
-        "show_view_all_button": false,
-        "button_text": "See all products",
-        "badge_text": "",
-        "badge_color": "color-accent-1",
-        "badge_position": "p-badge--top-right",
-        "badge_shape": "badge--star"
-      }
-    },
-    "product_hotspots": {
-      "type": "product-hotspots",
-      "blocks": {
-        "product_hotspots_1": {
-          "type": "hotspot",
-          "settings": {
-            "product": "bimbo-corset-skirt",
-            "top_offset": 42,
-            "left_offset": 54
-          }
-        },
-        "product_hotspots_2": {
-          "type": "hotspot",
-          "settings": {
-            "product": "bimbo-corset-pants",
-            "top_offset": 87,
-            "left_offset": 49
-          }
-        },
-        "product_hotspots_3": {
-          "type": "hotspot",
-          "disabled": true,
-          "settings": {
-            "product": "",
-            "top_offset": 33,
-            "left_offset": 91
-          }
-        }
-      },
-      "block_order": [
-        "product_hotspots_1",
-        "product_hotspots_2",
-        "product_hotspots_3"
-      ],
-      "settings": {
-        "color_scheme": "",
-        "subheading": "",
-        "heading": "",
-        "description": "",
-        "show_navigation": false,
-        "remove_padding_top": true,
-        "remove_padding_bottom": false,
-        "image_hotspot": "shopify://shop_images/IMG_6332.jpg",
-        "badge_text": "",
-        "badge_color": "color-accent-2",
-        "badge_position": "p-badge--top-right",
-        "badge_shape": "badge--diamond"
-      }
-    },
-    "custom_product_hotspot_ggaxyF": {
-      "type": "custom-product-hotspot",
-      "blocks": {
-        "hotspot_KyTf9V": {
-          "type": "hotspot",
-          "settings": {
-            "product": "bimbo-corset-pants",
-            "hotspot_x": 51,
-            "hotspot_y": 29,
-            "hotspot_color": "#000000",
-            "hotspot_pulse_color": "#ffffff"
-          }
-        },
-        "hotspot_7gphGk": {
-          "type": "hotspot",
-          "settings": {
-            "product": "bimbo-corset-skirt",
-            "hotspot_x": 50,
-            "hotspot_y": 50,
-            "hotspot_color": "#000000",
-            "hotspot_pulse_color": "#ffffff"
-          }
-        }
-      },
-      "block_order": [
-        "hotspot_KyTf9V",
-        "hotspot_7gphGk"
-      ],
-      "disabled": true,
-      "name": "Product Hotspot",
-      "settings": {
-        "heading": "Our highlights",
-        "subheading": "",
-        "hero_image": "shopify://shop_images/IMG_6327.jpg"
-      }
-    },
-    "countdown_banner": {
-      "type": "countdown-banner",
-      "blocks": {
-        "countdown_banner": {
-          "type": "content",
-          "settings": {
-            "content_position": "center-xs top-xs ta-left",
-            "subheading": "",
-            "heading": "Countdown banner",
-            "description": "<p>Share information about your promotion.</p>",
-            "enable_countdown_timer": true,
-            "hide_on_end": true,
-            "end_date": "",
-            "end_time": "",
-            "end_text": "<p>This event is finished.</p>",
-            "color_end_text": "#ff0000",
-            "primary_button_label": "Shop Now",
-            "primary_button_link": ""
-          }
-        }
-      },
-      "block_order": [
-        "countdown_banner"
-      ],
-      "disabled": true,
-      "settings": {
-        "color_scheme": "scheme-1",
-        "enable_large_heading": false,
-        "enable_fullwidth_banner": true,
-        "section_overlay_opacity": 30,
-        "section_mask_overlay_color": "#ffffff",
-        "section_content_overlay_color": "#101010",
-        "height_desktop": "70",
-        "height_mobile": "70",
-        "remove_padding_top": true,
-        "remove_padding_bottom": true,
-        "badge_text": "",
-        "badge_color": "color-accent-1",
-        "badge_position": "p-badge--top-right",
-        "badge_shape": "badge--star",
-        "image_banner_link": ""
-      }
-    },
-    "address_list": {
-      "type": "address-list",
-      "blocks": {
-        "address-list-0": {
-          "type": "address_item",
-          "settings": {
-            "heading": "Store name",
-            "address": "Street, City, Country, State",
-            "text": "<p>Talk about your shop.</p>",
-            "address_link": "https://goo.gl/maps/thGUGLRtaPqkWbBH6",
-            "button_text": "Get direction"
-          }
-        },
-        "address-list-1": {
-          "type": "address_item",
-          "settings": {
-            "heading": "Store name",
-            "address": "Street, City, Country, State",
-            "text": "<p>Talk about your shop.</p>",
-            "address_link": "https://goo.gl/maps/thGUGLRtaPqkWbBH6",
-            "button_text": "Get direction"
-          }
-        },
-        "address-list-2": {
-          "type": "address_item",
-          "settings": {
-            "heading": "Store name",
-            "address": "Street, City, Country, State",
-            "text": "<p>Talk about your shop.</p>",
-            "address_link": "https://goo.gl/maps/thGUGLRtaPqkWbBH6",
-            "button_text": "Get direction"
-          }
-        },
-        "address-list-3": {
-          "type": "address_item",
-          "settings": {
-            "heading": "Store name",
-            "address": "Street, City, Country, State",
-            "text": "<p>Talk about your shop.</p>",
-            "address_link": "https://goo.gl/maps/thGUGLRtaPqkWbBH6",
-            "button_text": "Get direction"
-          }
-        }
-      },
-      "block_order": [
-        "address-list-0",
-        "address-list-1",
-        "address-list-2",
-        "address-list-3"
-      ],
-      "disabled": true,
-      "settings": {
-        "color_scheme": "scheme-1",
-        "subheading": "",
-        "heading": "Visit our stores",
-        "description": "",
-        "items_per_row_on_desktop": "4",
-        "content_align": "ta-left",
-        "enable_carousel": false,
-        "show_navigation": false,
-        "remove_padding_top": true,
-        "remove_padding_bottom": false,
-        "image_ratio": "3/2",
-        "show_address_description": true,
-        "button_main_text": "",
-        "button_main_link": "",
-        "badge_text": "",
-        "badge_color": "color-accent-2",
-        "badge_position": "p-badge--top-right",
-        "badge_shape": "badge--star"
-      }
-    },
-    "testimonials": {
-      "type": "testimonials",
-      "blocks": {
-        "testimonial-0": {
-          "type": "testimonial",
-          "settings": {
-            "name": "Author's Name",
-            "job_title": "Loyal Customer",
-            "text": "Add customer reviews and testimonials to showcase your store's happy customers."
-          }
-        },
-        "testimonial-1": {
-          "type": "testimonial",
-          "settings": {
-            "name": "Author's Name",
-            "job_title": "Loyal Customer",
-            "text": "Add customer reviews and testimonials to showcase your store's happy customers."
-          }
-        },
-        "testimonial-2": {
-          "type": "testimonial",
-          "settings": {
-            "name": "Author's Name",
-            "job_title": "Loyal Customer",
-            "text": "Add customer reviews and testimonials to showcase your store's happy customers."
-          }
-        },
-        "testimonial-3": {
-          "type": "testimonial",
-          "settings": {
-            "name": "Author's Name",
-            "job_title": "Loyal Customer",
-            "text": "Add customer reviews and testimonials to showcase your store's happy customers."
-          }
-        }
-      },
-      "block_order": [
-        "testimonial-0",
-        "testimonial-1",
-        "testimonial-2",
-        "testimonial-3"
-      ],
-      "disabled": true,
-      "settings": {
-        "color_scheme": "scheme-3",
-        "subheading": "",
-        "heading": "Testimonials",
-        "description": "",
-        "items_per_row_on_desktop": "4",
-        "content_align": "diagonal d-grid-md",
-        "enable_carousel": true,
-        "show_navigation": true,
-        "remove_padding_top": false,
-        "remove_padding_bottom": false,
-        "section_mask_overlay_color": "#260c09",
-        "image_overlay_opacity": 30,
-        "icon_color": "color-accent-bg-2",
-        "badge_text": "",
-        "badge_color": "color-accent-1",
-        "badge_position": "p-badge--bottom-right",
-        "badge_shape": "badge--star"
       }
     },
     "info_banner_LeBhVN": {
@@ -770,8 +323,8 @@
         "section_mask_overlay_color": "#101010",
         "section_content_overlay_color": "#101010",
         "subheading": "",
-        "heading": "Newsletter",
-        "description": "Join our list for early access to new collections, insider perks, and curated fashion edits.",
+        "heading": "Be first to the new drops",
+        "description": "Join our list for early access to new collections, styling notes and private offers.",
         "content_alignment": "ta-left",
         "remove_padding_top": true,
         "remove_padding_bottom": true,
@@ -783,24 +336,13 @@
     }
   },
   "order": [
-    "video_slides_83c7GJ",
-    "running_text",
-    "content_collage",
-    "featured_collections",
-    "custom_banner_section_qQzPbW",
-    "video_hero_eaJRmR",
+    "gg_hero",
+    "gg_categories",
     "featured_product_carousel_fnkxC9",
-    "running_text_2",
+    "gg_reels",
+    "gg_steps",
     "collection_triple_slider_4my8UW",
     "custom_text_section_kYDnz8",
-    "content_collage_2",
-    "image_with_text_daTKkP",
-    "featured_collections_BKrU87",
-    "product_hotspots",
-    "custom_product_hotspot_ggaxyF",
-    "countdown_banner",
-    "address_list",
-    "testimonials",
     "info_banner_LeBhVN",
     "newsletter"
   ]

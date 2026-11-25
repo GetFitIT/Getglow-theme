@@ -1,0 +1,180 @@
+{%- comment -%}
+  Getglow hero: split layout on desktop (text left, portrait video right),
+  full-screen portrait video with text overlay on mobile.
+{%- endcomment -%}
+{%- liquid
+  assign poster_url = ''
+  if section.settings.poster != blank
+    assign poster_url = section.settings.poster | image_url: width: 1000
+  endif
+-%}
+<section class="gg-hero" id="gg-hero-{{ section.id }}">
+  <div class="gg-hero__text">
+    {%- if section.settings.eyebrow != blank -%}
+      <p class="gg-hero__eyebrow">{{ section.settings.eyebrow }}</p>
+    {%- endif -%}
+    {%- if section.settings.heading != blank -%}
+      <h1 class="gg-hero__heading">{{ section.settings.heading }}</h1>
+    {%- endif -%}
+    {%- if section.settings.subheading != blank -%}
+      <p class="gg-hero__sub">{{ section.settings.subheading }}</p>
+    {%- endif -%}
+    <div class="gg-hero__buttons">
+      {%- if section.settings.button_1_label != blank -%}
+        <a class="gg-btn gg-btn--primary" href="{{ section.settings.button_1_link | default: routes.all_products_collection_url }}">{{ section.settings.button_1_label }}</a>
+      {%- endif -%}
+      {%- if section.settings.button_2_label != blank -%}
+        <a class="gg-btn gg-btn--secondary" href="{{ section.settings.button_2_link | default: routes.all_products_collection_url }}">{{ section.settings.button_2_label }}</a>
+      {%- endif -%}
+    </div>
+  </div>
+
+  <div class="gg-hero__media">
+    {%- if section.settings.video != blank -%}
+      {{
+        section.settings.video
+        | video_tag:
+          autoplay: true,
+          loop: true,
+          muted: true,
+          playsinline: true,
+          controls: false,
+          preload: 'metadata',
+          poster: poster_url,
+          class: 'gg-hero__video'
+      }}
+    {%- elsif section.settings.poster != blank -%}
+      {{ section.settings.poster | image_url: width: 1200 | image_tag: class: 'gg-hero__video', loading: 'eager', alt: section.settings.poster.alt }}
+    {%- endif -%}
+  </div>
+</section>
+
+{% render 'gg-shared-styles' %}
+<style>
+  #gg-hero-{{ section.id }} {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: stretch;
+    background: {{ section.settings.background }};
+    min-height: min(88vh, 820px);
+  }
+
+  #gg-hero-{{ section.id }} .gg-hero__text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 64px clamp(24px, 6vw, 96px);
+    color: #1d1a16;
+  }
+
+  #gg-hero-{{ section.id }} .gg-hero__eyebrow {
+    margin: 0 0 18px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #8a7350;
+  }
+
+  #gg-hero-{{ section.id }} .gg-hero__heading {
+    margin: 0 0 20px;
+    font-family: var(--font-heading-family);
+    font-size: clamp(36px, 4.4vw, 60px);
+    line-height: 1.08;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+
+  #gg-hero-{{ section.id }} .gg-hero__sub {
+    margin: 0 0 32px;
+    max-width: 460px;
+    font-size: 17px;
+    line-height: 1.6;
+    color: #4a443b;
+  }
+
+  #gg-hero-{{ section.id }} .gg-hero__buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+
+  #gg-hero-{{ section.id }} .gg-hero__media {
+    position: relative;
+    overflow: hidden;
+    background: #e9e1d2;
+  }
+
+  #gg-hero-{{ section.id }} .gg-hero__video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 30%;
+  }
+
+  @media (max-width: 768px) {
+    #gg-hero-{{ section.id }} {
+      display: block;
+      position: relative;
+      min-height: 0;
+      height: 86svh;
+      max-height: 760px;
+    }
+
+    #gg-hero-{{ section.id }} .gg-hero__media {
+      position: absolute;
+      inset: 0;
+    }
+
+    #gg-hero-{{ section.id }} .gg-hero__media::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(0,0,0,0.65) 100%);
+    }
+
+    #gg-hero-{{ section.id }} .gg-hero__text {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 1;
+      padding: 24px 20px 32px;
+      color: #fff;
+    }
+
+    #gg-hero-{{ section.id }} .gg-hero__eyebrow { color: #f1e3c6; margin-bottom: 10px; font-size: 12px; }
+    #gg-hero-{{ section.id }} .gg-hero__heading { font-size: 32px; margin-bottom: 10px; }
+    #gg-hero-{{ section.id }} .gg-hero__sub { color: rgba(255,255,255,0.9); font-size: 15px; margin-bottom: 20px; }
+    #gg-hero-{{ section.id }} .gg-hero__buttons { flex-direction: column; }
+    #gg-hero-{{ section.id }} .gg-btn { width: 100%; }
+    #gg-hero-{{ section.id }} .gg-btn--primary { background: #fff; color: #1d1a16; border-color: #fff; }
+    #gg-hero-{{ section.id }} .gg-btn--secondary { color: #fff; border-color: rgba(255,255,255,0.85); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #gg-hero-{{ section.id }} .gg-hero__video { animation: none; }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Getglow hero",
+  "settings": [
+    { "type": "video", "id": "video", "label": "Video (portrait works best)" },
+    { "type": "image_picker", "id": "poster", "label": "Poster image", "info": "Shown while the video loads, and if it can't play." },
+    { "type": "text", "id": "eyebrow", "label": "Small text above heading", "default": "The Angel Dress" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Luxury occasion wear, made to your measure" },
+    { "type": "textarea", "id": "subheading", "label": "Text", "default": "Hand-finished pieces for weddings, owambe and every moment you want to own. Made to order and shipped worldwide." },
+    { "type": "text", "id": "button_1_label", "label": "Primary button", "default": "Shop the collection" },
+    { "type": "url", "id": "button_1_link", "label": "Primary button link" },
+    { "type": "text", "id": "button_2_label", "label": "Secondary button", "default": "Shop the Angel Dress" },
+    { "type": "url", "id": "button_2_link", "label": "Secondary button link" },
+    { "type": "color", "id": "background", "label": "Text panel background", "default": "#f6f0e6" }
+  ],
+  "presets": [{ "name": "Getglow hero" }]
+}
+{% endschema %}
