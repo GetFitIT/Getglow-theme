@@ -401,34 +401,34 @@
             assign fit_info = product.metafields.custom.fit | metafield_tag
           endif
         -%}
-        <div class="product-accordion">
-          <div class="accordion-item">
-            <button type="button" class="accordion-toggle" aria-expanded="true" aria-controls="acc-details">
+        <div class="gg-accordion">
+          <div class="gg-acc-item">
+            <button type="button" class="gg-acc-toggle" aria-expanded="true" aria-controls="acc-details">
               <span>DETAILS</span>
               <svg class="chevron" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
-            <div class="accordion-content" id="acc-details">
+            <div class="gg-acc-content" id="acc-details">
               {{ product.description }}
             </div>
           </div>
 
           {%- if fabric_care != blank -%}
-            <div class="accordion-item">
-              <button type="button" class="accordion-toggle" aria-expanded="false" aria-controls="acc-fabric">
+            <div class="gg-acc-item">
+              <button type="button" class="gg-acc-toggle" aria-expanded="false" aria-controls="acc-fabric">
                 <span>FABRIC &amp; CARE</span>
                 <svg class="chevron" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
               </button>
-              <div class="accordion-content rte" id="acc-fabric" hidden>{{ fabric_care }}</div>
+              <div class="gg-acc-content rte" id="acc-fabric" hidden>{{ fabric_care }}</div>
             </div>
           {%- endif -%}
 
           {%- if fit_info != blank -%}
-            <div class="accordion-item">
-              <button type="button" class="accordion-toggle" aria-expanded="false" aria-controls="acc-fit">
+            <div class="gg-acc-item">
+              <button type="button" class="gg-acc-toggle" aria-expanded="false" aria-controls="acc-fit">
                 <span>FIT &amp; SIZING</span>
                 <svg class="chevron" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
               </button>
-              <div class="accordion-content rte" id="acc-fit" hidden>
+              <div class="gg-acc-content rte" id="acc-fit" hidden>
                 {{ fit_info }}
                 {% if section.settings.show_size_guide %}<p><button type="button" class="link-btn" data-size-guide-open>View size guide</button></p>{% endif %}
               </div>
@@ -436,12 +436,12 @@
           {%- endif -%}
 
           {%- if section.settings.delivery_returns != blank -%}
-            <div class="accordion-item">
-              <button type="button" class="accordion-toggle" aria-expanded="false" aria-controls="acc-delivery">
+            <div class="gg-acc-item">
+              <button type="button" class="gg-acc-toggle" aria-expanded="false" aria-controls="acc-delivery">
                 <span>DELIVERY &amp; FINAL SALE</span>
                 <svg class="chevron" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
               </button>
-              <div class="accordion-content rte" id="acc-delivery" hidden>{{ section.settings.delivery_returns }}</div>
+              <div class="gg-acc-content rte" id="acc-delivery" hidden>{{ section.settings.delivery_returns }}</div>
             </div>
           {%- endif -%}
         </div>
@@ -1164,15 +1164,15 @@
 }
 
   /* Product info accordion */
-  .product-accordion {
+  .gg-accordion {
     border-top: 1px solid #e5e5e5;
   }
 
-  .accordion-item {
+  .gg-acc-item {
     border-bottom: 1px solid #e5e5e5;
   }
 
-  .accordion-toggle {
+  .gg-acc-toggle {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -1193,22 +1193,24 @@
     flex-shrink: 0;
   }
 
-  .accordion-toggle[aria-expanded="false"] .chevron,
+  .gg-acc-toggle[aria-expanded="false"] .chevron,
   .custom-size-toggle[aria-expanded="false"] .chevron {
     transform: rotate(-90deg);
   }
 
-  .accordion-content {
+  .gg-acc-content[hidden] { display: none !important; }
+
+  .gg-acc-content {
     padding: 0 0 18px;
     font-size: 15px;
     line-height: 1.65;
     color: #555;
   }
 
-  .accordion-content p,
-  .accordion-content li { margin: 0 0 10px; color: #555; opacity: 1; visibility: visible; }
-  .accordion-content strong { color: #222; }
-  .accordion-content ul { margin: 0 0 10px; padding-left: 18px; }
+  .gg-acc-content p,
+  .gg-acc-content li { margin: 0 0 10px; color: #555; opacity: 1; visibility: visible; }
+  .gg-acc-content strong { color: #222; }
+  .gg-acc-content ul { margin: 0 0 10px; padding-left: 18px; }
 
   /* Share */
   .product-share {
@@ -2295,7 +2297,7 @@ function initImageGalleryWithTransition() {
 
   // Product info accordion (Details / Fabric & Care / Fit / Delivery)
   function initAccordions() {
-    document.querySelectorAll('.accordion-toggle').forEach(function(toggle) {
+    document.querySelectorAll('.gg-acc-toggle').forEach(function(toggle) {
       toggle.addEventListener('click', function() {
         const panel = document.getElementById(toggle.getAttribute('aria-controls'));
         if (!panel) return;
