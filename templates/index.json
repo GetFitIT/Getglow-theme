@@ -70,43 +70,6 @@
         "show_count": true
       }
     },
-    "featured_product_carousel_fnkxC9": {
-      "type": "featured-product-carousel",
-      "name": "t:sections.featured_product_carousel.name",
-      "settings": {
-        "color_scheme": "scheme-1",
-        "subheading": "",
-        "heading": "Bestsellers",
-        "description": "Our most-loved pieces, made to order for you.",
-        "items_per_row_on_desktop": "4",
-        "content_align": "ta-center",
-        "show_navigation": true,
-        "remove_padding_top": false,
-        "remove_padding_bottom": false,
-        "product_list": [
-          "angel-dress",
-          "the-richest-aunty-bubu",
-          "aduke-bubu-set",
-          "hand-beaded-corset-top-with-inbuilt-corset-luxury-pleat-skirt",
-          "beaded-bimbo-corset-top",
-          "feather-me-set",
-          "the-beaded-akuete-jacket",
-          "daine-corset-dress"
-        ],
-        "show_ranking": false,
-        "ranking_badge_shape": "ribbon",
-        "ranking_badge_color": "color-accent-1",
-        "image_ratio": "2/3",
-        "image_overlay_opacity": 30,
-        "section_mask_overlay_color": "#101010",
-        "section_content_overlay_color": "",
-        "star_rating_overlay": "",
-        "badge_text": "",
-        "badge_color": "color-accent-1",
-        "badge_position": "p-badge--bottom-right",
-        "badge_shape": "badge--star"
-      }
-    },
     "gg_reels": {
       "type": "gg-reels",
       "blocks": {
@@ -401,12 +364,32 @@
         "show_price": false,
         "background": "#ffffff"
       }
+    },
+    "gg_bestsellers": {
+      "type": "gg-product-carousel",
+      "settings": {
+        "heading": "Bestsellers",
+        "subheading": "Our most-loved pieces, made to order for you.",
+        "products": [
+          "angel-dress",
+          "the-richest-aunty-bubu",
+          "aduke-bubu-set",
+          "hand-beaded-corset-top-with-inbuilt-corset-luxury-pleat-skirt",
+          "beaded-bimbo-corset-top",
+          "feather-me-set",
+          "the-beaded-akuete-jacket",
+          "daine-corset-dress"
+        ],
+        "badge": "",
+        "button_label": "Shop all",
+        "button_link": "shopify://collections/all"
+      }
     }
   },
   "order": [
     "gg_hero",
     "gg_categories",
-    "featured_product_carousel_fnkxC9",
+    "gg_bestsellers",
     "gg_reels",
     "gg_steps",
     "gg_clients",
