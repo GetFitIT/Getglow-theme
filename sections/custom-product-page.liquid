@@ -407,7 +407,7 @@
               <span>DETAILS</span>
               <svg class="chevron" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
-            <div class="accordion-content rte" id="acc-details">
+            <div class="accordion-content" id="acc-details">
               {{ product.description }}
             </div>
           </div>
@@ -1205,7 +1205,9 @@
     color: #555;
   }
 
-  .accordion-content p { margin: 0 0 10px; }
+  .accordion-content p,
+  .accordion-content li { margin: 0 0 10px; color: #555; opacity: 1; visibility: visible; }
+  .accordion-content strong { color: #222; }
   .accordion-content ul { margin: 0 0 10px; padding-left: 18px; }
 
   /* Share */
@@ -1993,7 +1995,9 @@ function initImageGallery() {
       console.log('New image src:', newImageSrc);
       
       // Mobile: scroll the swipe track. Desktop: swap main image src.
-      if (mobileTrack && mobileSlides.length) {
+      // (The mobile track is always in the DOM, so check the viewport, not its existence.)
+      const isMobileView = window.matchMedia('(max-width: 768px)').matches;
+      if (isMobileView && mobileTrack && mobileSlides.length) {
         scrollMobileToIndex(index);
       } else if (newImageSrc && mainImage) {
         // Check if image is preloaded
@@ -2402,9 +2406,17 @@ function initImageGalleryWithTransition() {
     });
   }
 
+  // Uses the store's own money format (e.g. "₦ + amount placeholder") so the symbol always matches
   function formatMoney(cents) {
-    const amount = (cents / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    return {{ shop.currency_symbol | json }} + amount;
+    const format = {{ shop.money_format | strip_html | json }} || {% raw %}'{{amount}}'{% endraw %};
+    const value = cents / 100;
+    const withDecimals = value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const noDecimals = Math.round(value).toLocaleString('en-US');
+    return format.replace(/\{\{\s*(\w+)\s*\}\}/, function(_, key) {
+      if (key === 'amount_no_decimals') return noDecimals;
+      if (key === 'amount_with_comma_separator') return withDecimals.replace(/,/g, '.').replace(/\.(\d{2})$/, ',$1');
+      return withDecimals;
+    });
   }
 
   // Show the photo for the selected colour (variant image, or image alt text matching the colour)
