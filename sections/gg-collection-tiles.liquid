@@ -1,0 +1,121 @@
+<section class="gg-tiles" id="gg-tiles-{{ section.id }}">
+  <div class="gg-wrap">
+    {%- if section.settings.heading != blank -%}
+      <div class="gg-section-head">
+        <h2 class="gg-section-title">{{ section.settings.heading }}</h2>
+        {%- if section.settings.subheading != blank -%}<p class="gg-section-sub">{{ section.settings.subheading }}</p>{%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="gg-tiles__grid">
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign c = block.settings.collection
+          assign tile_image = block.settings.image | default: c.featured_image
+          assign tile_label = block.settings.label | default: c.title
+          assign tile_url = c.url | default: routes.all_products_collection_url
+        -%}
+        <a class="gg-tile" href="{{ tile_url }}" {{ block.shopify_attributes }}>
+          <span class="gg-tile__media">
+            {%- if tile_image != blank -%}
+              {{ tile_image | image_url: width: 900 | image_tag:
+                widths: '360, 540, 720, 900',
+                sizes: '(max-width: 768px) 50vw, 25vw',
+                loading: 'lazy',
+                alt: tile_label,
+                class: 'gg-tile__img' }}
+            {%- endif -%}
+          </span>
+          <span class="gg-tile__label">
+            {{ tile_label }}
+            {%- if c != blank and section.settings.show_count -%}
+              <small>{{ c.products_count }} {% if c.products_count == 1 %}piece{% else %}pieces{% endif %}</small>
+            {%- endif -%}
+          </span>
+        </a>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% render 'gg-shared-styles' %}
+<style>
+
+  #gg-tiles-{{ section.id }} { padding: 72px 0; }
+  #gg-tiles-{{ section.id }} .gg-tiles__grid {
+    display: grid;
+    grid-template-columns: repeat({{ section.blocks.size | at_most: 4 | at_least: 1 }}, minmax(0, 1fr));
+    gap: 16px;
+  }
+  #gg-tiles-{{ section.id }} .gg-tile {
+    position: relative;
+    display: block;
+    border-radius: 10px;
+    overflow: hidden;
+    text-decoration: none;
+    color: #fff;
+  }
+  #gg-tiles-{{ section.id }} .gg-tile__media {
+    display: block;
+    aspect-ratio: 3 / 4;
+    background: #eee4d3;
+  }
+  #gg-tiles-{{ section.id }} .gg-tile__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 25%;
+    transition: transform 0.6s ease;
+  }
+  #gg-tiles-{{ section.id }} .gg-tile:hover .gg-tile__img { transform: scale(1.04); }
+  #gg-tiles-{{ section.id }} .gg-tile::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0) 55%, rgba(0,0,0,0.6) 100%);
+  }
+  #gg-tiles-{{ section.id }} .gg-tile__label {
+    position: absolute;
+    left: 18px;
+    right: 18px;
+    bottom: 16px;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+  #gg-tiles-{{ section.id }} .gg-tile__label small { font-size: 13px; font-weight: 400; opacity: 0.85; }
+
+  @media (max-width: 768px) {
+    #gg-tiles-{{ section.id }} { padding: 48px 0; }
+    #gg-tiles-{{ section.id }} .gg-tiles__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+    #gg-tiles-{{ section.id }} .gg-tile__label { left: 12px; bottom: 12px; font-size: 15px; }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Getglow category tiles",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Shop by category" },
+    { "type": "text", "id": "subheading", "label": "Subheading" },
+    { "type": "checkbox", "id": "show_count", "label": "Show number of pieces", "default": true }
+  ],
+  "blocks": [
+    {
+      "type": "tile",
+      "name": "Category",
+      "settings": [
+        { "type": "collection", "id": "collection", "label": "Collection" },
+        { "type": "image_picker", "id": "image", "label": "Image", "info": "Defaults to the collection image." },
+        { "type": "text", "id": "label", "label": "Label", "info": "Defaults to the collection title." }
+      ]
+    }
+  ],
+  "max_blocks": 8,
+  "presets": [{ "name": "Getglow category tiles" }]
+}
+{% endschema %}

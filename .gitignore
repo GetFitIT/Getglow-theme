@@ -1,0 +1,11 @@
+# Secrets - never commit
+.env
+.env.*
+*.token
+
+# Shopify CLI / OS / editor
+.shopify/
+node_modules/
+.DS_Store
+Thumbs.db
+.vscode/
