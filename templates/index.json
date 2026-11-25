@@ -333,6 +333,74 @@
         "badge_position": "p-badge--top-right",
         "badge_shape": "badge--star"
       }
+    },
+    "gg_clients": {
+      "type": "gg-reels",
+      "blocks": {
+        "c1": {
+          "type": "reel",
+          "settings": {
+            "video": "shopify://files/videos/getglow-client-feather-maroon.mp4",
+            "product": "feather-me-set",
+            "label": "Feather Me Set in Maroon"
+          }
+        },
+        "c2": {
+          "type": "reel",
+          "settings": {
+            "image": "shopify://shop_images/getglow-client-feather-black.jpg",
+            "product": "feather-me-set",
+            "label": "Feather Me Set in Black"
+          }
+        },
+        "c3": {
+          "type": "reel",
+          "settings": {
+            "video": "shopify://files/videos/getglow-client-rose-corset.mp4",
+            "product": "rose-corset-top",
+            "label": "Rose Corset Top & Skirt"
+          }
+        },
+        "c4": {
+          "type": "reel",
+          "settings": {
+            "image": "shopify://shop_images/getglow-client-magenta-bubu.jpg",
+            "product": "richest-aunty-bubu-with-turkey-pleat",
+            "label": "Richest Aunty Bubu with Turkey Pleat"
+          }
+        },
+        "c5": {
+          "type": "reel",
+          "settings": {
+            "video": "shopify://files/videos/getglow-client-bimbo-black.mp4",
+            "product": "beaded-bimbo-corset-top",
+            "label": "Beaded Bimbo Corset & Pleat Skirt"
+          }
+        },
+        "c6": {
+          "type": "reel",
+          "settings": {
+            "video": "shopify://files/videos/getglow-client-corset-navy.mp4",
+            "product": "hand-beaded-corset-top-with-inbuilt-corset-luxury-pleat-skirt",
+            "label": "Corset Top + Luxury Pleat Skirt"
+          }
+        }
+      },
+      "block_order": [
+        "c1",
+        "c2",
+        "c3",
+        "c4",
+        "c5",
+        "c6"
+      ],
+      "settings": {
+        "heading": "Worn by our clients",
+        "subheading": "Weddings, parties and red carpets: see how our clients wear Getglow.",
+        "columns": 3,
+        "show_price": false,
+        "background": "#ffffff"
+      }
     }
   },
   "order": [
@@ -341,6 +409,7 @@
     "featured_product_carousel_fnkxC9",
     "gg_reels",
     "gg_steps",
+    "gg_clients",
     "collection_triple_slider_4my8UW",
     "custom_text_section_kYDnz8",
     "info_banner_LeBhVN",
