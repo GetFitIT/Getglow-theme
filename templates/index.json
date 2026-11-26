@@ -21,7 +21,9 @@
         "button_1_link": "shopify://collections/all",
         "button_2_label": "Shop the Angel Dress",
         "button_2_link": "shopify://products/angel-dress",
-        "background": "#f6f0e6"
+        "background": "#f6f0e6",
+        "video_url_desktop": "https://cdn.shopify.com/s/files/1/0699/5116/0475/files/getglow-hero-red-gown-hq.mp4?v=1795684191",
+        "video_url_mobile": "https://cdn.shopify.com/s/files/1/0699/5116/0475/files/getglow-hero-red-gown-mobile.mp4?v=1795684200"
       }
     },
     "gg_categories": {
