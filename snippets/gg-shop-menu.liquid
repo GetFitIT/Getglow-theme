@@ -62,6 +62,19 @@
 
 {% render 'gg-shared-styles' %}
 <style>
+  /* Black Friday tile at the top of the phone menu (hidden on desktop, where the bar + homepage cover it) */
+  .gg-promo-item { display: none; }
+  @media (max-width: 1024px) {
+    .gg-promo-item { display: block; margin: 4px 0 14px; }
+    .gg-promo-link {
+      display: flex; flex-direction: column; gap: 4px; padding: 16px 18px; border-radius: 12px;
+      background: #14110d; color: #fff; text-decoration: none;
+    }
+    .gg-promo-link__eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: #f0c36b; }
+    .gg-promo-link__title { font-family: var(--font-heading-family); font-size: 22px; line-height: 1.2; color: #fff; }
+    .gg-promo-link__cta { margin-top: 4px; font-size: 13px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #f0c36b; }
+  }
+
   .gg-menu {
     display: grid;
     grid-template-columns: 220px minmax(0, 1fr) 250px;
