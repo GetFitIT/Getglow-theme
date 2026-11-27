@@ -259,12 +259,16 @@
 
   /* Grid */
   #gg-cp-{{ section.id }} .gg-cp__grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 32px 20px; }
+  #gg-cp-{{ section.id }} .gg-cp__grid > li { min-width: 0; }
+  #gg-cp-{{ section.id }} .gg-cp__promo { display: flex; }
   #gg-cp-{{ section.id }} .gg-cp__promo > div {
-    height: 100%; min-height: 260px; display: flex; flex-direction: column; justify-content: center; gap: 10px;
-    padding: 28px; border-radius: 10px; background: #1d1a16; color: #fff; aspect-ratio: 3 / 4;
+    box-sizing: border-box; width: 100%; min-width: 0; min-height: 260px;
+    display: flex; flex-direction: column; justify-content: center; gap: 10px;
+    padding: clamp(20px, 2.2vw, 28px); border-radius: 10px; background: #1d1a16; color: #fff;
+    overflow-wrap: break-word;
   }
   #gg-cp-{{ section.id }} .gg-cp__promo-eyebrow { margin: 0; font-size: 12px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: #d8c193; }
-  #gg-cp-{{ section.id }} .gg-cp__promo-title { margin: 0; font-family: var(--font-heading-family); font-size: 28px; line-height: 1.15; }
+  #gg-cp-{{ section.id }} .gg-cp__promo-title { margin: 0; font-family: var(--font-heading-family); font-size: clamp(22px, 2vw, 28px); line-height: 1.15; }
   #gg-cp-{{ section.id }} .gg-cp__promo-text { margin: 0; font-size: 15px; line-height: 1.6; color: rgba(255,255,255,0.8); }
   #gg-cp-{{ section.id }} .gg-cp__promo-link { margin-top: 6px; color: #fff; font-weight: 600; font-size: 14px; text-decoration: underline; text-underline-offset: 4px; }
 
@@ -289,7 +293,7 @@
     #gg-cp-{{ section.id }} .gg-cp__showing { display: none; }
     #gg-cp-{{ section.id }} .gg-cp__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 12px; }
     #gg-cp-{{ section.id }} .gg-cp__promo { grid-column: 1 / -1; }
-    #gg-cp-{{ section.id }} .gg-cp__promo > div { aspect-ratio: auto; min-height: 0; padding: 24px; }
+    #gg-cp-{{ section.id }} .gg-cp__promo > div { min-height: 0; padding: 24px; }
     #gg-cp-{{ section.id }} .gg-cp__filter-list { position: fixed; left: 16px; right: 16px; top: auto; bottom: 16px; max-height: 60vh; }
   }
 </style>
