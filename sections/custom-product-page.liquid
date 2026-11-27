@@ -975,6 +975,19 @@
     margin-left: 0.5rem;
   }
 
+  .gg-save {
+    display: inline-block;
+    margin-left: 10px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: #b3122e;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    vertical-align: middle;
+  }
+
   /* Cart Success Message */
   .cart-success-message {
     background: #f0fdf4;
@@ -2555,6 +2568,20 @@ function updatePrice() {
 
       const stickyPrice = document.getElementById('sticky-atc-price');
       if (stickyPrice) stickyPrice.textContent = formatMoney(price);
+
+      // Headline price follows the selected size/colour, with the "was" price during a sale
+      const headline = document.querySelector('.product-price .price');
+      const compare = parseFloat(selectedVariant.getAttribute('data-compare-price')) || 0;
+      if (headline) {
+        if (compare > price) {
+          const off = Math.round((1 - price / compare) * 100);
+          headline.innerHTML = '<span class="sale-price">' + formatMoney(price) + '</span>' +
+            '<span class="original-price">' + formatMoney(compare) + '</span>' +
+            '<span class="gg-save">Save ' + off + '%</span>';
+        } else {
+          headline.textContent = formatMoney(price);
+        }
+      }
     }
   }
 }
