@@ -386,10 +386,27 @@
         "button_label": "Shop all",
         "button_link": "shopify://collections/all"
       }
+    },
+    "gg_black_friday": {
+      "type": "gg-product-carousel",
+      "settings": {
+        "eyebrow": "Black Friday · Limited time",
+        "heading": "Up to 38% off selected pieces",
+        "subheading": "Our most-loved sets at their lowest prices of the year. Still made to your measure.",
+        "products": [],
+        "collection": "black-friday-sale",
+        "collection_limit": 12,
+        "hide_when_empty": true,
+        "style": "dark",
+        "badge": "",
+        "button_label": "Shop the Black Friday sale",
+        "button_link": "shopify://collections/black-friday-sale"
+      }
     }
   },
   "order": [
     "gg_hero",
+    "gg_black_friday",
     "gg_categories",
     "gg_bestsellers",
     "gg_reels",
