@@ -1,7 +1,7 @@
 {%- liquid
   assign media = 'image' | placeholder_svg_tag: 'placeholder w-100 h-100 of-cover js-image-lazy'
 -%}
-<sht-cart-drwr id="shtCartDrawer" class="drawer cart__drawer js-cart-drawer no-focus-visible" aria-hidden="true" hidden tabindex="-1">
+<sht-cart-drwr id="shtCartDrawer" class="drawer cart__drawer js-cart-drawer no-focus-visible gg-drawer" aria-hidden="true" hidden tabindex="-1">
   <div class="cart-drawer" id="cartDrawer">
     <div class="drawer__overlay js-cart-drawer-overlay js-drawer-overlay"></div>
     <div class="drawer__wrapper cart-drawer__wrapper js-cart-drawer-wrapper js-drawer-wrapper p-absolute" role="dialog" aria-label="{{ 'sections.cart.title' | t }}" aria-modal="true">
@@ -13,12 +13,19 @@
           </button>
         </div>
         <div class="drawer__body oy-scroll d-flex center-xs middle-xs fd-column flex-1">
-          <span class="h5 mb-32">{{ 'general.cart.cart_empty' | t }}</span>
+          <svg class="gg-drw-empty-icon" width="48" height="48" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 8h14l-1.2 11.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8L5 8Z" stroke="currentColor" stroke-width="1.3"/><path d="M9 8V6a3 3 0 0 1 6 0v2" stroke="currentColor" stroke-width="1.3"/></svg>
+          <span class="gg-drw-empty-title">Your bag is empty</span>
+          <span class="gg-drw-empty-sub">Every piece is made to your measure.</span>
           <sht-cart-drwr-frm>
-            <a href="{{ routes.all_products_collection_url }}" class="btn btn-primary btn-large">
-              {{ 'general.cart.continue_shopping' | t }}
-            </a>
+            <a href="{{ routes.all_products_collection_url }}" class="btn btn-primary btn-large">Shop all</a>
           </sht-cart-drwr-frm>
+          {%- assign gg_empty_handles = 'dresses,corset-tops-skirts,kimono' | split: ',' -%}
+          <div class="gg-drw-empty-links">
+            {%- for h in gg_empty_handles -%}
+              {%- assign c = collections[h] -%}
+              {%- if c != blank -%}<a href="{{ c.url }}">{{ c.title }}</a>{%- endif -%}
+            {%- endfor -%}
+          </div>
         </div>
       {%- else -%}
         <div class="drawer__header d-flex middle-xs between-xs">
@@ -60,13 +67,9 @@
                                 {%- if item.product.has_only_default_variant == false -%}
                                   <div class="cart-drawer__item__option">
                                     <span>
-                                      {%- liquid
-                                        assign options_names = ''
-                                        for option in item.options_with_values
-                                          assign options_names = options_names | append: ', ' | append: option.value
-                                        endfor
-                                        echo  options_names | replace_first: ', ', ''
-                                      -%}
+                                      {%- for option in item.options_with_values -%}
+                                        <span class="gg-drw-opt">{{ option.name }}: <strong>{{ option.value }}</strong></span>
+                                      {%- endfor -%}
                                       </span>
                                   </div>
                                 {%- endif -%}
@@ -74,8 +77,8 @@
                                   {%- assign property_first_char = property.first | slice: 0 -%}
                                   {%- if property.last != blank and property_first_char != '_' -%}
                                     <div class="cart-drawer__item__option">
-                                      <p class="d-block mt-4">
-                                        {{ property.first }}:
+                                      <p class="d-block mt-4 gg-drw-prop">
+                                        <span class="gg-drw-prop-label">{{ property.first }}</span>
                                         {% if property.last contains '/uploads/' %}
                                           <a href="{{ property.last }}" class="link" target="_blank" aria-describedby="a11y-new-window-message">
                                             {{ property.last | split: '/' | last }}
@@ -236,7 +239,11 @@
               </ul>
             {%- endif -%}
           </div>
-          <div class="d-flex middle-xs between-xs mb-24">
+          <p class="gg-drw-note">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 3h4l2 3 2-3h4l3 6-3 1v11H6V10L3 9l3-6Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+            <span>Made to order for you, ready to ship in 5–8 working days. Shipping calculated at checkout.</span>
+          </p>
+          <div class="d-flex middle-xs between-xs mb-24 gg-drw-total">
             <h2 class="h5 m-zero">{{ 'general.cart.total' | t }}</h2>
             <p class="m-zero h5 color-accent-bg-1">{{ cart.total_price | money_with_currency }}</p>
           </div>
@@ -246,10 +253,15 @@
                 {{ 'sections.cart.update' | t }}
               </button>
             </noscript>
-            <a href="{{- routes.cart_url -}}" class="btn btn-large btn-secondary w-100">{{ 'sections.cart.view_cart' | t }}</a>
-            <button type="submit" class="js-cart-drawer-submit-btn btn btn-large btn-primary w-100" name="checkout" form="cart-drawer-form" {% if cart == empty %} disabled{% endif %}>
-              {{ 'sections.cart.checkout' | t }}
+            <button type="submit" class="js-cart-drawer-submit-btn btn btn-large btn-primary w-100 gg-drw-checkout" name="checkout" form="cart-drawer-form" {% if cart == empty %} disabled{% endif %}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="5" y="10" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M8 10V7a4 4 0 1 1 8 0v3" stroke="currentColor" stroke-width="1.6"/></svg>
+              Secure checkout
             </button>
+          </div>
+          <div class="gg-drw-links">
+            <a href="{{- routes.cart_url -}}">View full bag</a>
+            <span aria-hidden="true">·</span>
+            <a href="https://wa.me/2347048522079?text={{ 'Hi Getglow, I have a question about my order.' | url_encode }}" target="_blank" rel="noopener">Questions? WhatsApp us</a>
           </div>
           {% if settings.show_cart_tax_info %}
             <small class="tax-note subtext d-block ta-center color-light text-block">
@@ -269,3 +281,49 @@
     </div>
   </div>
 </sht-cart-drwr>
+
+<style>
+  .gg-drawer .cart-drawer__wrapper { background: #fff; }
+  .gg-drawer .drawer__header { padding: 20px 22px; border-bottom: 1px solid #eee5d6; }
+  .gg-drawer .drawer__heading { font-family: var(--font-heading-family); font-weight: 400; font-size: 26px; letter-spacing: 0; text-transform: none; color: #1d1a16; }
+  .gg-drawer .drawer__body { padding: 4px 22px 16px; }
+
+  .gg-drawer .cart-drawer__product { grid-template-columns: 96px minmax(0, 1fr); padding: 18px 0; border-bottom: 1px solid #f0e9dc; }
+  .gg-drawer .cart-drawer__product__media { aspect-ratio: 3 / 4; border-radius: 8px; overflow: hidden; background: #f1ebe0; }
+  .gg-drawer .cart-drawer__product__media img { width: 100%; height: 100%; object-fit: cover; object-position: center 20%; }
+  .gg-drawer .cart-drawer__product-info--top { grid-template-columns: minmax(0, 1fr) auto; padding-bottom: 8px; }
+  .gg-drawer .cart-drawer__product-info--title > a { font-size: 15px; font-weight: 500; line-height: 1.35; color: #1d1a16; text-transform: none; letter-spacing: 0; }
+  .gg-drawer .cart-drawer__product-price .fw-700 { font-size: 15px; font-weight: 600; color: #1d1a16; }
+  .gg-drawer .cart-drawer__item__options dl { color: #5c554a; font-size: 13px; }
+  .gg-drawer .gg-drw-opt { display: inline-block; margin-right: 12px; }
+  .gg-drawer .gg-drw-opt strong { color: #1d1a16; font-weight: 500; }
+  .gg-drawer .gg-drw-prop { margin-top: 8px !important; padding: 7px 9px; border-radius: 8px; background: #fbf8f2; border: 1px solid #efe6d4; font-size: 12px; line-height: 1.45; color: #4a443b; }
+  .gg-drawer .gg-drw-prop-label { display: block; font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #8a7350; margin-bottom: 2px; }
+
+  .gg-drawer sht-cart-drwr-qty-inp { border: 1px solid #ddd2bf; border-radius: 999px; overflow: hidden; height: 36px; }
+  .gg-drawer sht-cart-drwr-qty-inp .btn { width: 34px; height: 34px; }
+  .gg-drawer sht-cart-drwr-qty-inp input { width: 30px; font-size: 14px; }
+  .gg-drawer .js-cart-drawer-delete-btn { border: 0; background: none; color: #8a7350; width: 34px; height: 34px; }
+  .gg-drawer .js-cart-drawer-delete-btn:hover { color: #1d1a16; }
+
+  .gg-drawer .cart-order-notes .btn-link { font-size: 14px; color: #6b5b3e; }
+  .gg-drawer .drawer__footer { padding: 16px 22px calc(16px + env(safe-area-inset-bottom)); background: #f6f0e6; border-top: 1px solid #eadfca; }
+  .gg-drawer .gg-drw-note { display: flex; gap: 10px; align-items: flex-start; margin: 0 0 14px; font-size: 13px; line-height: 1.5; color: #4a443b; }
+  .gg-drawer .gg-drw-note svg { flex-shrink: 0; color: #6b5b3e; margin-top: 1px; }
+  .gg-drawer .gg-drw-total { margin-bottom: 14px !important; }
+  .gg-drawer .gg-drw-total .h5 { font-size: 18px; font-weight: 600; letter-spacing: 0; text-transform: none; color: #1d1a16; }
+  .gg-drawer .gg-drw-checkout {
+    display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 54px; border-radius: 6px;
+    background: #6b5b3e; border-color: #6b5b3e; color: #fff; font-size: 14px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+  }
+  .gg-drawer .gg-drw-checkout:hover { background: #5a4c34; border-color: #5a4c34; }
+  .gg-drawer .gg-drw-links { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin-top: 10px; font-size: 13px; }
+  .gg-drawer .gg-drw-links a { color: #6b5b3e; text-decoration: underline; text-underline-offset: 3px; }
+  .gg-drawer .gg-drw-links span { color: #b5a98f; }
+
+  .gg-drawer .gg-drw-empty-icon { color: #8a7350; margin-bottom: 14px; }
+  .gg-drawer .gg-drw-empty-title { font-family: var(--font-heading-family); font-size: 26px; color: #1d1a16; }
+  .gg-drawer .gg-drw-empty-sub { margin: 6px 0 22px; font-size: 14px; color: #6b6457; }
+  .gg-drawer .gg-drw-empty-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 16px; }
+  .gg-drawer .gg-drw-empty-links a { padding: 8px 14px; border: 1px solid #e6dcc6; border-radius: 999px; font-size: 13px; color: #1d1a16; text-decoration: none; }
+</style>

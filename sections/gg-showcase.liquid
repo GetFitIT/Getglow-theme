@@ -1,0 +1,293 @@
+{%- liquid
+  assign hero = section.blocks | where: 'type', 'hero' | first
+  assign looks = section.blocks | where: 'type', 'look'
+  assign films = section.blocks | where: 'type', 'film'
+  assign press = section.blocks | where: 'type', 'press'
+  assign logos = section.blocks | where: 'type', 'logo'
+  assign cta = section.blocks | where: 'type', 'cta' | first
+  assign live_press = 0
+  for b in press
+    if b.settings.show
+      assign live_press = live_press | plus: 1
+    endif
+  endfor
+  assign live_films = 0
+  for b in films
+    if b.settings.show
+      assign live_films = live_films | plus: 1
+    endif
+  endfor
+  assign live_logos = 0
+  for b in logos
+    if b.settings.show
+      assign live_logos = live_logos | plus: 1
+    endif
+  endfor
+-%}
+{% render 'gg-shared-styles' %}
+
+<div class="gg-show" id="gg-show-{{ section.id }}">
+  {%- comment -%} Hero {%- endcomment -%}
+  {%- if hero -%}
+    <section class="gg-show__hero" {{ hero.shopify_attributes }}>
+      {%- if hero.settings.image -%}
+        {{ hero.settings.image | image_url: width: 2000 | image_tag: widths: '800, 1200, 1600, 2000', sizes: '100vw', loading: 'eager', fetchpriority: 'high', class: 'gg-show__hero-img', alt: '' }}
+      {%- endif -%}
+      <div class="gg-show__hero-text">
+        {%- if hero.settings.eyebrow != blank -%}<p class="gg-show__eyebrow">{{ hero.settings.eyebrow }}</p>{%- endif -%}
+        <h1 class="gg-show__title">{{ hero.settings.title }}</h1>
+        {%- if hero.settings.subtitle != blank -%}<p class="gg-show__sub">{{ hero.settings.subtitle }}</p>{%- endif -%}
+        {%- if looks.size > 0 -%}<a class="gg-btn gg-show__hero-btn" href="#gg-show-looks-{{ section.id }}">{{ hero.settings.btn_label | default: 'See the looks' }}</a>{%- endif -%}
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment -%} Logo strip (only confirmed logos) {%- endcomment -%}
+  {%- if live_logos > 0 -%}
+    <section class="gg-show__logos" aria-label="As featured in">
+      <p class="gg-show__label">As featured in</p>
+      <ul role="list">
+        {%- for b in logos -%}
+          {%- if b.settings.show -%}
+            <li {{ b.shopify_attributes }}>
+              {%- if b.settings.logo -%}
+                {{ b.settings.logo | image_url: width: 300 | image_tag: loading: 'lazy', alt: b.settings.name, class: 'gg-show__logo-img' }}
+              {%- else -%}
+                <span class="gg-show__logo-text">{{ b.settings.name }}</span>
+              {%- endif -%}
+            </li>
+          {%- endif -%}
+        {%- endfor -%}
+      </ul>
+    </section>
+  {%- endif -%}
+
+  {%- comment -%} Celebrity / client looks {%- endcomment -%}
+  {%- if looks.size > 0 -%}
+    <section class="gg-show__looks" id="gg-show-looks-{{ section.id }}">
+      <div class="gg-wrap">
+        <div class="gg-section-head">
+          <h2 class="gg-section-title">{{ section.settings.looks_heading }}</h2>
+          {%- if section.settings.looks_sub != blank -%}<p class="gg-section-sub">{{ section.settings.looks_sub }}</p>{%- endif -%}
+        </div>
+        <ul class="gg-show__grid" role="list">
+          {%- for b in looks -%}
+            {%- assign p = b.settings.product -%}
+            <li class="gg-look" {{ b.shopify_attributes }}>
+              <div class="gg-look__media">
+                {%- if b.settings.image -%}
+                  {{ b.settings.image | image_url: width: 900 | image_tag: widths: '450, 600, 900', sizes: '(max-width: 768px) 90vw, 33vw', loading: 'lazy', alt: b.settings.name | append: ' wearing Getglow' }}
+                {%- endif -%}
+                {%- if b.settings.handle != blank -%}<span class="gg-look__handle">{{ b.settings.handle }}</span>{%- endif -%}
+              </div>
+              <div class="gg-look__body">
+                <p class="gg-look__name">{{ b.settings.name }}</p>
+                {%- if b.settings.role != blank -%}<p class="gg-look__role">{{ b.settings.role }}</p>{%- endif -%}
+                <p class="gg-look__wearing">Wearing <strong>{{ b.settings.dress_name | default: p.title }}</strong></p>
+                {%- if p != blank -%}
+                  <a class="gg-look__shop" href="{{ p.url }}">
+                    <span class="gg-look__thumb">{%- if p.featured_image -%}{{ p.featured_image | image_url: width: 120 | image_tag: loading: 'lazy', alt: '' }}{%- endif -%}</span>
+                    <span><span class="gg-look__shop-label">Shop the look</span><span class="gg-look__shop-price">{% if p.price_varies %}From {% endif %}{{ p.price_min | money }}</span></span>
+                    <span aria-hidden="true">→</span>
+                  </a>
+                {%- endif -%}
+              </div>
+            </li>
+          {%- endfor -%}
+        </ul>
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment -%} Film & TV {%- endcomment -%}
+  {%- if live_films > 0 -%}
+    <section class="gg-show__films">
+      <div class="gg-wrap">
+        <div class="gg-section-head"><h2 class="gg-section-title">On screen</h2></div>
+        {%- for b in films -%}
+          {%- if b.settings.show -%}
+            {%- assign p = b.settings.product -%}
+            <article class="gg-film" {{ b.shopify_attributes }}>
+              <div class="gg-film__media">{%- if b.settings.image -%}{{ b.settings.image | image_url: width: 1200 | image_tag: widths: '600, 900, 1200', sizes: '(max-width: 768px) 100vw, 50vw', loading: 'lazy', alt: b.settings.title }}{%- endif -%}</div>
+              <div class="gg-film__text">
+                <p class="gg-show__eyebrow">{{ b.settings.kind }}</p>
+                <h3 class="gg-film__title">{{ b.settings.title }}</h3>
+                <p class="gg-film__meta">{{ b.settings.actress }}{% if b.settings.dress_name != blank %} in {{ b.settings.dress_name }}{% endif %}</p>
+                {%- if b.settings.description != blank -%}<p class="gg-film__desc">{{ b.settings.description }}</p>{%- endif -%}
+                {%- if p != blank -%}<a class="gg-btn gg-btn--secondary" href="{{ p.url }}">Shop the look</a>{%- endif -%}
+              </div>
+            </article>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment -%} Press {%- endcomment -%}
+  {%- if live_press > 0 -%}
+    <section class="gg-show__press">
+      <div class="gg-wrap">
+        <div class="gg-section-head"><h2 class="gg-section-title">In the press</h2></div>
+        <ul class="gg-show__press-grid" role="list">
+          {%- for b in press -%}
+            {%- if b.settings.show -%}
+              <li class="gg-press" {{ b.shopify_attributes }}>
+                <p class="gg-press__mag">{{ b.settings.name }}</p>
+                <p class="gg-press__quote">{{ b.settings.caption }}</p>
+                {%- if b.settings.link != blank -%}<a class="gg-press__link" href="{{ b.settings.link }}" target="_blank" rel="noopener">Read the feature →</a>{%- endif -%}
+              </li>
+            {%- endif -%}
+          {%- endfor -%}
+        </ul>
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment -%} Closing CTA {%- endcomment -%}
+  {%- if cta -%}
+    <section class="gg-show__cta" {{ cta.shopify_attributes }}>
+      {%- if cta.settings.eyebrow != blank -%}<p class="gg-show__eyebrow">{{ cta.settings.eyebrow }}</p>{%- endif -%}
+      <h2 class="gg-show__cta-title">{{ cta.settings.title }}</h2>
+      {%- if cta.settings.subtitle != blank -%}<p class="gg-show__cta-sub">{{ cta.settings.subtitle }}</p>{%- endif -%}
+      <a class="gg-btn gg-show__cta-btn" href="{{ cta.settings.btn_link | default: routes.all_products_collection_url }}">{{ cta.settings.btn_label | default: 'Shop the collection' }}</a>
+    </section>
+  {%- endif -%}
+</div>
+
+<style>
+  #gg-show-{{ section.id }} .gg-show__eyebrow { margin: 0 0 12px; font-size: 12px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: #d8c193; }
+  #gg-show-{{ section.id }} .gg-show__label { margin: 0 0 14px; font-size: 12px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: #8a7350; text-align: center; }
+
+  /* Hero */
+  #gg-show-{{ section.id }} .gg-show__hero { position: relative; min-height: min(78vh, 720px); display: flex; align-items: flex-end; background: #1d1a16; overflow: hidden; }
+  #gg-show-{{ section.id }} .gg-show__hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 25%; }
+  #gg-show-{{ section.id }} .gg-show__hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0.1) 30%, rgba(0,0,0,0.75) 100%); }
+  #gg-show-{{ section.id }} .gg-show__hero-text { position: relative; z-index: 1; width: 100%; max-width: 1320px; margin: 0 auto; padding: 0 20px clamp(40px, 7vw, 80px); color: #fff; }
+  #gg-show-{{ section.id }} .gg-show__title { margin: 0 0 14px; font-family: var(--font-heading-family); font-weight: 400; font-size: clamp(44px, 7vw, 96px); line-height: 1; }
+  #gg-show-{{ section.id }} .gg-show__sub { margin: 0 0 26px; max-width: 560px; font-size: 18px; line-height: 1.6; color: rgba(255,255,255,0.88); }
+  #gg-show-{{ section.id }} .gg-show__hero-btn { background: #fff; color: #1d1a16; border: 1px solid #fff; }
+  #gg-show-{{ section.id }} .gg-show__hero-btn:hover { background: transparent; color: #fff; }
+
+  /* Logos */
+  #gg-show-{{ section.id }} .gg-show__logos { padding: 36px 20px; border-bottom: 1px solid #eee5d6; }
+  #gg-show-{{ section.id }} .gg-show__logos ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 20px 48px; }
+  #gg-show-{{ section.id }} .gg-show__logo-img { height: 34px; width: auto; filter: grayscale(1); opacity: 0.75; }
+  #gg-show-{{ section.id }} .gg-show__logo-text { font-family: var(--font-heading-family); font-size: 24px; color: #6b6457; letter-spacing: 0.04em; }
+
+  /* Looks */
+  #gg-show-{{ section.id }} .gg-show__looks { padding: 80px 0; }
+  #gg-show-{{ section.id }} .gg-show__grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 40px 24px; }
+  #gg-show-{{ section.id }} .gg-look__media { position: relative; aspect-ratio: 3 / 4; border-radius: 12px; overflow: hidden; background: #f1ebe0; }
+  #gg-show-{{ section.id }} .gg-look__media img { width: 100%; height: 100%; object-fit: cover; object-position: center 20%; transition: transform 0.7s ease; }
+  #gg-show-{{ section.id }} .gg-look:hover .gg-look__media img { transform: scale(1.04); }
+  #gg-show-{{ section.id }} .gg-look__handle { position: absolute; left: 12px; bottom: 12px; padding: 5px 12px; border-radius: 999px; background: rgba(0,0,0,0.55); color: #fff; font-size: 12px; }
+  #gg-show-{{ section.id }} .gg-look__body { padding: 16px 2px 0; }
+  #gg-show-{{ section.id }} .gg-look__name { margin: 0; font-family: var(--font-heading-family); font-size: 26px; line-height: 1.15; color: #1d1a16; }
+  #gg-show-{{ section.id }} .gg-look__role { margin: 4px 0 0; font-size: 13px; color: #8a7350; letter-spacing: 0.06em; text-transform: uppercase; }
+  #gg-show-{{ section.id }} .gg-look__wearing { margin: 8px 0 0; font-size: 15px; color: #5c554a; }
+  #gg-show-{{ section.id }} .gg-look__wearing strong { color: #1d1a16; font-weight: 600; }
+  #gg-show-{{ section.id }} .gg-look__shop {
+    display: flex; align-items: center; gap: 12px; margin-top: 14px; padding: 8px 14px 8px 8px;
+    border: 1px solid #e6dcc6; border-radius: 12px; text-decoration: none; color: #1d1a16; transition: border-color 0.2s, background-color 0.2s;
+  }
+  #gg-show-{{ section.id }} .gg-look__shop:hover { border-color: #1d1a16; background: #fbf8f2; }
+  #gg-show-{{ section.id }} .gg-look__shop > span:last-child { margin-left: auto; font-size: 18px; }
+  #gg-show-{{ section.id }} .gg-look__thumb { width: 44px; height: 54px; border-radius: 6px; overflow: hidden; background: #f1ebe0; flex-shrink: 0; }
+  #gg-show-{{ section.id }} .gg-look__thumb img { width: 100%; height: 100%; object-fit: cover; }
+  #gg-show-{{ section.id }} .gg-look__shop-label { display: block; font-size: 13px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
+  #gg-show-{{ section.id }} .gg-look__shop-price { display: block; font-size: 14px; color: #6b5b3e; }
+
+  /* Films */
+  #gg-show-{{ section.id }} .gg-show__films { padding: 72px 0; background: #1d1a16; color: #fff; }
+  #gg-show-{{ section.id }} .gg-show__films .gg-section-title { color: #fff; }
+  #gg-show-{{ section.id }} .gg-film { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 40px; align-items: center; }
+  #gg-show-{{ section.id }} .gg-film + .gg-film { margin-top: 48px; }
+  #gg-show-{{ section.id }} .gg-film__media { aspect-ratio: 16 / 10; border-radius: 12px; overflow: hidden; background: #2a251e; }
+  #gg-show-{{ section.id }} .gg-film__media img { width: 100%; height: 100%; object-fit: cover; }
+  #gg-show-{{ section.id }} .gg-film__title { margin: 0 0 8px; font-family: var(--font-heading-family); font-weight: 400; font-size: clamp(30px, 3.4vw, 44px); }
+  #gg-show-{{ section.id }} .gg-film__meta { margin: 0 0 14px; color: #d8c193; }
+  #gg-show-{{ section.id }} .gg-film__desc { margin: 0 0 22px; line-height: 1.65; color: rgba(255,255,255,0.82); }
+  #gg-show-{{ section.id }} .gg-film .gg-btn--secondary { color: #fff; border-color: #fff; }
+
+  /* Press */
+  #gg-show-{{ section.id }} .gg-show__press { padding: 72px 0; background: #f6f0e6; }
+  #gg-show-{{ section.id }} .gg-show__press-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; }
+  #gg-show-{{ section.id }} .gg-press { padding: 26px; border-radius: 12px; background: #fff; border: 1px solid #ece3d2; }
+  #gg-show-{{ section.id }} .gg-press__mag { margin: 0 0 10px; font-family: var(--font-heading-family); font-size: 22px; color: #1d1a16; }
+  #gg-show-{{ section.id }} .gg-press__quote { margin: 0; font-size: 15px; line-height: 1.6; color: #5c554a; }
+  #gg-show-{{ section.id }} .gg-press__link { display: inline-block; margin-top: 12px; font-size: 13px; font-weight: 600; color: #6b5b3e; }
+
+  /* CTA */
+  #gg-show-{{ section.id }} .gg-show__cta { padding: 90px 20px; text-align: center; background: #1d1a16; color: #fff; }
+  #gg-show-{{ section.id }} .gg-show__cta-title { margin: 0 auto 14px; max-width: 760px; font-family: var(--font-heading-family); font-weight: 400; font-size: clamp(30px, 4vw, 52px); line-height: 1.1; }
+  #gg-show-{{ section.id }} .gg-show__cta-sub { margin: 0 auto 28px; max-width: 520px; color: rgba(255,255,255,0.8); font-size: 17px; }
+  #gg-show-{{ section.id }} .gg-show__cta-btn { background: #fff; color: #1d1a16; border: 1px solid #fff; }
+  #gg-show-{{ section.id }} .gg-show__cta-btn:hover { background: transparent; color: #fff; }
+
+  @media (max-width: 989px) {
+    #gg-show-{{ section.id }} .gg-show__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    #gg-show-{{ section.id }} .gg-film { grid-template-columns: 1fr; gap: 22px; }
+  }
+  @media (max-width: 600px) {
+    #gg-show-{{ section.id }} .gg-show__hero { min-height: 72svh; }
+    #gg-show-{{ section.id }} .gg-show__sub { font-size: 16px; }
+    #gg-show-{{ section.id }} .gg-show__looks { padding: 52px 0; }
+    #gg-show-{{ section.id }} .gg-show__grid { grid-template-columns: 1fr; gap: 36px; }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Getglow showcase",
+  "settings": [
+    { "type": "text", "id": "looks_heading", "label": "Looks heading", "default": "Worn by" },
+    { "type": "text", "id": "looks_sub", "label": "Looks subheading", "default": "The women who wear Getglow, and the pieces they chose." }
+  ],
+  "blocks": [
+    { "type": "hero", "name": "Hero", "limit": 1, "settings": [
+      { "type": "image_picker", "id": "image", "label": "Background image" },
+      { "type": "text", "id": "eyebrow", "label": "Small text", "default": "The Getglow Edit" },
+      { "type": "text", "id": "title", "label": "Title", "default": "As Seen On" },
+      { "type": "textarea", "id": "subtitle", "label": "Text" },
+      { "type": "text", "id": "btn_label", "label": "Button label", "default": "See the looks" }
+    ]},
+    { "type": "look", "name": "Celebrity / client look", "settings": [
+      { "type": "image_picker", "id": "image", "label": "Photo" },
+      { "type": "text", "id": "name", "label": "Name" },
+      { "type": "text", "id": "role", "label": "Role (optional)", "info": "e.g. Actress, Media personality" },
+      { "type": "text", "id": "handle", "label": "Instagram handle (optional)", "info": "e.g. @name. Only with their permission." },
+      { "type": "product", "id": "product", "label": "Product worn" },
+      { "type": "text", "id": "dress_name", "label": "Outfit name (optional)", "info": "Defaults to the product title." }
+    ]},
+    { "type": "film", "name": "Film / TV appearance", "settings": [
+      { "type": "checkbox", "id": "show", "label": "Show on page", "default": false, "info": "Only switch on for confirmed appearances." },
+      { "type": "image_picker", "id": "image", "label": "Still image" },
+      { "type": "text", "id": "kind", "label": "Type", "default": "Film appearance" },
+      { "type": "text", "id": "title", "label": "Title" },
+      { "type": "text", "id": "actress", "label": "Worn by" },
+      { "type": "text", "id": "dress_name", "label": "Outfit name" },
+      { "type": "textarea", "id": "description", "label": "Description" },
+      { "type": "product", "id": "product", "label": "Product (optional)" }
+    ]},
+    { "type": "press", "name": "Press feature", "settings": [
+      { "type": "checkbox", "id": "show", "label": "Show on page", "default": false, "info": "Only switch on for real, published features." },
+      { "type": "text", "id": "name", "label": "Publication" },
+      { "type": "textarea", "id": "caption", "label": "What they said / feature title" },
+      { "type": "url", "id": "link", "label": "Link to the article" }
+    ]},
+    { "type": "logo", "name": "Publication logo", "settings": [
+      { "type": "checkbox", "id": "show", "label": "Show on page", "default": false, "info": "Only for publications that have featured Getglow." },
+      { "type": "text", "id": "name", "label": "Name" },
+      { "type": "image_picker", "id": "logo", "label": "Logo image (optional)" }
+    ]},
+    { "type": "cta", "name": "Closing call to action", "limit": 1, "settings": [
+      { "type": "text", "id": "eyebrow", "label": "Small text" },
+      { "type": "text", "id": "title", "label": "Title" },
+      { "type": "text", "id": "subtitle", "label": "Text" },
+      { "type": "text", "id": "btn_label", "label": "Button label" },
+      { "type": "url", "id": "btn_link", "label": "Button link" }
+    ]}
+  ],
+  "presets": [{ "name": "Getglow showcase" }]
+}
+{% endschema %}
