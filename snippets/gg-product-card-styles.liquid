@@ -1,0 +1,34 @@
+<style>
+  .gg-pcard { display: block; text-decoration: none; color: #1d1a16; }
+  .gg-pcard__media {
+    position: relative; display: block; aspect-ratio: 3 / 4;
+    border-radius: 10px; overflow: hidden; background: #f1ebe0;
+  }
+  .gg-pcard__img {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    object-fit: cover; object-position: center 20%;
+    transition: opacity 0.45s ease, transform 0.6s ease;
+  }
+  .gg-pcard__img--hover { opacity: 0; }
+  @media (hover: hover) {
+    .gg-pcard:hover .gg-pcard__img--hover { opacity: 1; }
+    .gg-pcard:hover .gg-pcard__img { transform: scale(1.03); }
+  }
+  .gg-pcard__badge {
+    position: absolute; top: 10px; left: 10px; padding: 4px 10px; border-radius: 999px;
+    background: #fff; font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+  }
+  .gg-pcard__body { display: flex; flex-direction: column; gap: 4px; padding: 12px 2px 0; }
+  .gg-pcard__title {
+    font-size: 15px; font-weight: 500; line-height: 1.35;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+  }
+  .gg-pcard__price { font-size: 15px; font-weight: 600; color: #6b5b3e; }
+  .gg-pcard__swatches { display: flex; align-items: center; gap: 5px; margin-top: 5px; }
+  .gg-pcard__dot { width: 14px; height: 14px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.18); }
+  .gg-pcard__more { font-size: 12px; color: #6b6b6b; }
+  @media (max-width: 768px) {
+    .gg-pcard__title { font-size: 14px; }
+    .gg-pcard__price { font-size: 14px; }
+  }
+</style>

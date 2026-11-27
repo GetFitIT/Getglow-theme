@@ -1,0 +1,252 @@
+{%- liquid
+  assign q = search.terms | escape
+  assign popular = settings.gg_popular_searches | default: 'Bubu, Corset, Angel Dress, Kimono, Two-piece set, Feather Me, Bimbo' | split: ','
+  assign fallback = settings.gg_search_trending
+  if fallback == blank
+    assign fallback = collections['dresses']
+  endif
+  assign per_page = section.settings.per_page | default: 24
+-%}
+{% render 'gg-shared-styles' %}
+{% render 'gg-product-card-styles' %}
+
+<section class="gg-sp" id="gg-sp-{{ section.id }}">
+  <div class="gg-wrap">
+    <header class="gg-sp__head">
+      <p class="gg-sp__eyebrow">Search</p>
+      <form action="{{ routes.search_url }}" method="get" role="search" class="gg-sp__form">
+        <input type="hidden" name="type" value="product">
+        <input type="hidden" name="options[prefix]" value="last">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.6"/><path d="m20 20-3.5-3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <input type="search" name="q" value="{{ q }}" class="gg-sp__input" placeholder="Search bubus, corsets, kimonos…" aria-label="Search the store" autocomplete="off">
+        <button type="submit" class="gg-btn gg-btn--primary gg-sp__submit">Search</button>
+      </form>
+      {%- if search.performed -%}
+        <p class="gg-sp__count">
+          {%- if search.results_count == 0 -%}
+            No results for <strong>“{{ q }}”</strong>
+          {%- else -%}
+            {{ search.results_count }} {% if search.results_count == 1 %}result{% else %}results{% endif %} for <strong>“{{ q }}”</strong>
+          {%- endif -%}
+        </p>
+      {%- endif -%}
+    </header>
+
+    {%- if search.performed and search.results_count > 0 -%}
+      {%- paginate search.results by per_page -%}
+        {%- comment -%} Filters + sort {%- endcomment -%}
+        <form class="gg-sp__toolbar" id="gg-sp-filters" action="{{ routes.search_url }}" method="get">
+          <input type="hidden" name="q" value="{{ q }}">
+          <input type="hidden" name="type" value="product">
+          <input type="hidden" name="options[prefix]" value="last">
+          <div class="gg-sp__filters">
+            {%- for filter in search.filters -%}
+              {%- if filter.type == 'list' and filter.values.size > 1 -%}
+                {%- assign fl = filter.label | downcase -%}
+                {%- if fl contains 'type' or fl contains 'colo' or fl contains 'size' or fl contains 'categor' -%}
+                  <details class="gg-sp__filter">
+                    <summary>
+                      {{ filter.label }}
+                      {%- if filter.active_values.size > 0 -%}<span class="gg-sp__badge">{{ filter.active_values.size }}</span>{%- endif -%}
+                      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </summary>
+                    <div class="gg-sp__filter-list">
+                      {%- for v in filter.values -%}
+                        <label class="gg-sp__opt{% if v.count == 0 and v.active == false %} is-disabled{% endif %}">
+                          <input type="checkbox" name="{{ v.param_name }}" value="{{ v.value }}" {% if v.active %}checked{% endif %} {% if v.count == 0 and v.active == false %}disabled{% endif %}>
+                          {%- if fl contains 'colo' -%}<span class="gg-pcard__dot" style="background: {% render 'gg-swatch-bg', color: v.label %};"></span>{%- endif -%}
+                          <span>{{ v.label }}</span><span class="gg-sp__n">{{ v.count }}</span>
+                        </label>
+                      {%- endfor -%}
+                    </div>
+                  </details>
+                {%- endif -%}
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+          <label class="gg-sp__sort">
+            <span>Sort</span>
+            <select name="sort_by">
+              {%- for option in search.sort_options -%}
+                <option value="{{ option.value }}" {% if option.value == search.sort_by %}selected{% endif %}>{{ option.name }}</option>
+              {%- endfor -%}
+            </select>
+          </label>
+        </form>
+
+        {%- assign active_count = 0 -%}
+        {%- for filter in search.filters -%}{%- assign active_count = active_count | plus: filter.active_values.size -%}{%- endfor -%}
+        {%- if active_count > 0 -%}
+          <div class="gg-sp__active">
+            {%- for filter in search.filters -%}
+              {%- for v in filter.active_values -%}
+                <a class="gg-sp__pill" href="{{ v.url_to_remove }}">{{ v.label }} <span aria-hidden="true">×</span><span class="visually-hidden">Remove filter</span></a>
+              {%- endfor -%}
+            {%- endfor -%}
+            <a class="gg-sp__clearall" href="{{ routes.search_url }}?q={{ search.terms | url_encode }}&type=product&options%5Bprefix%5D=last">Clear all</a>
+          </div>
+        {%- endif -%}
+
+        <ul class="gg-sp__grid" role="list">
+          {%- for item in search.results -%}
+            {%- if item.object_type == 'product' -%}
+              <li>{% render 'gg-product-card', product: item, sizes: '(max-width: 768px) 50vw, (max-width: 1100px) 33vw, 25vw' %}</li>
+            {%- endif -%}
+          {%- endfor -%}
+        </ul>
+
+        {%- capture other_results -%}
+          {%- for item in search.results -%}
+            {%- unless item.object_type == 'product' -%}
+              <li><a href="{{ item.url }}">{{ item.title }}</a> <span>{{ item.object_type | capitalize }}</span></li>
+            {%- endunless -%}
+          {%- endfor -%}
+        {%- endcapture -%}
+        {%- if other_results != blank -%}
+          <div class="gg-sp__other"><p class="gg-sp__label">Pages & articles</p><ul>{{ other_results }}</ul></div>
+        {%- endif -%}
+
+        {%- if paginate.pages > 1 -%}
+          <nav class="gg-sp__pages" aria-label="Pagination">
+            {%- if paginate.previous -%}<a class="gg-sp__page" href="{{ paginate.previous.url }}" aria-label="Previous page">‹</a>{%- endif -%}
+            {%- for part in paginate.parts -%}
+              {%- if part.is_link -%}<a class="gg-sp__page" href="{{ part.url }}">{{ part.title }}</a>
+              {%- elsif part.title == paginate.current_page -%}<span class="gg-sp__page is-current" aria-current="page">{{ part.title }}</span>
+              {%- else -%}<span class="gg-sp__page is-gap">{{ part.title }}</span>{%- endif -%}
+            {%- endfor -%}
+            {%- if paginate.next -%}<a class="gg-sp__page" href="{{ paginate.next.url }}" aria-label="Next page">›</a>{%- endif -%}
+          </nav>
+        {%- endif -%}
+      {%- endpaginate -%}
+
+    {%- else -%}
+      {%- comment -%} No query yet, or nothing found {%- endcomment -%}
+      <div class="gg-sp__empty">
+        {%- if search.performed -%}
+          <h2 class="gg-section-title">We couldn’t find “{{ q }}”</h2>
+          <p class="gg-section-sub">Check the spelling, try a style (bubu, corset, kimono) or a colour. Or tell us what you’re looking for.</p>
+          <a class="gg-btn gg-btn--secondary" href="https://wa.me/2347048522079?text={{ 'Hi Getglow, I am looking for ' | append: search.terms | url_encode }}" target="_blank" rel="noopener">Ask us on WhatsApp</a>
+        {%- else -%}
+          <h2 class="gg-section-title">What are you looking for?</h2>
+        {%- endif -%}
+        <div class="gg-sp__chips">
+          {%- for term in popular -%}
+            {%- assign t = term | strip -%}
+            {%- if t != blank -%}<a class="gg-search__chip" href="{{ routes.search_url }}?q={{ t | url_encode }}&type=product&options%5Bprefix%5D=last">{{ t }}</a>{%- endif -%}
+          {%- endfor -%}
+        </div>
+      </div>
+      {%- if fallback != blank and fallback.products_count > 0 -%}
+        <div class="gg-sp__fallback">
+          <p class="gg-sp__label">{{ settings.gg_search_trending_title | default: 'Trending now' }}</p>
+          <ul class="gg-sp__grid" role="list">
+            {%- for p in fallback.products limit: 8 -%}
+              <li>{% render 'gg-product-card', product: p, sizes: '(max-width: 768px) 50vw, 25vw' %}</li>
+            {%- endfor -%}
+          </ul>
+        </div>
+      {%- endif -%}
+    {%- endif -%}
+  </div>
+</section>
+
+<style>
+  #gg-sp-{{ section.id }} { padding: 40px 0 80px; }
+  #gg-sp-{{ section.id }} .gg-sp__head { max-width: 760px; margin: 0 auto 32px; text-align: center; }
+  #gg-sp-{{ section.id }} .gg-sp__eyebrow { margin: 0 0 12px; font-size: 12px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: #8a7350; }
+  #gg-sp-{{ section.id }} .gg-sp__form {
+    display: flex; align-items: center; gap: 10px; padding: 6px 6px 6px 18px;
+    border: 1px solid #d9cfbd; border-radius: 999px; background: #fff; color: #6b5b3e;
+  }
+  #gg-sp-{{ section.id }} .gg-sp__form:focus-within { border-color: #6b5b3e; box-shadow: 0 0 0 3px rgba(107, 91, 62, 0.12); }
+  #gg-sp-{{ section.id }} .gg-sp__input { flex: 1; min-width: 0; border: 0; outline: 0; background: none; font-size: 18px; color: #1d1a16; padding: 10px 0; }
+  #gg-sp-{{ section.id }} .gg-sp__input::-webkit-search-cancel-button { display: none; }
+  #gg-sp-{{ section.id }} .gg-sp__submit { min-height: 46px; border-radius: 999px; padding: 0 24px; }
+  #gg-sp-{{ section.id }} .gg-sp__count { margin: 16px 0 0; font-size: 16px; color: #5c554a; }
+  #gg-sp-{{ section.id }} .gg-sp__count strong { color: #1d1a16; }
+
+  #gg-sp-{{ section.id }} .gg-sp__toolbar {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+    padding: 14px 0; margin-bottom: 18px; border-top: 1px solid #eee5d6; border-bottom: 1px solid #eee5d6;
+  }
+  #gg-sp-{{ section.id }} .gg-sp__filters { display: flex; flex-wrap: wrap; gap: 8px; }
+  #gg-sp-{{ section.id }} .gg-sp__filter { position: relative; }
+  #gg-sp-{{ section.id }} .gg-sp__filter summary {
+    list-style: none; display: inline-flex; align-items: center; gap: 8px; cursor: pointer;
+    padding: 9px 14px; border: 1px solid #e6dcc6; border-radius: 999px; font-size: 14px; background: #fff;
+  }
+  #gg-sp-{{ section.id }} .gg-sp__filter summary::-webkit-details-marker { display: none; }
+  #gg-sp-{{ section.id }} .gg-sp__filter[open] summary { border-color: #1d1a16; }
+  #gg-sp-{{ section.id }} .gg-sp__badge { display: inline-flex; align-items: center; justify-content: center; min-width: 20px; height: 20px; border-radius: 999px; background: #6b5b3e; color: #fff; font-size: 11px; }
+  #gg-sp-{{ section.id }} .gg-sp__filter-list {
+    position: absolute; z-index: 20; top: calc(100% + 8px); left: 0; min-width: 240px; max-height: 320px; overflow: auto;
+    padding: 10px; background: #fff; border: 1px solid #eee5d6; border-radius: 12px; box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+  }
+  #gg-sp-{{ section.id }} .gg-sp__opt { display: flex; align-items: center; gap: 10px; padding: 8px; border-radius: 8px; font-size: 14px; cursor: pointer; }
+  #gg-sp-{{ section.id }} .gg-sp__opt:hover { background: #fbf8f2; }
+  #gg-sp-{{ section.id }} .gg-sp__opt.is-disabled { opacity: 0.4; cursor: default; }
+  #gg-sp-{{ section.id }} .gg-sp__n { margin-left: auto; color: #8a8174; font-size: 13px; }
+  #gg-sp-{{ section.id }} .gg-sp__sort { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; color: #5c554a; }
+  #gg-sp-{{ section.id }} .gg-sp__sort select { padding: 9px 30px 9px 12px; border: 1px solid #e6dcc6; border-radius: 999px; background: #fff; font-size: 14px; color: #1d1a16; }
+
+  #gg-sp-{{ section.id }} .gg-sp__active { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 20px; }
+  #gg-sp-{{ section.id }} .gg-sp__pill { display: inline-flex; gap: 6px; padding: 6px 12px; border-radius: 999px; background: #f3ecdf; color: #1d1a16; font-size: 13px; text-decoration: none; }
+  #gg-sp-{{ section.id }} .gg-sp__clearall { font-size: 13px; color: #6b5b3e; }
+
+  #gg-sp-{{ section.id }} .gg-sp__grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 28px 20px; }
+  #gg-sp-{{ section.id }} .gg-sp__label { margin: 0 0 14px; font-size: 12px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #8a7350; }
+  #gg-sp-{{ section.id }} .gg-sp__other { margin-top: 40px; }
+  #gg-sp-{{ section.id }} .gg-sp__other ul { list-style: none; padding: 0; margin: 0; }
+  #gg-sp-{{ section.id }} .gg-sp__other li { padding: 10px 0; border-bottom: 1px solid #eee5d6; display: flex; justify-content: space-between; }
+  #gg-sp-{{ section.id }} .gg-sp__other a { color: #1d1a16; }
+  #gg-sp-{{ section.id }} .gg-sp__other span { color: #8a8174; font-size: 13px; }
+
+  #gg-sp-{{ section.id }} .gg-sp__pages { display: flex; justify-content: center; gap: 6px; margin-top: 44px; }
+  #gg-sp-{{ section.id }} .gg-sp__page {
+    display: inline-flex; align-items: center; justify-content: center; min-width: 42px; height: 42px; padding: 0 10px;
+    border: 1px solid #e6dcc6; border-radius: 999px; color: #1d1a16; text-decoration: none; font-size: 14px;
+  }
+  #gg-sp-{{ section.id }} .gg-sp__page.is-current { background: #1d1a16; border-color: #1d1a16; color: #fff; }
+  #gg-sp-{{ section.id }} .gg-sp__page.is-gap { border: 0; }
+
+  #gg-sp-{{ section.id }} .gg-sp__empty { text-align: center; max-width: 640px; margin: 10px auto 40px; }
+  #gg-sp-{{ section.id }} .gg-sp__empty .gg-btn { margin-top: 18px; }
+  #gg-sp-{{ section.id }} .gg-sp__chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 22px; }
+  #gg-sp-{{ section.id }} .gg-search__chip {
+    display: inline-flex; padding: 9px 16px; border: 1px solid #e6dcc6; border-radius: 999px;
+    background: #fbf8f2; color: #1d1a16; font-size: 14px; text-decoration: none;
+  }
+  #gg-sp-{{ section.id }} .gg-search__chip:hover { background: #1d1a16; color: #fff; }
+  #gg-sp-{{ section.id }} .gg-sp__fallback { margin-top: 20px; }
+
+  @media (max-width: 1100px) { #gg-sp-{{ section.id }} .gg-sp__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  @media (max-width: 768px) {
+    #gg-sp-{{ section.id }} { padding: 24px 0 56px; }
+    #gg-sp-{{ section.id }} .gg-sp__input { font-size: 16px; }
+    #gg-sp-{{ section.id }} .gg-sp__submit { padding: 0 16px; }
+    #gg-sp-{{ section.id }} .gg-sp__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 12px; }
+    #gg-sp-{{ section.id }} .gg-sp__filter-list { position: fixed; left: 16px; right: 16px; top: auto; bottom: 16px; max-height: 60vh; }
+  }
+</style>
+
+<script>
+  (function() {
+    var form = document.getElementById('gg-sp-filters');
+    if (!form) return;
+    // Apply filters / sort as soon as they change
+    form.addEventListener('change', function() { form.submit(); });
+    // Close an open filter dropdown when clicking elsewhere
+    document.addEventListener('click', function(e) {
+      form.querySelectorAll('details[open]').forEach(function(d) { if (!d.contains(e.target)) d.removeAttribute('open'); });
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Getglow search results",
+  "settings": [
+    { "type": "range", "id": "per_page", "label": "Products per page", "min": 12, "max": 48, "step": 4, "default": 24 }
+  ]
+}
+{% endschema %}
