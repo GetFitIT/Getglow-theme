@@ -188,7 +188,8 @@
             "image": "shopify://shop_images/IMG_5665.jpg",
             "name": "Sharon Roseman",
             "product": "the-richest-aunty-bubu",
-            "dress_name": "The Richest Aunty Bubu"
+            "dress_name": "The Richest Aunty Bubu",
+            "role": "Celebrity"
           }
         },
         "look2": {
@@ -197,7 +198,8 @@
             "image": "shopify://shop_images/Framed_in_gold._Draped_in_power.Outfit_getglowng_Fascinator_yunik.works_Beaded_bag_themaisonm.jpg",
             "name": "Dr Faith Omene",
             "product": "feather-me-set",
-            "dress_name": "The Feather Me Corset and Skirt"
+            "dress_name": "The Feather Me Corset and Skirt",
+            "role": "Celebrity"
           }
         },
         "look3": {
@@ -206,7 +208,8 @@
             "image": "shopify://shop_images/get.jpg",
             "name": "Bimbo Ademoye",
             "product": "richest-aunty-bubu-with-turkey-pleat",
-            "dress_name": "Richest Aunty Bubu with Turkey Pleat"
+            "dress_name": "Richest Aunty Bubu with Turkey Pleat",
+            "role": "Celebrity"
           }
         },
         "film1": {
@@ -297,6 +300,88 @@
             "btn_label": "Shop the collection",
             "btn_link": "/collections/all"
           }
+        },
+        "look_veeky": {
+          "type": "look",
+          "settings": {
+            "video": "shopify://files/videos/getglow-look-veeky-beaded-bimbo.mp4",
+            "name": "Veeky",
+            "role": "Influencer",
+            "product": "beaded-bimbo-corset-top",
+            "dress_name": "Beaded Bimbo Corset"
+          }
+        },
+        "look_angel_white": {
+          "type": "look",
+          "settings": {
+            "video": "shopify://files/videos/getglow-look-angel-white.mp4",
+            "role": "Influencer",
+            "product": "angel-dress",
+            "dress_name": "Angel Dress in White"
+          }
+        },
+        "look_beaded_pink": {
+          "type": "look",
+          "settings": {
+            "video": "shopify://files/videos/getglow-look-beaded-corset-pink.mp4",
+            "role": "Influencer",
+            "product": "hand-beaded-corset-top-with-inbuilt-corset-luxury-pleat-skirt",
+            "dress_name": "Hand-beaded Corset + Pleat Skirt"
+          }
+        },
+        "look_bimbo_black_1": {
+          "type": "look",
+          "settings": {
+            "video": "shopify://files/videos/getglow-look-bimbo-black-1.mp4",
+            "role": "Influencer",
+            "product": "bimbo-corset-skirt",
+            "dress_name": "Bimbo Corset & Sequin Skirt"
+          }
+        },
+        "look_feather_maroon": {
+          "type": "look",
+          "settings": {
+            "video": "shopify://files/videos/getglow-client-feather-maroon.mp4",
+            "role": "Client",
+            "product": "feather-me-set",
+            "dress_name": "Feather Me Set in Maroon"
+          }
+        },
+        "look_bimbo_black_2": {
+          "type": "look",
+          "settings": {
+            "video": "shopify://files/videos/getglow-look-bimbo-black-2.mp4",
+            "role": "Influencer",
+            "product": "bimbo-corset-skirt",
+            "dress_name": "Bimbo Corset & Sequin Skirt"
+          }
+        },
+        "look_feather_black": {
+          "type": "look",
+          "settings": {
+            "image": "shopify://shop_images/getglow-client-feather-black.jpg",
+            "role": "Client",
+            "product": "feather-me-set",
+            "dress_name": "Feather Me Set in Black"
+          }
+        },
+        "look_rose": {
+          "type": "look",
+          "settings": {
+            "video": "shopify://files/videos/getglow-client-rose-corset.mp4",
+            "role": "Client",
+            "product": "rose-corset-top",
+            "dress_name": "Rose Corset Top & Skirt"
+          }
+        },
+        "look_magenta": {
+          "type": "look",
+          "settings": {
+            "image": "shopify://shop_images/getglow-client-magenta-bubu.jpg",
+            "role": "Client",
+            "product": "richest-aunty-bubu-with-turkey-pleat",
+            "dress_name": "Satin Bubu with Turkey Pleat"
+          }
         }
       },
       "block_order": [
@@ -304,6 +389,15 @@
         "look1",
         "look2",
         "look3",
+        "look_veeky",
+        "look_angel_white",
+        "look_beaded_pink",
+        "look_bimbo_black_1",
+        "look_feather_maroon",
+        "look_bimbo_black_2",
+        "look_feather_black",
+        "look_rose",
+        "look_magenta",
         "film1",
         "press1",
         "press2",
@@ -318,7 +412,7 @@
       ],
       "settings": {
         "looks_heading": "Worn by",
-        "looks_sub": "The women who wear Getglow, and the pieces they chose."
+        "looks_sub": "Celebrities, influencers and our clients, in the Getglow pieces they chose."
       }
     }
   },
