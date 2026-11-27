@@ -26,7 +26,7 @@
             <span class="gg-reel__info">
               <span class="gg-reel__title">{{ block.settings.label | default: p.title }}</span>
               {%- if section.settings.show_price -%}
-                <span class="gg-reel__price">{% if p.price_varies %}From {% endif %}{{ p.price_min | money }}</span>
+                <span class="gg-reel__price">{% render 'gg-card-price', product: p %}</span>
               {%- endif -%}
             </span>
           {%- endif -%}

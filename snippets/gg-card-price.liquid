@@ -1,0 +1,61 @@
+{%- comment -%}
+  Card price for a product. Usage:
+    {% render 'gg-card-price', product: p %}                 -> price (+ crossed-out was-price when on sale)
+    {% render 'gg-card-price', product: p, mode: 'badge' %}  -> "-20%" badge (empty when not on sale)
+  Products with a "Piece" option are priced by their sets (Full set / Beaded set), not by single pieces.
+{%- endcomment -%}
+{%- liquid
+  assign piece_pos = 0
+  for o in product.options_with_values
+    if o.name == 'Piece'
+      assign piece_pos = o.position
+    endif
+  endfor
+
+  assign best = nil
+  assign min_p = 0
+  assign max_p = 0
+  for v in product.variants
+    if piece_pos > 0
+      case piece_pos
+        when 1
+          assign pv = v.option1 | downcase
+        when 2
+          assign pv = v.option2 | downcase
+        else
+          assign pv = v.option3 | downcase
+      endcase
+      unless pv contains 'set'
+        continue
+      endunless
+    endif
+    if best == nil or v.price < best.price
+      assign best = v
+    endif
+    if min_p == 0 or v.price < min_p
+      assign min_p = v.price
+    endif
+    if v.price > max_p
+      assign max_p = v.price
+    endif
+  endfor
+  if best == nil
+    assign best = product.selected_or_first_available_variant
+    assign min_p = product.price_min
+    assign max_p = product.price_max
+  endif
+
+  assign on_sale = false
+  if best.compare_at_price > best.price
+    assign on_sale = true
+    assign pct = best.compare_at_price | minus: best.price | times: 100 | divided_by: best.compare_at_price
+  endif
+-%}
+{%- if mode == 'badge' -%}
+  {%- if on_sale and pct > 0 -%}<span class="gg-sale-badge">−{{ pct }}%</span>{%- endif -%}
+{%- else -%}
+  <span class="gg-price{% if on_sale %} is-sale{% endif %}">
+    <span class="gg-price__now">{% if max_p > min_p %}From {% endif %}{{ best.price | money }}</span>
+    {%- if on_sale -%}<s class="gg-price__was">{{ best.compare_at_price | money }}</s>{%- endif -%}
+  </span>
+{%- endif -%}

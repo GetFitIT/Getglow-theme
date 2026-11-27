@@ -84,7 +84,7 @@
                 <a class="gg-search__product" href="{{ p.url }}">
                   <span class="gg-search__product-img">{%- if p.featured_image -%}{{ p.featured_image | image_url: width: 360 | image_tag: loading: 'lazy', alt: p.title }}{%- endif -%}</span>
                   <span class="gg-search__product-title">{{ p.title }}</span>
-                  <span class="gg-search__product-price">{% if p.price_varies %}From {% endif %}{{ p.price_min | money }}</span>
+                  <span class="gg-search__product-price">{% render 'gg-card-price', product: p %}</span>
                 </a>
               {%- endfor -%}
             </div>
@@ -98,6 +98,7 @@
   </div>
 </div>
 
+{% render 'gg-shared-styles' %}
 <style>
   /* Hide the theme's original search drawer; this overlay replaces it */
   .js-predictive-search.header-search { display: none !important; }
