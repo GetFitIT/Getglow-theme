@@ -134,6 +134,16 @@
       <div class="header__menu d-flex fd-column js-menu-drawer-content">
         <nav class="header__nav js-header-navigation flex-1 w-100">
           <ul class="main__menu m-zero ls-none">
+            {%- assign gg_bf = collections['black-friday-sale'] -%}
+            {%- if gg_bf != blank and gg_bf.products_count > 0 -%}
+              <li class="menu__item gg-promo-item">
+                <a href="{{ gg_bf.url }}" class="gg-promo-link">
+                  <span class="gg-promo-link__eyebrow">Black Friday</span>
+                  <span class="gg-promo-link__title">Up to 38% off selected pieces</span>
+                  <span class="gg-promo-link__cta">Shop the sale <span aria-hidden="true">→</span></span>
+                </a>
+              </li>
+            {%- endif -%}
             {% for block in section.blocks %}
               {% case block.type %}
                 {% when 'collections_menu' %}
