@@ -1,17 +1,13 @@
 {
   "sections": {
-    "breadcrumb": {
-      "type": "breadcrumb",
-      "settings": {}
-    },
     "main": {
-      "type": "main-search",
+      "type": "gg-search-page",
       "settings": {
+        "per_page": 24
       }
     }
   },
   "order": [
-    "breadcrumb",
     "main"
   ]
 }

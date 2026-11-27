@@ -1,0 +1,357 @@
+{%- comment -%}
+  Getglow search overlay. Opens from any header search trigger (.js-search-open-trigger) or [data-gg-search-open].
+  Live results come from Shopify's /search/suggest.json. Rendered once from the header.
+{%- endcomment -%}
+{%- liquid
+  assign popular = settings.gg_popular_searches | default: 'Bubu, Corset, Angel Dress, Kimono, Two-piece set, Feather Me, Bimbo' | split: ','
+  assign trending = settings.gg_search_trending
+  if trending == blank
+    assign trending = collections['dresses']
+  endif
+-%}
+<div class="gg-search" id="gg-search" role="dialog" aria-modal="true" aria-label="{{ 'general.search.search' | t }}" hidden>
+  <div class="gg-search__backdrop" data-gg-search-close></div>
+  <div class="gg-search__panel">
+    <form action="{{ routes.search_url }}" method="get" role="search" class="gg-search__form" id="gg-search-form">
+      <input type="hidden" name="type" value="product">
+      <input type="hidden" name="options[prefix]" value="last">
+      <div class="gg-search__bar">
+        <svg class="gg-search__icon" width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.6"/><path d="m20 20-3.5-3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <input id="gg-search-input" class="gg-search__input" type="search" name="q" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+          placeholder="Search bubus, corsets, kimonos…" aria-label="Search the store" aria-controls="gg-search-results">
+        <button type="button" class="gg-search__clear" id="gg-search-clear" aria-label="Clear search" hidden>Clear</button>
+        <button type="button" class="gg-search__close" data-gg-search-close aria-label="Close search">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+    </form>
+
+    <div class="gg-search__body">
+      {%- comment -%} Shown before the customer types {%- endcomment -%}
+      <div class="gg-search__start" id="gg-search-start">
+        <div class="gg-search__block gg-search__recent" id="gg-search-recent" hidden>
+          <div class="gg-search__label-row">
+            <p class="gg-search__label">Recent searches</p>
+            <button type="button" class="gg-search__link" id="gg-search-recent-clear">Clear</button>
+          </div>
+          <div class="gg-search__chips" id="gg-search-recent-list"></div>
+        </div>
+
+        <div class="gg-search__block">
+          <p class="gg-search__label">Popular searches</p>
+          <div class="gg-search__chips">
+            {%- for term in popular -%}
+              {%- assign t = term | strip -%}
+              {%- if t != blank -%}
+                <a class="gg-search__chip" href="{{ routes.search_url }}?q={{ t | url_encode }}&type=product&options%5Bprefix%5D=last">{{ t }}</a>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        </div>
+
+        <div class="gg-search__block">
+          <p class="gg-search__label">Shop by category</p>
+          <div class="gg-search__cats">
+            {%- if settings.gg_search_categories != blank -%}
+              {%- for link in settings.gg_search_categories.links limit: 6 -%}
+                <a class="gg-search__cat" href="{{ link.url }}">
+                  {%- assign cimg = link.object.featured_image | default: link.object.image -%}
+                  <span class="gg-search__cat-img">{%- if cimg -%}{{ cimg | image_url: width: 240 | image_tag: loading: 'lazy', alt: '' }}{%- endif -%}</span>
+                  <span>{{ link.title }}</span>
+                </a>
+              {%- endfor -%}
+            {%- else -%}
+              {%- assign cat_handles = 'dresses,corset-tops-skirts,kimono,bimbo' | split: ',' -%}
+              {%- assign cat_labels = 'Bubus & Dresses,Corsets & Skirts,Kimono Sets,The Bimbo Edit' | split: ',' -%}
+              {%- for h in cat_handles -%}
+                {%- assign c = collections[h] -%}
+                {%- if c != blank -%}
+                  <a class="gg-search__cat" href="{{ c.url }}">
+                    <span class="gg-search__cat-img">{%- if c.featured_image -%}{{ c.featured_image | image_url: width: 240 | image_tag: loading: 'lazy', alt: '' }}{%- endif -%}</span>
+                    <span>{{ cat_labels[forloop.index0] }}</span>
+                  </a>
+                {%- endif -%}
+              {%- endfor -%}
+            {%- endif -%}
+          </div>
+        </div>
+
+        {%- if trending != blank and trending.products_count > 0 -%}
+          <div class="gg-search__block">
+            <p class="gg-search__label">{{ settings.gg_search_trending_title | default: 'Trending now' }}</p>
+            <div class="gg-search__products">
+              {%- for p in trending.products limit: 4 -%}
+                <a class="gg-search__product" href="{{ p.url }}">
+                  <span class="gg-search__product-img">{%- if p.featured_image -%}{{ p.featured_image | image_url: width: 360 | image_tag: loading: 'lazy', alt: p.title }}{%- endif -%}</span>
+                  <span class="gg-search__product-title">{{ p.title }}</span>
+                  <span class="gg-search__product-price">{% if p.price_varies %}From {% endif %}{{ p.price_min | money }}</span>
+                </a>
+              {%- endfor -%}
+            </div>
+          </div>
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} Live results (filled by JS) {%- endcomment -%}
+      <div class="gg-search__results" id="gg-search-results" aria-live="polite" hidden></div>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Hide the theme's original search drawer; this overlay replaces it */
+  .js-predictive-search.header-search { display: none !important; }
+
+  .gg-search[hidden] { display: none !important; }
+  .gg-search { position: fixed; inset: 0; z-index: 10060; }
+  .gg-search__backdrop { position: absolute; inset: 0; background: rgba(20, 16, 10, 0.45); animation: ggFade 0.2s ease; }
+  .gg-search__panel {
+    position: relative;
+    max-height: min(88vh, 860px);
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.18);
+    animation: ggDrop 0.25s ease;
+  }
+  @keyframes ggFade { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes ggDrop { from { transform: translateY(-16px); opacity: 0; } to { transform: none; opacity: 1; } }
+
+  .gg-search__form { border-bottom: 1px solid #eee5d6; }
+  .gg-search__bar {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 18px 20px;
+  }
+  .gg-search__icon { flex-shrink: 0; color: #6b5b3e; }
+  .gg-search__input {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    font-family: var(--font-heading-family);
+    font-size: 26px;
+    color: #1d1a16;
+    padding: 6px 0;
+  }
+  .gg-search__input::placeholder { color: #a39a8b; }
+  .gg-search__input::-webkit-search-cancel-button { display: none; }
+  .gg-search__clear, .gg-search__link {
+    border: 0; background: none; padding: 4px 6px; cursor: pointer;
+    font-size: 13px; color: #6b5b3e; text-decoration: underline; text-underline-offset: 3px;
+  }
+  .gg-search__close {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 44px; height: 44px; border: 1px solid #e6dcc6; border-radius: 50%;
+    background: #fff; color: #1d1a16; cursor: pointer; flex-shrink: 0;
+  }
+  .gg-search__close:hover { background: #1d1a16; color: #fff; }
+
+  .gg-search__body { overflow-y: auto; -webkit-overflow-scrolling: touch; }
+  .gg-search__start, .gg-search__results { max-width: 1100px; margin: 0 auto; padding: 22px 20px 30px; }
+  .gg-search__block + .gg-search__block { margin-top: 26px; }
+  .gg-search__label-row { display: flex; align-items: center; justify-content: space-between; }
+  .gg-search__label {
+    margin: 0 0 12px; font-size: 12px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #8a7350;
+  }
+  .gg-search__chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .gg-search__chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 9px 16px; border: 1px solid #e6dcc6; border-radius: 999px;
+    background: #fbf8f2; color: #1d1a16; font-size: 14px; text-decoration: none;
+    transition: background-color 0.2s, border-color 0.2s;
+  }
+  .gg-search__chip:hover { background: #1d1a16; border-color: #1d1a16; color: #fff; }
+
+  .gg-search__cats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+  .gg-search__cat {
+    display: flex; align-items: center; gap: 12px; padding: 8px;
+    border: 1px solid #efe6d4; border-radius: 10px; text-decoration: none;
+    color: #1d1a16; font-size: 14px; font-weight: 500;
+  }
+  .gg-search__cat:hover { border-color: #6b5b3e; }
+  .gg-search__cat-img { width: 52px; height: 64px; flex-shrink: 0; border-radius: 6px; overflow: hidden; background: #f1ebe0; }
+  .gg-search__cat-img img { width: 100%; height: 100%; object-fit: cover; }
+
+  .gg-search__products { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+  .gg-search__product { display: flex; flex-direction: column; gap: 4px; text-decoration: none; color: #1d1a16; }
+  .gg-search__product-img { display: block; aspect-ratio: 3 / 4; border-radius: 8px; overflow: hidden; background: #f1ebe0; margin-bottom: 6px; }
+  .gg-search__product-img img { width: 100%; height: 100%; object-fit: cover; object-position: center 20%; transition: transform 0.5s ease; }
+  .gg-search__product:hover .gg-search__product-img img { transform: scale(1.04); }
+  .gg-search__product-title { font-size: 14px; font-weight: 500; line-height: 1.35; }
+  .gg-search__product-price { font-size: 14px; font-weight: 600; color: #6b5b3e; }
+  .gg-search__product mark { background: #f6e8c8; color: inherit; padding: 0 1px; border-radius: 2px; }
+
+  .gg-search__results-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+  .gg-search__results-head .gg-search__label { margin: 0; }
+  .gg-search__suggest { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 22px; }
+  .gg-search__viewall {
+    display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%;
+    margin-top: 22px; min-height: 50px; border-radius: 6px;
+    background: #6b5b3e; color: #fff; font-size: 13px; font-weight: 600; letter-spacing: 0.1em;
+    text-transform: uppercase; text-decoration: none;
+  }
+  .gg-search__viewall:hover { background: #5a4c34; color: #fff; }
+  .gg-search__empty { text-align: center; padding: 18px 0 8px; color: #5c554a; font-size: 15px; line-height: 1.6; }
+  .gg-search__empty strong { color: #1d1a16; }
+  .gg-search__empty a { color: #1f7a4a; font-weight: 600; }
+  .gg-search__loading { display: flex; gap: 16px; }
+  .gg-search__skeleton { flex: 1; aspect-ratio: 3 / 4; border-radius: 8px; background: linear-gradient(90deg, #f3eee5 0%, #faf7f1 50%, #f3eee5 100%); background-size: 200% 100%; animation: ggShimmer 1.2s infinite; }
+  @keyframes ggShimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+
+  @media (max-width: 768px) {
+    .gg-search__panel { height: 100%; max-height: none; }
+    .gg-search__bar { padding: 12px 16px; }
+    .gg-search__input { font-size: 20px; }
+    .gg-search__start, .gg-search__results { padding: 18px 16px 28px; }
+    .gg-search__cats { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+    .gg-search__products { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .gg-search__loading .gg-search__skeleton:nth-child(n+3) { display: none; }
+  }
+</style>
+
+<script>
+  (function() {
+    var root = document.getElementById('gg-search');
+    if (!root) return;
+    var input = document.getElementById('gg-search-input');
+    var form = document.getElementById('gg-search-form');
+    var start = document.getElementById('gg-search-start');
+    var results = document.getElementById('gg-search-results');
+    var clearBtn = document.getElementById('gg-search-clear');
+    var recentWrap = document.getElementById('gg-search-recent');
+    var recentList = document.getElementById('gg-search-recent-list');
+    var searchUrl = {{ routes.search_url | json }};
+    var suggestUrl = {{ routes.predictive_search_url | json }} + '.json';
+    var moneyFormat = {{ shop.money_format | strip_html | json }} || {% raw %}'{{amount}}'{% endraw %};
+    var whatsapp = 'https://wa.me/2347048522079?text=' + encodeURIComponent('Hi Getglow, I am looking for ');
+    var RECENT_KEY = 'gg_recent_searches';
+    var lastFocus = null, timer = null, controller = null;
+
+    function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function(c) { return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+    function money(v) {
+      // suggest.json returns prices as decimal strings in the shop currency, e.g. "80000.00"
+      var n = parseFloat(v); if (isNaN(n)) return '';
+      var amount = n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      return moneyFormat.replace(/\{\{\s*\w+\s*\}\}/, amount);
+    }
+    function highlight(text, q) {
+      var safe = esc(text);
+      var words = q.trim().split(/\s+/).filter(function(w) { return w.length > 1; }).map(function(w) { return w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); });
+      if (!words.length) return safe;
+      return safe.replace(new RegExp('(' + words.join('|') + ')', 'gi'), '<mark>$1</mark>');
+    }
+    function searchLink(q) { return searchUrl + '?q=' + encodeURIComponent(q) + '&type=product&options%5Bprefix%5D=last'; }
+    function img(url, w) { if (!url) return ''; return url + (url.indexOf('?') > -1 ? '&' : '?') + 'width=' + w; }
+
+    function getRecent() { try { return JSON.parse(localStorage.getItem(RECENT_KEY) || '[]'); } catch (e) { return []; } }
+    function saveRecent(q) {
+      q = (q || '').trim(); if (!q) return;
+      try {
+        var list = getRecent().filter(function(x) { return x.toLowerCase() !== q.toLowerCase(); });
+        list.unshift(q); localStorage.setItem(RECENT_KEY, JSON.stringify(list.slice(0, 6)));
+      } catch (e) {}
+    }
+    function renderRecent() {
+      var list = getRecent();
+      recentWrap.hidden = !list.length;
+      recentList.innerHTML = list.map(function(q) { return '<a class="gg-search__chip" href="' + searchLink(q) + '">' + esc(q) + '</a>'; }).join('');
+    }
+
+    function open() {
+      lastFocus = document.activeElement;
+      renderRecent();
+      root.hidden = false;
+      document.documentElement.style.overflow = 'hidden';
+      setTimeout(function() { input.focus(); }, 30);
+    }
+    function close() {
+      root.hidden = true;
+      document.documentElement.style.overflow = '';
+      if (lastFocus && lastFocus.focus) lastFocus.focus();
+    }
+
+    function showStart() { results.hidden = true; start.hidden = false; clearBtn.hidden = true; }
+
+    function render(q, data) {
+      var r = (data && data.resources && data.resources.results) || {};
+      var products = r.products || [], collections = r.collections || [], queries = r.queries || [];
+      var html = '';
+      var sugg = queries.filter(function(x) { return x.text && x.text.toLowerCase() !== q.toLowerCase(); }).slice(0, 4);
+      if (sugg.length || collections.length) {
+        html += '<div class="gg-search__suggest">';
+        sugg.forEach(function(s) { html += '<a class="gg-search__chip" href="' + searchLink(s.text) + '">' + esc(s.text) + '</a>'; });
+        collections.slice(0, 3).forEach(function(c) { html += '<a class="gg-search__chip" href="' + esc(c.url) + '">In ' + esc(c.title) + ' →</a>'; });
+        html += '</div>';
+      }
+      if (products.length) {
+        html += '<div class="gg-search__results-head"><p class="gg-search__label">Products</p></div><div class="gg-search__products">';
+        products.slice(0, 8).forEach(function(p) {
+          var image = (p.featured_image && p.featured_image.url) || p.image;
+          var priceText = (p.price_min && p.price_max && p.price_min !== p.price_max ? 'From ' : '') + money(p.price_min || p.price);
+          html += '<a class="gg-search__product" href="' + esc(p.url) + '">' +
+            '<span class="gg-search__product-img">' + (image ? '<img src="' + esc(img(image, 360)) + '" alt="' + esc(p.title) + '" loading="lazy">' : '') + '</span>' +
+            '<span class="gg-search__product-title">' + highlight(p.title, q) + '</span>' +
+            '<span class="gg-search__product-price">' + esc(priceText) + '</span></a>';
+        });
+        html += '</div><a class="gg-search__viewall" href="' + searchLink(q) + '">View all results for “' + esc(q) + '”</a>';
+      } else {
+        html += '<div class="gg-search__empty"><p>No pieces found for <strong>“' + esc(q) + '”</strong>.</p>' +
+          '<p>Try another word, like a style (bubu, corset, kimono) or a colour. Can’t find it? ' +
+          '<a href="' + whatsapp + encodeURIComponent(q) + '" target="_blank" rel="noopener">Ask us on WhatsApp</a>.</p></div>';
+      }
+      results.innerHTML = html;
+      start.hidden = true; results.hidden = false;
+    }
+
+    function fetchResults(q) {
+      if (controller) controller.abort();
+      controller = 'AbortController' in window ? new AbortController() : null;
+      results.innerHTML = '<div class="gg-search__loading">' + '<div class="gg-search__skeleton"></div>'.repeat(4) + '</div>';
+      start.hidden = true; results.hidden = false;
+      var url = suggestUrl + '?q=' + encodeURIComponent(q) +
+        '&resources[type]=product,collection,query&resources[limit]=8&resources[limit_scope]=each' +
+        '&resources[options][unavailable_products]=last&resources[options][fields]=title,product_type,variants.title,tag';
+      fetch(url, controller ? { signal: controller.signal } : {})
+        .then(function(res) { return res.json(); })
+        .then(function(data) { if (input.value.trim() === q) render(q, data); })
+        .catch(function(err) { if (err && err.name === 'AbortError') return; results.innerHTML = '<div class="gg-search__empty"><p>Search is taking a moment. Press Enter to see all results.</p></div>'; });
+    }
+
+    input.addEventListener('input', function() {
+      var q = input.value.trim();
+      clearBtn.hidden = !input.value;
+      clearTimeout(timer);
+      if (q.length < 2) { if (controller) controller.abort(); showStart(); return; }
+      timer = setTimeout(function() { fetchResults(q); }, 220);
+    });
+    clearBtn.addEventListener('click', function() { input.value = ''; showStart(); input.focus(); });
+    form.addEventListener('submit', function(e) {
+      var q = input.value.trim();
+      if (!q) { e.preventDefault(); return; }
+      saveRecent(q);
+    });
+    results.addEventListener('click', function(e) { if (e.target.closest('a')) saveRecent(input.value); });
+    document.getElementById('gg-search-recent-clear').addEventListener('click', function() {
+      try { localStorage.removeItem(RECENT_KEY); } catch (e) {} renderRecent();
+    });
+    root.querySelectorAll('[data-gg-search-close]').forEach(function(b) { b.addEventListener('click', close); });
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && !root.hidden) close();
+      // "/" opens search when not typing in a field
+      if (e.key === '/' && root.hidden && !/input|textarea|select/i.test((document.activeElement || {}).tagName || '')) { e.preventDefault(); open(); }
+    });
+
+    // Take over the theme's header search buttons (capture phase runs before the theme's own handler)
+    document.addEventListener('click', function(e) {
+      var t = e.target.closest('.js-search-open-trigger, [data-gg-search-open]');
+      if (!t) return;
+      e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation();
+      open();
+    }, true);
+  })();
+</script>

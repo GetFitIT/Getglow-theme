@@ -1097,5 +1097,39 @@
         "info": "t:settings_schema.favicon.settings.favicon.info"
       }
     ]
+  },
+  {
+    "name": "Getglow search",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Controls the search overlay (header search icon) and the search results page."
+      },
+      {
+        "type": "text",
+        "id": "gg_popular_searches",
+        "label": "Popular searches",
+        "info": "Comma separated. Shown as quick links before a customer types.",
+        "default": "Bubu, Corset, Angel Dress, Kimono, Two-piece set, Feather Me, Bimbo"
+      },
+      {
+        "type": "collection",
+        "id": "gg_search_trending",
+        "label": "Trending products collection",
+        "info": "Shown in the search overlay and when a search finds nothing."
+      },
+      {
+        "type": "text",
+        "id": "gg_search_trending_title",
+        "label": "Trending heading",
+        "default": "Trending now"
+      },
+      {
+        "type": "link_list",
+        "id": "gg_search_categories",
+        "label": "Category links (optional menu)",
+        "info": "Leave blank to use: Dresses / Bubu, Corset Tops/Skirts, Kimono, Bimbo."
+      }
+    ]
   }
 ]
