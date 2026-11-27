@@ -1,0 +1,332 @@
+{%- liquid
+  assign per_page = section.settings.per_page | default: 24
+  assign intro = collection.description | strip_html | strip
+  if intro == blank
+    assign intro = section.settings.default_intro
+  endif
+  assign hero_image = collection.image | default: collection.featured_image
+  if collection.handle == 'all' or collection.handle == blank
+    assign hero_image = section.settings.all_image | default: hero_image
+  endif
+-%}
+{% render 'gg-shared-styles' %}
+{% render 'gg-product-card-styles' %}
+
+<section class="gg-cp" id="gg-cp-{{ section.id }}">
+  {%- comment -%} Hero {%- endcomment -%}
+  <header class="gg-cp__hero{% if hero_image and section.settings.show_image %} has-image{% endif %}">
+    <div class="gg-cp__hero-text">
+      <nav class="gg-cp__crumbs" aria-label="Breadcrumb">
+        <a href="{{ routes.root_url }}">Home</a><span aria-hidden="true">/</span>
+        <a href="{{ routes.collections_url }}">Shop</a><span aria-hidden="true">/</span>
+        <span aria-current="page">{{ collection.title }}</span>
+      </nav>
+      <h1 class="gg-cp__title">{{ collection.title }}</h1>
+      {%- if intro != blank -%}<p class="gg-cp__intro">{{ intro }}</p>{%- endif -%}
+      <p class="gg-cp__meta">
+        {{ collection.products_count }} {% if collection.products_count == 1 %}piece{% else %}pieces{% endif %}
+        <span aria-hidden="true">·</span> Made to order <span aria-hidden="true">·</span> UK 6–22
+      </p>
+    </div>
+    {%- if hero_image and section.settings.show_image -%}
+      <div class="gg-cp__hero-media">
+        {{ hero_image | image_url: width: 1400 | image_tag:
+          widths: '600, 900, 1200, 1400', sizes: '(max-width: 768px) 100vw, 45vw',
+          loading: 'eager', fetchpriority: 'high', alt: collection.title }}
+      </div>
+    {%- endif -%}
+  </header>
+
+  <div class="gg-wrap">
+    {%- comment -%} Category links {%- endcomment -%}
+    {%- assign nav_handles = section.settings.nav_handles | default: 'all,new-arrivals,dresses,corset-tops-skirts,kimono,bimbo' | remove: ' ' | split: ',' -%}
+    <nav class="gg-cp__nav" aria-label="Collections">
+      {%- for h in nav_handles -%}
+        {%- if h == 'all' -%}
+          <a class="gg-cp__navlink{% if collection.handle == 'all' %} is-active{% endif %}" href="{{ routes.all_products_collection_url }}">Shop all</a>
+        {%- else -%}
+          {%- assign c = collections[h] -%}
+          {%- if c != blank and c.products_count > 0 -%}
+            <a class="gg-cp__navlink{% if collection.handle == c.handle %} is-active{% endif %}" href="{{ c.url }}">{{ c.title }}</a>
+          {%- endif -%}
+        {%- endif -%}
+      {%- endfor -%}
+    </nav>
+
+    {%- paginate collection.products by per_page -%}
+      {%- comment -%} Filters + sort {%- endcomment -%}
+      <form class="gg-cp__toolbar" id="gg-cp-filters-{{ section.id }}" action="{{ collection.url }}" method="get">
+        <div class="gg-cp__filters">
+          {%- for filter in collection.filters -%}
+            {%- if filter.type == 'list' and filter.values.size > 1 -%}
+              {%- assign fl = filter.label | downcase -%}
+              <details class="gg-cp__filter">
+                <summary>
+                  {{ filter.label }}
+                  {%- if filter.active_values.size > 0 -%}<span class="gg-cp__badge">{{ filter.active_values.size }}</span>{%- endif -%}
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </summary>
+                <div class="gg-cp__filter-list">
+                  {%- for v in filter.values -%}
+                    <label class="gg-cp__opt{% if v.count == 0 and v.active == false %} is-disabled{% endif %}">
+                      <input type="checkbox" name="{{ v.param_name }}" value="{{ v.value }}" {% if v.active %}checked{% endif %} {% if v.count == 0 and v.active == false %}disabled{% endif %}>
+                      {%- if fl contains 'colo' -%}<span class="gg-pcard__dot" style="background: {% render 'gg-swatch-bg', color: v.label %};"></span>{%- endif -%}
+                      <span>{{ v.label }}</span><span class="gg-cp__n">{{ v.count }}</span>
+                    </label>
+                  {%- endfor -%}
+                </div>
+              </details>
+            {%- elsif filter.type == 'price_range' -%}
+              <details class="gg-cp__filter">
+                <summary>
+                  {{ filter.label }}
+                  {%- if filter.min_value.value != nil or filter.max_value.value != nil -%}<span class="gg-cp__badge">1</span>{%- endif -%}
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </summary>
+                <div class="gg-cp__filter-list gg-cp__price">
+                  <label>Min ({{ cart.currency.symbol }})
+                    <input type="number" inputmode="numeric" name="{{ filter.min_value.param_name }}" value="{{ filter.min_value.value | money_without_currency | remove: ',' | remove: '.00' }}" placeholder="0" min="0">
+                  </label>
+                  <label>Max ({{ cart.currency.symbol }})
+                    <input type="number" inputmode="numeric" name="{{ filter.max_value.param_name }}" value="{{ filter.max_value.value | money_without_currency | remove: ',' | remove: '.00' }}" placeholder="{{ filter.range_max | money_without_currency | remove: ',' | remove: '.00' }}" min="0">
+                  </label>
+                  <button type="submit" class="gg-btn gg-btn--primary">Apply</button>
+                </div>
+              </details>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+        <div class="gg-cp__right">
+          <span class="gg-cp__showing">
+            {%- assign first_i = paginate.current_offset | plus: 1 -%}
+            {%- assign last_i = paginate.current_offset | plus: paginate.page_size | at_most: paginate.items -%}
+            {%- if paginate.items > 0 -%}{{ first_i }}–{{ last_i }} of {{ paginate.items }}{%- endif -%}
+          </span>
+          <label class="gg-cp__sort">
+            <span>Sort</span>
+            <select name="sort_by">
+              {%- assign current_sort = collection.sort_by | default: collection.default_sort_by -%}
+              {%- for option in collection.sort_options -%}
+                <option value="{{ option.value }}" {% if option.value == current_sort %}selected{% endif %}>{{ option.name }}</option>
+              {%- endfor -%}
+            </select>
+          </label>
+        </div>
+      </form>
+
+      {%- assign active_count = 0 -%}
+      {%- for filter in collection.filters -%}
+        {%- assign active_count = active_count | plus: filter.active_values.size -%}
+        {%- if filter.type == 'price_range' -%}
+          {%- if filter.min_value.value != nil or filter.max_value.value != nil -%}{%- assign active_count = active_count | plus: 1 -%}{%- endif -%}
+        {%- endif -%}
+      {%- endfor -%}
+      {%- if active_count > 0 -%}
+        <div class="gg-cp__active">
+          {%- for filter in collection.filters -%}
+            {%- for v in filter.active_values -%}
+              <a class="gg-cp__pill" href="{{ v.url_to_remove }}">{{ v.label }} <span aria-hidden="true">×</span><span class="visually-hidden">Remove filter</span></a>
+            {%- endfor -%}
+            {%- if filter.type == 'price_range' -%}
+              {%- if filter.min_value.value != nil or filter.max_value.value != nil -%}
+                <a class="gg-cp__pill" href="{{ filter.url_to_remove }}">
+                  {{ filter.min_value.value | default: 0 | money_without_trailing_zeros }}–{{ filter.max_value.value | default: filter.range_max | money_without_trailing_zeros }} <span aria-hidden="true">×</span>
+                </a>
+              {%- endif -%}
+            {%- endif -%}
+          {%- endfor -%}
+          <a class="gg-cp__clearall" href="{{ collection.url }}{% if collection.sort_by %}?sort_by={{ collection.sort_by }}{% endif %}">Clear all</a>
+        </div>
+      {%- endif -%}
+
+      {%- if collection.products.size > 0 -%}
+        <ul class="gg-cp__grid" role="list">
+          {%- for product in collection.products -%}
+            <li>{% render 'gg-product-card', product: product, sizes: '(max-width: 768px) 50vw, (max-width: 1100px) 33vw, 25vw' %}</li>
+            {%- if forloop.index == section.settings.promo_after and section.settings.show_promo and paginate.current_page == 1 -%}
+              <li class="gg-cp__promo">
+                <div>
+                  <p class="gg-cp__promo-eyebrow">Tailored to you</p>
+                  <p class="gg-cp__promo-title">{{ section.settings.promo_title }}</p>
+                  <p class="gg-cp__promo-text">{{ section.settings.promo_text }}</p>
+                  <a class="gg-cp__promo-link" href="https://wa.me/2347048522079?text={{ 'Hi Getglow, I need help with sizing for ' | append: collection.title | url_encode }}" target="_blank" rel="noopener">Ask about sizing on WhatsApp →</a>
+                </div>
+              </li>
+            {%- endif -%}
+          {%- endfor -%}
+        </ul>
+      {%- else -%}
+        <div class="gg-cp__empty">
+          {%- if active_count > 0 -%}
+            <h2 class="gg-section-title">No pieces match these filters</h2>
+            <p class="gg-section-sub">Try removing a filter, or tell us what you’re looking for.</p>
+            <a class="gg-btn gg-btn--secondary" href="{{ collection.url }}">Clear filters</a>
+          {%- else -%}
+            <h2 class="gg-section-title">New pieces coming soon</h2>
+            <p class="gg-section-sub">This edit is being restocked. Explore the rest of the collection in the meantime.</p>
+            <a class="gg-btn gg-btn--primary" href="{{ routes.all_products_collection_url }}">Shop all</a>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      {%- if paginate.pages > 1 -%}
+        <nav class="gg-cp__pages" aria-label="Pagination">
+          {%- if paginate.previous -%}<a class="gg-cp__page" href="{{ paginate.previous.url }}" aria-label="Previous page">‹</a>{%- endif -%}
+          {%- for part in paginate.parts -%}
+            {%- if part.is_link -%}<a class="gg-cp__page" href="{{ part.url }}">{{ part.title }}</a>
+            {%- elsif part.title == paginate.current_page -%}<span class="gg-cp__page is-current" aria-current="page">{{ part.title }}</span>
+            {%- else -%}<span class="gg-cp__page is-gap">{{ part.title }}</span>{%- endif -%}
+          {%- endfor -%}
+          {%- if paginate.next -%}<a class="gg-cp__page" href="{{ paginate.next.url }}" aria-label="Next page">›</a>{%- endif -%}
+        </nav>
+      {%- endif -%}
+    {%- endpaginate -%}
+  </div>
+</section>
+
+<style>
+  #gg-cp-{{ section.id }} { padding-bottom: 72px; }
+
+  /* Hero */
+  #gg-cp-{{ section.id }} .gg-cp__hero {
+    display: grid; grid-template-columns: 1fr; background: #f6f0e6; margin-bottom: 28px;
+  }
+  #gg-cp-{{ section.id }} .gg-cp__hero.has-image { grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr); min-height: 380px; }
+  #gg-cp-{{ section.id }} .gg-cp__hero-text {
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 48px clamp(20px, 6vw, 96px);
+  }
+  #gg-cp-{{ section.id }} .gg-cp__hero:not(.has-image) .gg-cp__hero-text { align-items: center; text-align: center; padding-top: 56px; padding-bottom: 56px; }
+  #gg-cp-{{ section.id }} .gg-cp__crumbs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; font-size: 13px; color: #8a7350; }
+  #gg-cp-{{ section.id }} .gg-cp__crumbs a { color: #8a7350; text-decoration: none; }
+  #gg-cp-{{ section.id }} .gg-cp__crumbs a:hover { text-decoration: underline; }
+  #gg-cp-{{ section.id }} .gg-cp__title {
+    margin: 0 0 14px; font-family: var(--font-heading-family); font-weight: 400;
+    font-size: clamp(34px, 4.2vw, 56px); line-height: 1.08; color: #1d1a16;
+  }
+  #gg-cp-{{ section.id }} .gg-cp__intro { margin: 0 0 16px; max-width: 520px; font-size: 17px; line-height: 1.6; color: #4a443b; }
+  #gg-cp-{{ section.id }} .gg-cp__meta { margin: 0; font-size: 13px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #6b5b3e; }
+  #gg-cp-{{ section.id }} .gg-cp__meta span { margin: 0 6px; }
+  #gg-cp-{{ section.id }} .gg-cp__hero-media { position: relative; overflow: hidden; }
+  #gg-cp-{{ section.id }} .gg-cp__hero-media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 25%; }
+
+  /* Category links */
+  #gg-cp-{{ section.id }} .gg-cp__nav {
+    display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding-bottom: 4px; margin-bottom: 8px;
+  }
+  #gg-cp-{{ section.id }} .gg-cp__nav::-webkit-scrollbar { display: none; }
+  #gg-cp-{{ section.id }} .gg-cp__navlink {
+    flex-shrink: 0; padding: 9px 18px; border: 1px solid #e6dcc6; border-radius: 999px;
+    font-size: 14px; color: #1d1a16; text-decoration: none; background: #fff; transition: background-color 0.2s, color 0.2s;
+  }
+  #gg-cp-{{ section.id }} .gg-cp__navlink:hover { border-color: #1d1a16; }
+  #gg-cp-{{ section.id }} .gg-cp__navlink.is-active { background: #1d1a16; border-color: #1d1a16; color: #fff; }
+
+  /* Toolbar */
+  #gg-cp-{{ section.id }} .gg-cp__toolbar {
+    position: relative; z-index: 15; background: #fff;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+    padding: 12px 0; margin-bottom: 18px; border-bottom: 1px solid #eee5d6;
+  }
+  #gg-cp-{{ section.id }} .gg-cp__filters { display: flex; flex-wrap: wrap; gap: 8px; }
+  #gg-cp-{{ section.id }} .gg-cp__filter { position: relative; }
+  #gg-cp-{{ section.id }} .gg-cp__filter summary {
+    list-style: none; display: inline-flex; align-items: center; gap: 8px; cursor: pointer;
+    padding: 9px 14px; border: 1px solid #e6dcc6; border-radius: 999px; font-size: 14px; background: #fff;
+  }
+  #gg-cp-{{ section.id }} .gg-cp__filter summary::-webkit-details-marker { display: none; }
+  #gg-cp-{{ section.id }} .gg-cp__filter[open] summary { border-color: #1d1a16; }
+  #gg-cp-{{ section.id }} .gg-cp__badge { display: inline-flex; align-items: center; justify-content: center; min-width: 20px; height: 20px; border-radius: 999px; background: #6b5b3e; color: #fff; font-size: 11px; }
+  #gg-cp-{{ section.id }} .gg-cp__filter-list {
+    position: absolute; z-index: 20; top: calc(100% + 8px); left: 0; min-width: 240px; max-height: 340px; overflow: auto;
+    padding: 10px; background: #fff; border: 1px solid #eee5d6; border-radius: 12px; box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+  }
+  #gg-cp-{{ section.id }} .gg-cp__opt { display: flex; align-items: center; gap: 10px; padding: 8px; border-radius: 8px; font-size: 14px; cursor: pointer; }
+  #gg-cp-{{ section.id }} .gg-cp__opt:hover { background: #fbf8f2; }
+  #gg-cp-{{ section.id }} .gg-cp__opt.is-disabled { opacity: 0.4; cursor: default; }
+  #gg-cp-{{ section.id }} .gg-cp__n { margin-left: auto; color: #8a8174; font-size: 13px; }
+  #gg-cp-{{ section.id }} .gg-cp__price { display: grid; gap: 10px; min-width: 260px; }
+  #gg-cp-{{ section.id }} .gg-cp__price label { display: flex; flex-direction: column; gap: 4px; font-size: 13px; color: #5c554a; }
+  #gg-cp-{{ section.id }} .gg-cp__price input { padding: 9px 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 16px; }
+  #gg-cp-{{ section.id }} .gg-cp__right { display: flex; align-items: center; gap: 16px; }
+  #gg-cp-{{ section.id }} .gg-cp__showing { font-size: 14px; color: #8a8174; }
+  #gg-cp-{{ section.id }} .gg-cp__sort { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; color: #5c554a; }
+  #gg-cp-{{ section.id }} .gg-cp__sort select { padding: 9px 30px 9px 12px; border: 1px solid #e6dcc6; border-radius: 999px; background: #fff; font-size: 14px; color: #1d1a16; }
+
+  #gg-cp-{{ section.id }} .gg-cp__active { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 20px; }
+  #gg-cp-{{ section.id }} .gg-cp__pill { display: inline-flex; gap: 6px; padding: 6px 12px; border-radius: 999px; background: #f3ecdf; color: #1d1a16; font-size: 13px; text-decoration: none; }
+  #gg-cp-{{ section.id }} .gg-cp__clearall { font-size: 13px; color: #6b5b3e; }
+
+  /* Grid */
+  #gg-cp-{{ section.id }} .gg-cp__grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 32px 20px; }
+  #gg-cp-{{ section.id }} .gg-cp__promo > div {
+    height: 100%; min-height: 260px; display: flex; flex-direction: column; justify-content: center; gap: 10px;
+    padding: 28px; border-radius: 10px; background: #1d1a16; color: #fff; aspect-ratio: 3 / 4;
+  }
+  #gg-cp-{{ section.id }} .gg-cp__promo-eyebrow { margin: 0; font-size: 12px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: #d8c193; }
+  #gg-cp-{{ section.id }} .gg-cp__promo-title { margin: 0; font-family: var(--font-heading-family); font-size: 28px; line-height: 1.15; }
+  #gg-cp-{{ section.id }} .gg-cp__promo-text { margin: 0; font-size: 15px; line-height: 1.6; color: rgba(255,255,255,0.8); }
+  #gg-cp-{{ section.id }} .gg-cp__promo-link { margin-top: 6px; color: #fff; font-weight: 600; font-size: 14px; text-decoration: underline; text-underline-offset: 4px; }
+
+  #gg-cp-{{ section.id }} .gg-cp__empty { text-align: center; max-width: 560px; margin: 40px auto; }
+  #gg-cp-{{ section.id }} .gg-cp__empty .gg-btn { margin-top: 18px; }
+
+  #gg-cp-{{ section.id }} .gg-cp__pages { display: flex; justify-content: center; gap: 6px; margin-top: 48px; }
+  #gg-cp-{{ section.id }} .gg-cp__page {
+    display: inline-flex; align-items: center; justify-content: center; min-width: 42px; height: 42px; padding: 0 10px;
+    border: 1px solid #e6dcc6; border-radius: 999px; color: #1d1a16; text-decoration: none; font-size: 14px;
+  }
+  #gg-cp-{{ section.id }} .gg-cp__page.is-current { background: #1d1a16; border-color: #1d1a16; color: #fff; }
+  #gg-cp-{{ section.id }} .gg-cp__page.is-gap { border: 0; }
+
+  @media (max-width: 1100px) { #gg-cp-{{ section.id }} .gg-cp__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  @media (max-width: 768px) {
+    #gg-cp-{{ section.id }} .gg-cp__hero.has-image { grid-template-columns: 1fr; min-height: 0; }
+    #gg-cp-{{ section.id }} .gg-cp__hero-media { order: -1; aspect-ratio: 16 / 10; }
+    #gg-cp-{{ section.id }} .gg-cp__hero-text { padding: 26px 16px 28px; }
+    #gg-cp-{{ section.id }} .gg-cp__intro { font-size: 15px; }
+    #gg-cp-{{ section.id }} .gg-cp__nav { margin: 0 -20px 6px; padding: 0 20px 4px; }
+    #gg-cp-{{ section.id }} .gg-cp__showing { display: none; }
+    #gg-cp-{{ section.id }} .gg-cp__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 12px; }
+    #gg-cp-{{ section.id }} .gg-cp__promo { grid-column: 1 / -1; }
+    #gg-cp-{{ section.id }} .gg-cp__promo > div { aspect-ratio: auto; min-height: 0; padding: 24px; }
+    #gg-cp-{{ section.id }} .gg-cp__filter-list { position: fixed; left: 16px; right: 16px; top: auto; bottom: 16px; max-height: 60vh; }
+  }
+</style>
+
+<script>
+  (function() {
+    var form = document.getElementById('gg-cp-filters-{{ section.id }}');
+    if (!form) return;
+    // Apply checkbox filters and sort immediately; price waits for the Apply button
+    form.addEventListener('change', function(e) {
+      if (e.target.type === 'number') return;
+      form.querySelectorAll('input[type="number"]').forEach(function(i) { if (!i.value) i.disabled = true; });
+      form.submit();
+    });
+    form.addEventListener('submit', function() {
+      form.querySelectorAll('input[type="number"]').forEach(function(i) { if (!i.value) i.disabled = true; });
+    });
+    document.addEventListener('click', function(e) {
+      form.querySelectorAll('details[open]').forEach(function(d) { if (!d.contains(e.target)) d.removeAttribute('open'); });
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Getglow collection",
+  "settings": [
+    { "type": "range", "id": "per_page", "label": "Products per page", "min": 12, "max": 48, "step": 4, "default": 24 },
+    { "type": "checkbox", "id": "show_image", "label": "Show collection image in header", "default": true },
+    { "type": "image_picker", "id": "all_image", "label": "Header image for 'Shop all'" },
+    { "type": "textarea", "id": "default_intro", "label": "Intro text (when a collection has no description)", "default": "Luxury occasion wear, hand-finished and made to your measure." },
+    { "type": "text", "id": "nav_handles", "label": "Collection links (handles, comma separated)", "default": "all,new-arrivals,dresses,corset-tops-skirts,kimono,bimbo" },
+    { "type": "header", "content": "Sizing tile in the grid" },
+    { "type": "checkbox", "id": "show_promo", "label": "Show sizing tile", "default": true },
+    { "type": "range", "id": "promo_after", "label": "Show after product number", "min": 2, "max": 12, "step": 1, "default": 6 },
+    { "type": "text", "id": "promo_title", "label": "Title", "default": "Between sizes? We make it to fit you." },
+    { "type": "textarea", "id": "promo_text", "label": "Text", "default": "Every piece is made to order. Add your measurements on the product page and our tailors will cut it to your body." }
+  ]
+}
+{% endschema %}
