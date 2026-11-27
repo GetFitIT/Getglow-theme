@@ -1,1 +1,91 @@
-{"sections":{"breadcrumb":{"type":"breadcrumb","settings":{}},"main":{"type":"main-list-collections","settings":{"heading":"Heading","item_per_page":"24","column_mobile":"1","content_alignment":"ta-left"}},"image-banner":{"type":"image-banner","blocks":{"item":{"type":"content","settings":{"content_position":"center-xs middle-xs ta-center","subheading":"","heading":"Image banner","description":"<p>Use this text to share brand information with your customers. Introduce a new product, share an announcement or welcome customers.<\/p>","primary_button_label":"Button label","primary_button_link":"","secondary_button_label":"","secondary_button_link":""}}},"block_order":["item"],"settings":{"enable_large_heading":false,"desktop_background_image":"","mobile_background_image":"","badge_text":"","badge_color":"color-accent-1","badge_position":"p-badge--top-right","badge_shape":"badge--star"}}},"order":["breadcrumb","main","image-banner"]}
+{
+  "sections": {
+    "main": {
+      "type": "gg-collection-tiles",
+      "blocks": {
+        "t1": {
+          "type": "tile",
+          "settings": {
+            "collection": "dresses",
+            "image": "shopify://shop_images/getglow-tile-bubu-magenta.jpg",
+            "label": "Bubus & Dresses"
+          }
+        },
+        "t2": {
+          "type": "tile",
+          "settings": {
+            "collection": "corset-tops-skirts",
+            "image": "shopify://shop_images/getglow-tile-beaded-corset.jpg",
+            "label": "Corsets & Skirts"
+          }
+        },
+        "t3": {
+          "type": "tile",
+          "settings": {
+            "collection": "kimono",
+            "label": "Kimono Sets"
+          }
+        },
+        "t4": {
+          "type": "tile",
+          "settings": {
+            "collection": "bimbo",
+            "label": "The Bimbo Edit"
+          }
+        }
+      },
+      "block_order": [
+        "t1",
+        "t2",
+        "t3",
+        "t4"
+      ],
+      "settings": {
+        "heading": "Shop the collections",
+        "subheading": "Luxury occasion wear, hand-finished and made to your measure.",
+        "show_count": true
+      }
+    },
+    "gg_steps": {
+      "type": "gg-steps",
+      "blocks": {
+        "s1": {
+          "type": "step",
+          "settings": {
+            "title": "Choose your look",
+            "text": "Pick your style and colour."
+          }
+        },
+        "s2": {
+          "type": "step",
+          "settings": {
+            "title": "Add your measurements",
+            "text": "Choose a UK size, or add your measurements for a made-to-measure fit."
+          }
+        },
+        "s3": {
+          "type": "step",
+          "settings": {
+            "title": "Made for you, shipped to you",
+            "text": "Ready to ship in 5–8 working days, delivered worldwide."
+          }
+        }
+      },
+      "block_order": [
+        "s1",
+        "s2",
+        "s3"
+      ],
+      "settings": {
+        "heading": "How made-to-order works",
+        "subheading": "",
+        "button_label": "",
+        "background": "#f6f0e6"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "gg_steps"
+  ]
+}
