@@ -47,10 +47,11 @@
                   class: 'gg-card__img gg-card__img--hover' }}
               {%- endif -%}
               {%- if section.settings.badge != blank -%}<span class="gg-card__badge">{{ section.settings.badge }}</span>{%- endif -%}
+              {% render 'gg-card-price', product: p, mode: 'badge' %}
             </span>
             <span class="gg-card__body">
               <span class="gg-card__title">{{ p.title }}</span>
-              <span class="gg-card__price">{% if p.price_varies %}From {% endif %}{{ p.price_min | money }}</span>
+              <span class="gg-card__price">{% render 'gg-card-price', product: p %}</span>
               {%- if color_option and color_option.values.size > 1 -%}
                 <span class="gg-card__swatches" aria-label="{{ color_option.values.size }} colours">
                   {%- for v in color_option.values limit: 5 -%}

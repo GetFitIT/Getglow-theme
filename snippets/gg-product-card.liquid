@@ -25,11 +25,11 @@
     {%- if img2 -%}
       {{ img2 | image_url: width: 720 | image_tag: widths: '300, 450, 600, 720', sizes: sizes, loading: 'lazy', alt: '', class: 'gg-pcard__img gg-pcard__img--hover' }}
     {%- endif -%}
-    {%- if product.compare_at_price_max > product.price_max -%}<span class="gg-pcard__badge">Sale</span>{%- endif -%}
+    {% render 'gg-card-price', product: product, mode: 'badge' %}
   </span>
   <span class="gg-pcard__body">
     <span class="gg-pcard__title">{{ product.title }}</span>
-    <span class="gg-pcard__price">{% if product.price_varies %}From {% endif %}{{ product.price_min | money }}</span>
+    <span class="gg-pcard__price">{% render 'gg-card-price', product: product %}</span>
     {%- if color_option and color_option.values.size > 1 -%}
       <span class="gg-pcard__swatches" aria-label="{{ color_option.values.size }} colours">
         {%- for v in color_option.values limit: 6 -%}

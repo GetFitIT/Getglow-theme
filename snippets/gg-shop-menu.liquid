@@ -54,12 +54,13 @@
         <span class="gg-menu__feature-badge">{{ block.settings.gg_feature_label | default: 'New in' }}</span>
       </span>
       <span class="gg-menu__feature-title">{{ feature.title }}</span>
-      <span class="gg-menu__feature-price">{% if feature.price_varies %}From {% endif %}{{ feature.price_min | money }}</span>
+      <span class="gg-menu__feature-price">{% render 'gg-card-price', product: feature %}</span>
       <span class="gg-menu__feature-cta">Shop now <span aria-hidden="true">→</span></span>
     </a>
   {%- endif -%}
 </div>
 
+{% render 'gg-shared-styles' %}
 <style>
   .gg-menu {
     display: grid;

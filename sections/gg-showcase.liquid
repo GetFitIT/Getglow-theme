@@ -94,7 +94,7 @@
                 {%- if p != blank -%}
                   <a class="gg-look__shop" href="{{ p.url }}">
                     <span class="gg-look__thumb">{%- if p.featured_image -%}{{ p.featured_image | image_url: width: 120 | image_tag: loading: 'lazy', alt: '' }}{%- endif -%}</span>
-                    <span><span class="gg-look__shop-label">Shop the look</span><span class="gg-look__shop-price">{% if p.price_varies %}From {% endif %}{{ p.price_min | money }}</span></span>
+                    <span><span class="gg-look__shop-label">Shop the look</span><span class="gg-look__shop-price">{% render 'gg-card-price', product: p %}</span></span>
                     <span aria-hidden="true">→</span>
                   </a>
                 {%- endif -%}
