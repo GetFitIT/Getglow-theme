@@ -220,7 +220,7 @@
               </label>
             {% endfor %}
           </div>
-        {% elsif option.name == 'Clothing features' %}
+        {% elsif option.name == 'Clothing features' or option.name == 'Piece' %}
           <div class="size-options">
             {% for value in option.values %}
               <input 
