@@ -1,1 +1,331 @@
-{"sections":{"breadcrumb":{"type":"breadcrumb","disabled":true,"settings":{"color_scheme":""}},"main":{"type":"main-page","disabled":true,"settings":{"color_scheme":"","show_page_title":true,"remove_padding_top":true,"remove_padding_bottom":false}},"press_media_showcase_wCgHhj":{"type":"press-media-showcase","blocks":{"hero_AfyrR3":{"type":"hero","settings":{"eyebrow":"The GetGlow Edit","title":"As Seen In","subtitle":"GetGlow dresses worn by celebrities, featured in films, and showcased in top fashion publications worldwide.","bg_image":"shopify:\/\/shop_images\/Dressed_like_the_moment.Moving_like_the_legacy.Built_for_rooms_that_require_presence_not_permis_1.jpg","btn_label":"Shop the Collection","btn_link":"\/collections\/all"}},"celebrity_JzfbJy":{"type":"celebrity","settings":{"image":"shopify:\/\/shop_images\/IMG_5665.jpg","name":"Sharon Roseman","dress_name":"The Richest Aunty Bubu","product_link":""}},"celebrity_GmkcAy":{"type":"celebrity","settings":{"image":"shopify:\/\/shop_images\/Framed_in_gold._Draped_in_power.Outfit_getglowng_Fascinator_yunik.works_Beaded_bag_themaisonm.jpg","name":"Dr Faith Omene","dress_name":"The Feather Me Corset and Skirt","product_link":""}},"celebrity_3DU3Gz":{"type":"celebrity","settings":{"image":"shopify:\/\/shop_images\/get.jpg","name":"Bimbo Ademoye","dress_name":"Richest Aunty Bubu with Turkey Pleat","product_link":""}},"press_feature_7DdRbb":{"type":"press_feature","settings":{"mag_name":"Vogue Africa","caption":"Featured on the February cover — The New Wave of African Luxury.","article_link":""}},"press_feature_Ry7kDt":{"type":"press_feature","settings":{"mag_name":"Glam Africa","caption":"Editorial spread: Dressing the Future.","article_link":""}},"press_feature_CGMNMg":{"type":"press_feature","settings":{"mag_name":"ThisDay Style","caption":"10 Looks That Defined the Season.","article_link":""}},"press_feature_K7nWiM":{"type":"press_feature","settings":{"mag_name":"BellaNaija","caption":"Best Dressed at Lagos Fashion Week.","article_link":""}},"movie_BBNcVm":{"type":"movie","settings":{"image":"shopify:\/\/shop_images\/get_1.jpg","appearance_type":"Film Appearance","movie_title":"Where Love Lives","actress_name":"Bimbo Ademoye","dress_name":"The Crimson Evening Gown","description":"The iconic finale scene that had audiences talking for weeks — a GetGlow original that stopped the show.","product_link":""}},"logo_6fREj9":{"type":"logo","settings":{"logo_name":"Vogue","logo_link":""}},"logo_PwJpwr":{"type":"logo","settings":{"logo_name":"Glam Africa","logo_link":""}},"logo_TkA9VA":{"type":"logo","settings":{"logo_name":"Guardian Life","logo_link":""}},"logo_xEhwek":{"type":"logo","settings":{"logo_name":"ThisDay Style","logo_link":""}},"logo_6U6iHA":{"type":"logo","settings":{"logo_name":"BellaNaija","logo_link":""}},"cta_mDkL6h":{"type":"cta","settings":{"eyebrow":"The Collection","title":"Shop the Dresses Everyone Is Talking About","subtitle":"Loved by celebrities and featured in publications worldwide.","btn_label":"Shop The Collection","btn_link":"\/collections\/all"}}},"block_order":["hero_AfyrR3","celebrity_JzfbJy","celebrity_GmkcAy","celebrity_3DU3Gz","press_feature_7DdRbb","press_feature_Ry7kDt","press_feature_CGMNMg","press_feature_K7nWiM","movie_BBNcVm","logo_6fREj9","logo_PwJpwr","logo_TkA9VA","logo_xEhwek","logo_6U6iHA","cta_mDkL6h"],"name":"Press & Media Showcase","settings":{}}},"order":["breadcrumb","main","press_media_showcase_wCgHhj"]}
+{
+  "sections": {
+    "breadcrumb": {
+      "type": "breadcrumb",
+      "disabled": true,
+      "settings": {
+        "color_scheme": ""
+      }
+    },
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "color_scheme": "",
+        "show_page_title": true,
+        "remove_padding_top": true,
+        "remove_padding_bottom": false
+      }
+    },
+    "press_media_showcase_wCgHhj": {
+      "type": "press-media-showcase",
+      "blocks": {
+        "hero_AfyrR3": {
+          "type": "hero",
+          "settings": {
+            "eyebrow": "The GetGlow Edit",
+            "title": "As Seen In",
+            "subtitle": "GetGlow dresses worn by celebrities, featured in films, and showcased in top fashion publications worldwide.",
+            "bg_image": "shopify://shop_images/Dressed_like_the_moment.Moving_like_the_legacy.Built_for_rooms_that_require_presence_not_permis_1.jpg",
+            "btn_label": "Shop the Collection",
+            "btn_link": "/collections/all"
+          }
+        },
+        "celebrity_JzfbJy": {
+          "type": "celebrity",
+          "settings": {
+            "image": "shopify://shop_images/IMG_5665.jpg",
+            "name": "Sharon Roseman",
+            "dress_name": "The Richest Aunty Bubu",
+            "product_link": ""
+          }
+        },
+        "celebrity_GmkcAy": {
+          "type": "celebrity",
+          "settings": {
+            "image": "shopify://shop_images/Framed_in_gold._Draped_in_power.Outfit_getglowng_Fascinator_yunik.works_Beaded_bag_themaisonm.jpg",
+            "name": "Dr Faith Omene",
+            "dress_name": "The Feather Me Corset and Skirt",
+            "product_link": ""
+          }
+        },
+        "celebrity_3DU3Gz": {
+          "type": "celebrity",
+          "settings": {
+            "image": "shopify://shop_images/get.jpg",
+            "name": "Bimbo Ademoye",
+            "dress_name": "Richest Aunty Bubu with Turkey Pleat",
+            "product_link": ""
+          }
+        },
+        "press_feature_7DdRbb": {
+          "type": "press_feature",
+          "settings": {
+            "mag_name": "Vogue Africa",
+            "caption": "Featured on the February cover — The New Wave of African Luxury.",
+            "article_link": ""
+          }
+        },
+        "press_feature_Ry7kDt": {
+          "type": "press_feature",
+          "settings": {
+            "mag_name": "Glam Africa",
+            "caption": "Editorial spread: Dressing the Future.",
+            "article_link": ""
+          }
+        },
+        "press_feature_CGMNMg": {
+          "type": "press_feature",
+          "settings": {
+            "mag_name": "ThisDay Style",
+            "caption": "10 Looks That Defined the Season.",
+            "article_link": ""
+          }
+        },
+        "press_feature_K7nWiM": {
+          "type": "press_feature",
+          "settings": {
+            "mag_name": "BellaNaija",
+            "caption": "Best Dressed at Lagos Fashion Week.",
+            "article_link": ""
+          }
+        },
+        "movie_BBNcVm": {
+          "type": "movie",
+          "settings": {
+            "image": "shopify://shop_images/get_1.jpg",
+            "appearance_type": "Film Appearance",
+            "movie_title": "Where Love Lives",
+            "actress_name": "Bimbo Ademoye",
+            "dress_name": "The Crimson Evening Gown",
+            "description": "The iconic finale scene that had audiences talking for weeks — a GetGlow original that stopped the show.",
+            "product_link": ""
+          }
+        },
+        "logo_6fREj9": {
+          "type": "logo",
+          "settings": {
+            "logo_name": "Vogue",
+            "logo_link": ""
+          }
+        },
+        "logo_PwJpwr": {
+          "type": "logo",
+          "settings": {
+            "logo_name": "Glam Africa",
+            "logo_link": ""
+          }
+        },
+        "logo_TkA9VA": {
+          "type": "logo",
+          "settings": {
+            "logo_name": "Guardian Life",
+            "logo_link": ""
+          }
+        },
+        "logo_xEhwek": {
+          "type": "logo",
+          "settings": {
+            "logo_name": "ThisDay Style",
+            "logo_link": ""
+          }
+        },
+        "logo_6U6iHA": {
+          "type": "logo",
+          "settings": {
+            "logo_name": "BellaNaija",
+            "logo_link": ""
+          }
+        },
+        "cta_mDkL6h": {
+          "type": "cta",
+          "settings": {
+            "eyebrow": "The Collection",
+            "title": "Shop the Dresses Everyone Is Talking About",
+            "subtitle": "Loved by celebrities and featured in publications worldwide.",
+            "btn_label": "Shop The Collection",
+            "btn_link": "/collections/all"
+          }
+        }
+      },
+      "block_order": [
+        "hero_AfyrR3",
+        "celebrity_JzfbJy",
+        "celebrity_GmkcAy",
+        "celebrity_3DU3Gz",
+        "press_feature_7DdRbb",
+        "press_feature_Ry7kDt",
+        "press_feature_CGMNMg",
+        "press_feature_K7nWiM",
+        "movie_BBNcVm",
+        "logo_6fREj9",
+        "logo_PwJpwr",
+        "logo_TkA9VA",
+        "logo_xEhwek",
+        "logo_6U6iHA",
+        "cta_mDkL6h"
+      ],
+      "name": "Press & Media Showcase",
+      "settings": {},
+      "disabled": true
+    },
+    "gg_showcase": {
+      "type": "gg-showcase",
+      "blocks": {
+        "hero": {
+          "type": "hero",
+          "settings": {
+            "image": "shopify://shop_images/Dressed_like_the_moment.Moving_like_the_legacy.Built_for_rooms_that_require_presence_not_permis_1.jpg",
+            "eyebrow": "The Getglow Edit",
+            "title": "As Seen On",
+            "subtitle": "Getglow pieces as worn by the women who own every room: actresses, media personalities and our clients.",
+            "btn_label": "See the looks"
+          }
+        },
+        "look1": {
+          "type": "look",
+          "settings": {
+            "image": "shopify://shop_images/IMG_5665.jpg",
+            "name": "Sharon Roseman",
+            "product": "the-richest-aunty-bubu",
+            "dress_name": "The Richest Aunty Bubu"
+          }
+        },
+        "look2": {
+          "type": "look",
+          "settings": {
+            "image": "shopify://shop_images/Framed_in_gold._Draped_in_power.Outfit_getglowng_Fascinator_yunik.works_Beaded_bag_themaisonm.jpg",
+            "name": "Dr Faith Omene",
+            "product": "feather-me-set",
+            "dress_name": "The Feather Me Corset and Skirt"
+          }
+        },
+        "look3": {
+          "type": "look",
+          "settings": {
+            "image": "shopify://shop_images/get.jpg",
+            "name": "Bimbo Ademoye",
+            "product": "richest-aunty-bubu-with-turkey-pleat",
+            "dress_name": "Richest Aunty Bubu with Turkey Pleat"
+          }
+        },
+        "film1": {
+          "type": "film",
+          "settings": {
+            "show": false,
+            "image": "shopify://shop_images/get_1.jpg",
+            "kind": "Film Appearance",
+            "title": "Where Love Lives",
+            "actress": "Bimbo Ademoye",
+            "dress_name": "The Crimson Evening Gown",
+            "description": "The iconic finale scene that had audiences talking for weeks — a GetGlow original that stopped the show."
+          }
+        },
+        "press1": {
+          "type": "press",
+          "settings": {
+            "show": false,
+            "name": "Vogue Africa",
+            "caption": "Featured on the February cover — The New Wave of African Luxury."
+          }
+        },
+        "press2": {
+          "type": "press",
+          "settings": {
+            "show": false,
+            "name": "Glam Africa",
+            "caption": "Editorial spread: Dressing the Future."
+          }
+        },
+        "press3": {
+          "type": "press",
+          "settings": {
+            "show": false,
+            "name": "ThisDay Style",
+            "caption": "10 Looks That Defined the Season."
+          }
+        },
+        "press4": {
+          "type": "press",
+          "settings": {
+            "show": false,
+            "name": "BellaNaija",
+            "caption": "Best Dressed at Lagos Fashion Week."
+          }
+        },
+        "logo1": {
+          "type": "logo",
+          "settings": {
+            "show": false,
+            "name": "Vogue"
+          }
+        },
+        "logo2": {
+          "type": "logo",
+          "settings": {
+            "show": false,
+            "name": "Glam Africa"
+          }
+        },
+        "logo3": {
+          "type": "logo",
+          "settings": {
+            "show": false,
+            "name": "Guardian Life"
+          }
+        },
+        "logo4": {
+          "type": "logo",
+          "settings": {
+            "show": false,
+            "name": "ThisDay Style"
+          }
+        },
+        "logo5": {
+          "type": "logo",
+          "settings": {
+            "show": false,
+            "name": "BellaNaija"
+          }
+        },
+        "cta": {
+          "type": "cta",
+          "settings": {
+            "eyebrow": "The Collection",
+            "title": "Wear the pieces everyone is talking about",
+            "subtitle": "Hand-finished, made to your measure, shipped worldwide.",
+            "btn_label": "Shop the collection",
+            "btn_link": "/collections/all"
+          }
+        }
+      },
+      "block_order": [
+        "hero",
+        "look1",
+        "look2",
+        "look3",
+        "film1",
+        "press1",
+        "press2",
+        "press3",
+        "press4",
+        "logo1",
+        "logo2",
+        "logo3",
+        "logo4",
+        "logo5",
+        "cta"
+      ],
+      "settings": {
+        "looks_heading": "Worn by",
+        "looks_sub": "The women who wear Getglow, and the pieces they chose."
+      }
+    }
+  },
+  "order": [
+    "gg_showcase",
+    "breadcrumb",
+    "main",
+    "press_media_showcase_wCgHhj"
+  ]
+}
