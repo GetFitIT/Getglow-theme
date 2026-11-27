@@ -76,7 +76,11 @@
             <li class="gg-look" {{ b.shopify_attributes }}>
               <div class="gg-look__media">
                 {%- if b.settings.video != blank -%}
-                  {{ b.settings.video | video_tag: autoplay: false, loop: true, muted: true, playsinline: true, controls: false, preload: 'none', image_size: '720x', class: 'gg-look__video' }}
+                  {%- comment -%} A still image sits under the video, so the card is never blank before it plays {%- endcomment -%}
+                  {%- if b.settings.video.preview_image -%}
+                    {{ b.settings.video.preview_image | image_url: width: 720 | image_tag: widths: '360, 540, 720', sizes: '(max-width: 768px) 50vw, 33vw', loading: 'lazy', alt: b.settings.name | default: 'Getglow client', class: 'gg-look__poster' }}
+                  {%- endif -%}
+                  {{ b.settings.video | video_tag: autoplay: false, loop: true, muted: true, playsinline: true, controls: false, preload: 'none', class: 'gg-look__video' }}
                   <span class="gg-look__play" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
                 {%- elsif b.settings.image -%}
                   {{ b.settings.image | image_url: width: 900 | image_tag: widths: '450, 600, 900', sizes: '(max-width: 768px) 90vw, 33vw', loading: 'lazy', alt: b.settings.name | default: 'Getglow client' | append: ' wearing Getglow' }}
@@ -183,7 +187,9 @@
   #gg-show-{{ section.id }} .gg-look__media { position: relative; aspect-ratio: 3 / 4; border-radius: 12px; overflow: hidden; background: #f1ebe0; }
   #gg-show-{{ section.id }} .gg-look__media img { width: 100%; height: 100%; object-fit: cover; object-position: center 20%; transition: transform 0.7s ease; }
   #gg-show-{{ section.id }} .gg-look:hover .gg-look__media img { transform: scale(1.04); }
-  #gg-show-{{ section.id }} .gg-look__video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  #gg-show-{{ section.id }} .gg-look__poster { position: absolute; inset: 0; }
+  #gg-show-{{ section.id }} .gg-look__video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 0.4s; }
+  #gg-show-{{ section.id }} .gg-look__media.is-playing .gg-look__video { opacity: 1; }
   #gg-show-{{ section.id }} .gg-look__play {
     position: absolute; top: 12px; right: 12px; display: inline-flex; align-items: center; justify-content: center;
     width: 30px; height: 30px; border-radius: 50%; background: rgba(0,0,0,0.5); color: #fff;
@@ -238,10 +244,25 @@
     #gg-show-{{ section.id }} .gg-film { grid-template-columns: 1fr; gap: 22px; }
   }
   @media (max-width: 600px) {
-    #gg-show-{{ section.id }} .gg-show__hero { min-height: 72svh; }
-    #gg-show-{{ section.id }} .gg-show__sub { font-size: 16px; }
-    #gg-show-{{ section.id }} .gg-show__looks { padding: 52px 0; }
-    #gg-show-{{ section.id }} .gg-show__grid { grid-template-columns: 1fr; gap: 36px; }
+    #gg-show-{{ section.id }} .gg-show__hero { min-height: 62svh; }
+    #gg-show-{{ section.id }} .gg-show__title { font-size: 44px; }
+    #gg-show-{{ section.id }} .gg-show__sub { font-size: 15px; margin-bottom: 20px; }
+    #gg-show-{{ section.id }} .gg-show__looks { padding: 44px 0; }
+    /* Two compact columns on phones instead of one long column of tall cards */
+    #gg-show-{{ section.id }} .gg-show__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 12px; }
+    #gg-show-{{ section.id }} .gg-look__media { border-radius: 10px; }
+    #gg-show-{{ section.id }} .gg-look__play { width: 24px; height: 24px; top: 8px; right: 8px; }
+    #gg-show-{{ section.id }} .gg-look__handle { left: 8px; bottom: 8px; font-size: 11px; padding: 4px 8px; }
+    #gg-show-{{ section.id }} .gg-look__body { padding-top: 10px; }
+    #gg-show-{{ section.id }} .gg-look__name { font-size: 18px; }
+    #gg-show-{{ section.id }} .gg-look__role { font-size: 10px; margin-top: 2px; }
+    #gg-show-{{ section.id }} .gg-look__wearing { font-size: 13px; line-height: 1.4; margin-top: 4px; }
+    #gg-show-{{ section.id }} .gg-look__shop { margin-top: 8px; padding: 8px 10px; gap: 8px; border-radius: 8px; }
+    #gg-show-{{ section.id }} .gg-look__thumb { display: none; }
+    #gg-show-{{ section.id }} .gg-look__shop-label { font-size: 11px; }
+    #gg-show-{{ section.id }} .gg-look__shop-price { font-size: 12px; }
+    #gg-show-{{ section.id }} .gg-look__shop > span:last-child { font-size: 15px; }
+    #gg-show-{{ section.id }} .gg-show__cta { padding: 64px 20px; }
   }
 </style>
 
@@ -249,15 +270,34 @@
   (function() {
     // Play look videos only while they are on screen (saves data on mobile)
     var root = document.getElementById('gg-show-{{ section.id }}');
-    if (!root || !('IntersectionObserver' in window)) return;
+    if (!root) return;
+
+    // Shopify generates new image sizes on first request and can briefly return an error.
+    // Retry failed images a few times instead of leaving a broken image.
+    root.addEventListener('error', function(e) {
+      var img = e.target;
+      if (!img || img.tagName !== 'IMG') return;
+      var tries = parseInt(img.getAttribute('data-retry') || '0', 10);
+      if (tries >= 4) return;
+      img.setAttribute('data-retry', tries + 1);
+      setTimeout(function() {
+        var src = img.getAttribute('src'), srcset = img.getAttribute('srcset');
+        if (srcset) { img.removeAttribute('srcset'); img.setAttribute('srcset', srcset); }
+        if (src) { img.removeAttribute('src'); img.setAttribute('src', src); }
+      }, 1200 * (tries + 1));
+    }, true);
+
+    if (!('IntersectionObserver' in window)) return;
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     var io = new IntersectionObserver(function(entries) {
       entries.forEach(function(e) {
         var v = e.target;
         if (e.isIntersecting) {
           if (v.preload === 'none') v.preload = 'auto';
-          var p = v.play(); if (p && p.catch) p.catch(function() {});
-          v.parentNode.classList.add('is-playing');
+          var p = v.play();
+          // Only fade the video in once it is really playing (e.g. iPhone Low Power Mode blocks autoplay; the still image stays)
+          if (p && p.then) p.then(function() { v.parentNode.classList.add('is-playing'); }).catch(function() {});
+          else v.parentNode.classList.add('is-playing');
         } else {
           v.pause();
         }

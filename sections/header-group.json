@@ -25,9 +25,17 @@
             "message_text": "QUESTIONS? CHAT WITH US ON WHATSAPP",
             "message_link": "https://wa.me/2347048522079"
           }
+        },
+        "message_bf": {
+          "type": "message",
+          "settings": {
+            "message_text": "BLACK FRIDAY: UP TO 20% OFF SELECTED PIECES · SHOP THE SALE",
+            "message_link": "shopify://collections/black-friday-sale"
+          }
         }
       },
       "block_order": [
+        "message_bf",
         "message-0",
         "message_VVA9PA",
         "message_mCQUxW"
