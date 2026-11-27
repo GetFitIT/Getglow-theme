@@ -1,0 +1,121 @@
+{%- comment -%}
+  Getglow "Shop" dropdown: links column, collection tiles (labels under the photos), featured product.
+  Rendered inside the header's collections_menu block. Param: block
+{%- endcomment -%}
+{%- liquid
+  assign feature = block.settings.gg_feature_product
+  if feature == blank
+    assign newest = collections['all'].products | sort: 'created_at' | reverse
+    for p in newest
+      if p.featured_image
+        assign feature = p
+        break
+      endif
+    endfor
+  endif
+-%}
+<div class="gg-menu {{ settings.enable_content_max_width | replace: true, 'ctnr' | replace: false, '' }}" id="menuHeaderCollection">
+  <div class="gg-menu__links">
+    <p class="gg-menu__label">Shop</p>
+    <ul role="list">
+      <li><a href="{{ routes.all_products_collection_url }}" class="gg-menu__link gg-menu__link--strong">{{ block.settings.gg_shop_all_label | default: 'Shop all' }} <span aria-hidden="true">→</span></a></li>
+      {%- assign na = collections['new-arrivals'] -%}
+      {%- if na != blank and na.products_count > 0 -%}
+        <li><a href="{{ na.url }}" class="gg-menu__link">New in <span class="gg-menu__count">{{ na.products_count }}</span></a></li>
+      {%- endif -%}
+      {%- for c in block.settings.collection_list -%}
+        <li><a href="{{ c.url }}" class="gg-menu__link">{{ c.title }} <span class="gg-menu__count">{{ c.products_count }}</span></a></li>
+      {%- endfor -%}
+      <li><a href="{{ routes.collections_url }}" class="gg-menu__link gg-menu__link--muted">All collections</a></li>
+    </ul>
+  </div>
+
+  <ul class="gg-menu__tiles" role="list">
+    {%- for c in block.settings.collection_list limit: 4 -%}
+      <li>
+        <a href="{{ c.url }}" class="gg-menu__tile">
+          <span class="gg-menu__tile-img">
+            {%- assign img = c.image | default: c.featured_image -%}
+            {%- if img -%}
+              {{ img | image_url: width: 520 | image_tag: widths: '260, 390, 520', sizes: '200px', loading: 'lazy', alt: c.title }}
+            {%- endif -%}
+          </span>
+          <span class="gg-menu__tile-title">{{ c.title }}</span>
+          <span class="gg-menu__tile-sub">{{ c.products_count }} {% if c.products_count == 1 %}piece{% else %}pieces{% endif %} <span aria-hidden="true">→</span></span>
+        </a>
+      </li>
+    {%- endfor -%}
+  </ul>
+
+  {%- if feature != blank -%}
+    <a href="{{ feature.url }}" class="gg-menu__feature">
+      <span class="gg-menu__feature-img">
+        {{ feature.featured_image | image_url: width: 600 | image_tag: widths: '300, 450, 600', sizes: '260px', loading: 'lazy', alt: feature.title }}
+        <span class="gg-menu__feature-badge">{{ block.settings.gg_feature_label | default: 'New in' }}</span>
+      </span>
+      <span class="gg-menu__feature-title">{{ feature.title }}</span>
+      <span class="gg-menu__feature-price">{% if feature.price_varies %}From {% endif %}{{ feature.price_min | money }}</span>
+      <span class="gg-menu__feature-cta">Shop now <span aria-hidden="true">→</span></span>
+    </a>
+  {%- endif -%}
+</div>
+
+<style>
+  .gg-menu {
+    display: grid;
+    grid-template-columns: 220px minmax(0, 1fr) 250px;
+    gap: 36px;
+    padding-top: 28px;
+    padding-bottom: 32px;
+    align-items: start;
+  }
+  .gg-menu__label {
+    margin: 0 0 14px; font-size: 12px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: #8a7350;
+  }
+  .gg-menu__links ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+  .gg-menu__link {
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    padding: 9px 10px; margin: 0 -10px; border-radius: 8px;
+    font-size: 16px; color: #1d1a16; text-decoration: none; transition: background-color 0.15s;
+  }
+  .gg-menu__link:hover { background: #f6f0e6; }
+  .gg-menu__link--strong { font-weight: 600; }
+  .gg-menu__link--muted { color: #6b5b3e; font-size: 14px; text-decoration: underline; text-underline-offset: 3px; }
+  .gg-menu__count { font-size: 12px; color: #8a8174; background: #f3ecdf; border-radius: 999px; padding: 2px 8px; }
+
+  .gg-menu__tiles { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+  .gg-menu__tile { display: flex; flex-direction: column; gap: 4px; text-decoration: none; color: #1d1a16; }
+  .gg-menu__tile-img { display: block; aspect-ratio: 3 / 4; border-radius: 10px; overflow: hidden; background: #f1ebe0; margin-bottom: 8px; }
+  .gg-menu__tile-img img { width: 100%; height: 100%; object-fit: cover; object-position: center 20%; transition: transform 0.5s ease; }
+  .gg-menu__tile:hover .gg-menu__tile-img img { transform: scale(1.05); }
+  .gg-menu__tile-title { font-family: var(--font-heading-family); font-size: 19px; line-height: 1.2; }
+  .gg-menu__tile-sub { font-size: 13px; color: #6b5b3e; }
+
+  .gg-menu__feature {
+    display: flex; flex-direction: column; gap: 4px; padding: 14px; border-radius: 12px;
+    background: #f6f0e6; text-decoration: none; color: #1d1a16;
+  }
+  .gg-menu__feature-img { position: relative; display: block; aspect-ratio: 4 / 5; border-radius: 8px; overflow: hidden; margin-bottom: 10px; background: #e9e1d2; }
+  .gg-menu__feature-img img { width: 100%; height: 100%; object-fit: cover; object-position: center 20%; }
+  .gg-menu__feature-badge {
+    position: absolute; top: 10px; left: 10px; padding: 4px 10px; border-radius: 999px; background: #fff;
+    font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+  }
+  .gg-menu__feature-title { font-size: 16px; font-weight: 600; }
+  .gg-menu__feature-price { font-size: 14px; color: #6b5b3e; font-weight: 600; }
+  .gg-menu__feature-cta { margin-top: 6px; font-size: 13px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; text-decoration: underline; text-underline-offset: 4px; }
+
+  @media (max-width: 1199px) {
+    .gg-menu { grid-template-columns: 200px minmax(0, 1fr); }
+    .gg-menu__feature { display: none; }
+  }
+  /* Mobile / drawer: simple list + two-column tiles */
+  @media (max-width: 989px) {
+    .gg-menu { grid-template-columns: 1fr; gap: 18px; padding: 8px 0 20px; }
+    .gg-menu__label { display: none; }
+    .gg-menu__link { margin: 0; padding: 10px 0; border-bottom: 1px solid #f0e9dc; border-radius: 0; font-size: 16px; }
+    .gg-menu__link:hover { background: none; }
+    .gg-menu__tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+    .gg-menu__tile-title { font-size: 16px; }
+  }
+</style>
