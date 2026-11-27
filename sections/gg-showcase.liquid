@@ -75,13 +75,16 @@
             {%- assign p = b.settings.product -%}
             <li class="gg-look" {{ b.shopify_attributes }}>
               <div class="gg-look__media">
-                {%- if b.settings.image -%}
-                  {{ b.settings.image | image_url: width: 900 | image_tag: widths: '450, 600, 900', sizes: '(max-width: 768px) 90vw, 33vw', loading: 'lazy', alt: b.settings.name | append: ' wearing Getglow' }}
+                {%- if b.settings.video != blank -%}
+                  {{ b.settings.video | video_tag: autoplay: false, loop: true, muted: true, playsinline: true, controls: false, preload: 'none', image_size: '720x', class: 'gg-look__video' }}
+                  <span class="gg-look__play" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+                {%- elsif b.settings.image -%}
+                  {{ b.settings.image | image_url: width: 900 | image_tag: widths: '450, 600, 900', sizes: '(max-width: 768px) 90vw, 33vw', loading: 'lazy', alt: b.settings.name | default: 'Getglow client' | append: ' wearing Getglow' }}
                 {%- endif -%}
                 {%- if b.settings.handle != blank -%}<span class="gg-look__handle">{{ b.settings.handle }}</span>{%- endif -%}
               </div>
               <div class="gg-look__body">
-                <p class="gg-look__name">{{ b.settings.name }}</p>
+                {%- if b.settings.name != blank -%}<p class="gg-look__name">{{ b.settings.name }}</p>{%- endif -%}
                 {%- if b.settings.role != blank -%}<p class="gg-look__role">{{ b.settings.role }}</p>{%- endif -%}
                 <p class="gg-look__wearing">Wearing <strong>{{ b.settings.dress_name | default: p.title }}</strong></p>
                 {%- if p != blank -%}
@@ -180,6 +183,12 @@
   #gg-show-{{ section.id }} .gg-look__media { position: relative; aspect-ratio: 3 / 4; border-radius: 12px; overflow: hidden; background: #f1ebe0; }
   #gg-show-{{ section.id }} .gg-look__media img { width: 100%; height: 100%; object-fit: cover; object-position: center 20%; transition: transform 0.7s ease; }
   #gg-show-{{ section.id }} .gg-look:hover .gg-look__media img { transform: scale(1.04); }
+  #gg-show-{{ section.id }} .gg-look__video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  #gg-show-{{ section.id }} .gg-look__play {
+    position: absolute; top: 12px; right: 12px; display: inline-flex; align-items: center; justify-content: center;
+    width: 30px; height: 30px; border-radius: 50%; background: rgba(0,0,0,0.5); color: #fff;
+  }
+  #gg-show-{{ section.id }} .gg-look__media.is-playing .gg-look__play { opacity: 0; transition: opacity 0.3s; }
   #gg-show-{{ section.id }} .gg-look__handle { position: absolute; left: 12px; bottom: 12px; padding: 5px 12px; border-radius: 999px; background: rgba(0,0,0,0.55); color: #fff; font-size: 12px; }
   #gg-show-{{ section.id }} .gg-look__body { padding: 16px 2px 0; }
   #gg-show-{{ section.id }} .gg-look__name { margin: 0; font-family: var(--font-heading-family); font-size: 26px; line-height: 1.15; color: #1d1a16; }
@@ -236,6 +245,28 @@
   }
 </style>
 
+<script>
+  (function() {
+    // Play look videos only while they are on screen (saves data on mobile)
+    var root = document.getElementById('gg-show-{{ section.id }}');
+    if (!root || !('IntersectionObserver' in window)) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var io = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        var v = e.target;
+        if (e.isIntersecting) {
+          if (v.preload === 'none') v.preload = 'auto';
+          var p = v.play(); if (p && p.catch) p.catch(function() {});
+          v.parentNode.classList.add('is-playing');
+        } else {
+          v.pause();
+        }
+      });
+    }, { threshold: 0.35 });
+    root.querySelectorAll('.gg-look__video').forEach(function(v) { io.observe(v); });
+  })();
+</script>
+
 {% schema %}
 {
   "name": "Getglow showcase",
@@ -252,6 +283,7 @@
       { "type": "text", "id": "btn_label", "label": "Button label", "default": "See the looks" }
     ]},
     { "type": "look", "name": "Celebrity / client look", "settings": [
+      { "type": "video", "id": "video", "label": "Video (optional)", "info": "Short, silent clip. Plays while on screen. Used instead of the photo." },
       { "type": "image_picker", "id": "image", "label": "Photo" },
       { "type": "text", "id": "name", "label": "Name" },
       { "type": "text", "id": "role", "label": "Role (optional)", "info": "e.g. Actress, Media personality" },
