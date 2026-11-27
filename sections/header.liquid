@@ -152,13 +152,7 @@
                             {{ icon_chevron_down }}
                           </summary>
                           <div class="menu-dropdown mega-menu-wrapper  w-100 oy-scroll disable-scrollbars">
-                            <ul class="menu-collection__list {{ settings.enable_content_max_width | replace: true, 'ctnr' | replace: false, '' }} rw ls-none pt-12 pb-16 p-zero r-gap-2x" id="menuHeaderCollection">
-                              {% for collection in block.settings.collection_list %}
-                                <li class="clm o-hidden" style="--w-xs:6;--w-lg:{{- lg -}};">
-                                  {% render 'card-collection', collection: collection, media_ratio: '1/1', overlay_opacity: settings.overlay_opacity, section: section, is_first: false %}
-                                </li>
-                              {% endfor %}
-                            </ul>
+                            {%- render 'gg-shop-menu', block: block -%}
                           </div>
                         </details>
                       </sht-menu-header>
@@ -684,6 +678,28 @@
               "label": "6"
             }
           ]
+        },
+        {
+          "type": "header",
+          "content": "Getglow menu"
+        },
+        {
+          "type": "product",
+          "id": "gg_feature_product",
+          "label": "Featured product",
+          "info": "Shown on the right of the Shop menu. Defaults to the newest product."
+        },
+        {
+          "type": "text",
+          "id": "gg_feature_label",
+          "label": "Featured label",
+          "default": "New in"
+        },
+        {
+          "type": "text",
+          "id": "gg_shop_all_label",
+          "label": "Shop all link label",
+          "default": "Shop all"
         }
       ]
     }
